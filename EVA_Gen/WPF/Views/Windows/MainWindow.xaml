@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:EVA_Gen.WPF.Views"
-
+        xmlns:cmd="clr-namespace:EVA_Gen.WPF.Infrastructure.Commands" 
         xmlns:vm="clr-namespace:EVA_Gen.WPF.ViewModels"   
         Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
@@ -16,5 +16,10 @@
         <TextBox Margin="50"
                      Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}"
                      TextWrapping="Wrap"></TextBox>
+        <Button Margin="10" Content="Close" >
+            <Button.Command>
+                <cmd:TestCommand></cmd:TestCommand>
+            </Button.Command>
+        </Button>
     </Grid>
 </Window>
