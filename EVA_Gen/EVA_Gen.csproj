@@ -56,6 +56,7 @@
     <Compile Include="Command.cs" />
     <Compile Include="Develop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WPF\ViewModels\Base\ViewModel.cs" />
     <Compile Include="WPF\Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -70,7 +71,6 @@
     <Folder Include="WPF\Data\" />
     <Folder Include="WPF\Infrastructure\" />
     <Folder Include="WPF\Models\" />
-    <Folder Include="WPF\ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
