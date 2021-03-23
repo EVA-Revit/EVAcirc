@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace EVA_Gen.WPF
+namespace EVA_Gen.WPF.Views
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml

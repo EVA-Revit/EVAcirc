@@ -39,7 +39,7 @@ namespace EVA_Gen
         static Boolean CodeMetod()
         {
 
-            var view = new WPF.MainWindow();
+            var view = new WPF.Views.MainWindow();
             view.ShowDialog();
             return true;
         }
