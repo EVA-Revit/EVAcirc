@@ -38,7 +38,9 @@ namespace EVA_Gen
         /// <returns></returns>
         static Boolean CodeMetod()
         {
-            TaskDialog.Show("New plagin", "HelloWorld!!!!");
+
+            var view = new WPF.MainWindow();
+            view.ShowDialog();
             return true;
         }
     }
