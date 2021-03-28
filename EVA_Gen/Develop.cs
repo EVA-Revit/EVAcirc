@@ -44,7 +44,17 @@ namespace EVA_Gen
             
             var fg = new PanelItem();
             fg.Name = "Hello";
-           
+            var circIt= new CircItem();
+
+            circIt.Name = "Цепь один";
+            circIt.P_ust = 200;
+            fg.Circuits.Add(circIt);
+
+            var circIt2 = new CircItem();
+            circIt2.Name = "Цепь два";
+            circIt2.P_ust = 777;
+            fg.Circuits.Add(circIt2);
+
             var pop = new PanelItem();
             pop.Name = "Hello2";
             fg.Nodes.Add(pop);

@@ -43,12 +43,28 @@ namespace EVA_Gen.WPF.ViewModels
         #endregion
 
 
-
+        //Свойство Панели для тривью
         public List<PanelItem> Panels { get; set; }
 
 
+        //свойство выбранной панели
+        private PanelItem _SelectedPanel;
+
+        public PanelItem SelectedPanel
+        {
+            get => _SelectedPanel;
+            //при выборе панели, будет срабатывать этот метод
+            set
+            {
+                if (Equals(_SelectedPanel, value)) return;
+                _SelectedPanel = value;
+                //TaskDialog.Show("faf", "Hello world");
+                OnPropertyChanged();
+            }
+        }
 
 
+        /*----------------------------------------------------------------------------------------------------------------*/
         #region Команды
 
         #region ClosedWindowCommand
