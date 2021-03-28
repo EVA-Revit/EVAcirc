@@ -25,7 +25,15 @@ namespace EVA_Gen.WPF.Models
         public string AppVvod { get; set; }
         public int CountGroup { get; set; }
 
-        public ObservableCollection<PanelItem> Nodes { get; set; }
+        public List<PanelItem> Nodes { get; set; }
+
+
+
+        //Конструктор
+        public PanelItem()
+        {
+            Nodes = new List<PanelItem>();
+        }
 
     }
 }

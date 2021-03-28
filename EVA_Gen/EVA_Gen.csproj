@@ -63,7 +63,6 @@
     <Compile Include="WPF\Models\PanelItem.cs" />
     <Compile Include="WPF\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="WPF\ViewModels\Base\ViewModel.cs" />
-    <Compile Include="WPF\ViewModels\PanelsViewModel.cs" />
     <Compile Include="WPF\Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

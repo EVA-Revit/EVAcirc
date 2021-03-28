@@ -9,6 +9,7 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using System.Collections.ObjectModel;
+using EVA_Gen.WPF.Models;
 using EVA_Gen.WPF.ViewModels;
 
 namespace EVA_Gen
@@ -41,14 +42,14 @@ namespace EVA_Gen
         static Boolean CodeMetod()
         {
             
-            var fg = new PanelsViewModel();
+            var fg = new PanelItem();
             fg.Name = "Hello";
            
-            var pop = new PanelsViewModel();
+            var pop = new PanelItem();
             pop.Name = "Hello2";
-            fg.Children.Add(pop);
+            fg.Nodes.Add(pop);
 
-            var df = new ObservableCollection<PanelsViewModel>();
+            var df = new List<PanelItem>();
             df.Add(fg);
 
             var mVm = new MainWindowViewModel();

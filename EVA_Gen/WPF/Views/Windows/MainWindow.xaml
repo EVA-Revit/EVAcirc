@@ -9,6 +9,7 @@
         Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
         Title="{Binding Path=Title}">
+    <!--Привязка Data Context для отладки-->
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -27,7 +28,7 @@
 
             <TreeView BorderThickness="1" ItemsSource="{Binding Panels}">
                 <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                    <HierarchicalDataTemplate ItemsSource="{Binding Nodes}">
                         <!--<TextBlock Text="{Binding Name}"></TextBlock>-->
                         <CheckBox Content="{Binding Name}"></CheckBox>
                     </HierarchicalDataTemplate>

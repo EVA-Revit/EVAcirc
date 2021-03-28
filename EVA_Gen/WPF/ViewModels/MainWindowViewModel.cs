@@ -9,6 +9,7 @@ using EVA_Gen.WPF.ViewModels.Base;
 using System.Windows;
 using System.Collections.ObjectModel;
 using Autodesk.Revit.UI;
+using EVA_Gen.WPF.Models;
 
 namespace EVA_Gen.WPF.ViewModels
 {
@@ -43,7 +44,7 @@ namespace EVA_Gen.WPF.ViewModels
 
 
 
-        public ObservableCollection<PanelsViewModel> Panels { get; set; }
+        public List<PanelItem> Panels { get; set; }
 
 
 
