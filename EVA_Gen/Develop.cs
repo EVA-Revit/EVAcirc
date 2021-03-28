@@ -8,6 +8,8 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
 using Autodesk.Revit.DB.ExtensibleStorage;
+using System.Collections.ObjectModel;
+using EVA_Gen.WPF.ViewModels;
 
 namespace EVA_Gen
 {
@@ -38,8 +40,21 @@ namespace EVA_Gen
         /// <returns></returns>
         static Boolean CodeMetod()
         {
+            
+            var fg = new PanelsViewModel();
+            fg.Name = "Hello";
+           
+            var pop = new PanelsViewModel();
+            pop.Name = "Hello2";
+            fg.Children.Add(pop);
 
+            var df = new ObservableCollection<PanelsViewModel>();
+            df.Add(fg);
+
+            var mVm = new MainWindowViewModel();
+            mVm.Panels = df;
             var view = new WPF.Views.MainWindow();
+            view.DataContext = mVm;
             view.ShowDialog();
             return true;
         }

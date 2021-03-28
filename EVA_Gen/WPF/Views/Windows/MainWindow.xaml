@@ -13,13 +13,34 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
     <Grid>
-        <TextBox Margin="50"
-                     Text="{Binding Path=Title, UpdateSourceTrigger=PropertyChanged}"
-                     TextWrapping="Wrap"></TextBox>
-        <Button Margin="10" Content="Close" >
+        
+        <Grid.Resources>
+
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <DockPanel Margin=" 10">
+
+            <TextBlock DockPanel.Dock="Top" Text="Панели"/>
+
+            <TreeView BorderThickness="1" ItemsSource="{Binding Panels}">
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                        <!--<TextBlock Text="{Binding Name}"></TextBlock>-->
+                        <CheckBox Content="{Binding Name}"></CheckBox>
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+        </DockPanel>
+
+
+
+        <!--<Button Margin="10" Content="{Binding Panels}" >
             <Button.Command>
                 <cmd:TestCommand></cmd:TestCommand>
             </Button.Command>
-        </Button>
+        </Button>-->
     </Grid>
 </Window>

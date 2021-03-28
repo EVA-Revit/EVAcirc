@@ -7,12 +7,14 @@ using System.Windows.Input;
 using EVA_Gen.WPF.Infrastructure.Commands;
 using EVA_Gen.WPF.ViewModels.Base;
 using System.Windows;
+using System.Collections.ObjectModel;
+using Autodesk.Revit.UI;
 
 namespace EVA_Gen.WPF.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        private string _Title = "E V A";
+        private string _Title = "E V A_____";
 
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>
@@ -38,6 +40,12 @@ namespace EVA_Gen.WPF.ViewModels
             set => Set(ref _Title, value);
         }
         #endregion
+
+
+
+        public ObservableCollection<PanelsViewModel> Panels { get; set; }
+
+
 
 
         #region Команды

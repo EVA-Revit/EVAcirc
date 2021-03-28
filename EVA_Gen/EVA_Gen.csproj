@@ -60,8 +60,10 @@
     <Compile Include="WPF\Infrastructure\Commands\Base\CommandWPF.cs" />
     <Compile Include="WPF\Infrastructure\Commands\LambdaCommand.cs" />
     <Compile Include="WPF\Infrastructure\Commands\TestCommand.cs" />
+    <Compile Include="WPF\Models\PanelItem.cs" />
     <Compile Include="WPF\ViewModels\MainWindowViewModel.cs" />
     <Compile Include="WPF\ViewModels\Base\ViewModel.cs" />
+    <Compile Include="WPF\ViewModels\PanelsViewModel.cs" />
     <Compile Include="WPF\Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
@@ -74,7 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="WPF\Data\" />
-    <Folder Include="WPF\Models\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
