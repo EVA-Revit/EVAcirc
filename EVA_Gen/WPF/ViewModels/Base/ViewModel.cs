@@ -15,7 +15,12 @@ namespace EVA_Gen.WPF.ViewModels.Base
         protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName = null)
         {
             //Генерация события
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+            try
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+            }
+            catch { }
+           
         }
 
         //Запретить кольцевые обновление свойств

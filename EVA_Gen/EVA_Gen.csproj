@@ -63,9 +63,10 @@
     <Compile Include="Command.cs" />
     <Compile Include="Develop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilits.cs" />
     <Compile Include="WPF\Infrastructure\Commands\Base\CommandWPF.cs" />
     <Compile Include="WPF\Infrastructure\Commands\LambdaCommand.cs" />
-    <Compile Include="WPF\Infrastructure\Commands\TestCommand.cs" />
+    <Compile Include="WPF\Infrastructure\Commands\GenCommand.cs" />
     <Compile Include="WPF\Models\PanelItem.cs" />
     <Compile Include="WPF\ViewModels\BindableSelectedItemBehavior.cs" />
     <Compile Include="WPF\ViewModels\MainWindowViewModel.cs" />

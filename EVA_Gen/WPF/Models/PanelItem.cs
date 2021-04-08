@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.UI;
+using Autodesk.Revit.DB;
 
 namespace EVA_Gen.WPF.Models
 {
@@ -13,6 +14,11 @@ namespace EVA_Gen.WPF.Models
         public string Name { get; set; }
         public int P_ust { get; set; }
         public string P_r { get; set; }
+
+        public int elId { get; set; }
+
+        public Element Element { get; set; }
+
     }
 
     internal class CircItem : ElectricalInfo
@@ -28,6 +34,8 @@ namespace EVA_Gen.WPF.Models
         public string AppVvod { get; set; }
         public int CountGroup { get; set; }
 
+        public Element Rboard { get; set; }
+
 
 
         private bool _Is_Checked;
@@ -40,11 +48,10 @@ namespace EVA_Gen.WPF.Models
             {
                 if (Equals(_Is_Checked, value)) return;
                 _Is_Checked = value;
-                TaskDialog.Show("fafaf", "aafaf");
             }
         }
 
-        public List<PanelItem> Nodes { get; set; }
+        public List<PanelItem> SubPanels { get; set; }
 
 
         //Цепи щита
@@ -52,10 +59,19 @@ namespace EVA_Gen.WPF.Models
 
 
         //Конструктор
-        public PanelItem()
+        public PanelItem(Element panelRevit)
         {
-            Nodes = new List<PanelItem>();
+            SubPanels = new List<PanelItem>();
             Circuits = new ObservableCollection<CircItem>();
+
+            //Заполнение свойств 
+            Name = panelRevit.Name;
+            elId = panelRevit.Id.IntegerValue;
+
+            Rboard = panelRevit;
+
+            //CountGroup=panelRevit.
+
         }
 
     }

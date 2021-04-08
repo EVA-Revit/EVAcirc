@@ -47,7 +47,7 @@ namespace EVA_Gen.WPF.ViewModels
         public List<PanelItem> Panels { get; set; }
 
 
-        //свойство выбранной панели
+        //свойство выбранной панели через behavior
         private PanelItem _SelectedPanel;
 
         public PanelItem SelectedPanel
@@ -58,8 +58,8 @@ namespace EVA_Gen.WPF.ViewModels
             {
                 if (Equals(_SelectedPanel, value)) return;
                 _SelectedPanel = value;
-                //TaskDialog.Show("faf", "Hello world");
-                OnPropertyChanged();
+                GenCommand.SelectedPanelCommand = value;
+                OnPropertyChanged();   
             }
         }
 
