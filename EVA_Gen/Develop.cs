@@ -117,7 +117,7 @@ namespace EVA_Gen
                     //Если в списке дочерних щитов не содержится щит из списка щитов, то он щитается родительским и:
                     if (!equipmentChildren.Contains(fi.Id))
                     {
-                        var panelItem = GetPanelItems(fi);
+                        var panelItem = GetPanelItems(fi); //
                         panelItems.Add(panelItem);
                     }
 

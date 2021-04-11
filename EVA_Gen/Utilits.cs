@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Diagnostics;
@@ -9,6 +10,7 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Electrical;
 using Autodesk.Revit.DB.ExtensibleStorage;
 using System.Runtime.InteropServices;
+using EVA_Gen.WPF.Models;
 
 namespace EVA_Gen
 {
@@ -107,6 +109,27 @@ namespace EVA_Gen
             return sortCircuit.OrderBy(x => x.StartSlot);
         }
 
+        public static ObservableCollection<CircItem> GetSortedCircuits(Element element, out CircItem circBoard)
+        {
+            FamilyInstance board = element as FamilyInstance;
+            circBoard = null;
+            ObservableCollection<CircItem> circItems = new ObservableCollection<CircItem>();
+            ElectricalSystemSet fullCircuits = board.MEPModel.ElectricalSystems; //Получение всех цепей щита
+            List<ElectricalSystem> sortCircuit = new List<ElectricalSystem>();
+            string boardName = board.Name;
+            foreach (ElectricalSystem circ in fullCircuits)
+            {
+                string s = circ.PanelName;
+                if (s == boardName) sortCircuit.Add(circ);
+                else circBoard = new CircItem(circ);
+            }
+            sortCircuit.OrderBy(x => x.StartSlot);
+            foreach (ElectricalSystem circ in sortCircuit)
+            {
+                circItems.Add(new CircItem(circ));
+            }
+            return circItems; 
+        }
 
     }
 }

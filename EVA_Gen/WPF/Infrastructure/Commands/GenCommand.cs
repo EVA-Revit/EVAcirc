@@ -73,9 +73,10 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
             uidoc.RequestViewChange(view);
             double step = Utilits.Ft(30);
 
-            ElectricalSystem circBoard = null;
-            IEnumerable<ElectricalSystem> circSortBoard = Utilits.GetSortedCircuits(SelectedPanelCommand.Rboard as FamilyInstance, out circBoard); //отсортированные цепи
-            int nn = circSortBoard.Count();
+            //ElectricalSystem circBoard = null;
+            //List<ElectricalSystem> circSortBoard = Utilits.GetSortedCircuits(SelectedPanelCommand.Rboard as FamilyInstance, out circBoard).ToList(); //отсортированные цепи
+            List<CircItem> circItemsBoard = SelectedPanelCommand.Circuits.ToList();
+            int nn = SelectedPanelCommand.CountGroup;
             XYZ pt = new XYZ();
            
 
@@ -117,9 +118,45 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
                 for (int i = 1; i < nn + 1; i++)
                 {
-
+                    string t = "";
+                    string w = "";
+                    string q = "";
 
                     FamilyInstance othLine = doc.Create.NewFamilyInstance(new XYZ((step * i) - step / 2 + pt.X, pt.Y, 0), fam_othLine, view);
+
+                    var circ = circItemsBoard[i - 1];
+
+                    if (circ.Mark_Cable_2 != "") //если содержит текст
+                    {
+
+                        //TaskDialog.Show("Testing", "Пустой параметр Марка кабеля");
+                    }
+
+                    else //если не содержит текст
+                    {
+                        if (circ.SectionCable2 != "")
+                        {
+
+                        }
+
+                    }
+
+
+                    if (circ.L_pipe != "")
+                    {
+                        w = circ.L_pipe + "м";
+                    }
+
+
+                    //назначение
+                    othLine.LookupParameter("Строка1_EVA").Set(circ.Name + "; " + circ.Mark_Cable_1 + "; " + circ.WayOfLaying);
+
+                    //othLine.LookupParameter("Строка1_EVA").Set(circ.LookupParameter("Имя_цепи_EVA").ToString() + "; " 
+                    //    + circ.LookupParameter("Марка_кабеля_1_EVA").ToString());
+
+
+
+
 
 
                     //var circ = ElPanel.ElCircuetsList[i - 1];
