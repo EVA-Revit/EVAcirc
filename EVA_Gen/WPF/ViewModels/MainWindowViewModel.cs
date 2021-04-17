@@ -58,7 +58,7 @@ namespace EVA_Gen.WPF.ViewModels
             {
                 if (Equals(_SelectedPanel, value)) return;
                 _SelectedPanel = value;
-                GenCommand.SelectedPanelCommand = value;
+                GenCommand.SelectedPanel = value;
                 OnPropertyChanged();   
             }
         }

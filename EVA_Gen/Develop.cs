@@ -129,6 +129,7 @@ namespace EVA_Gen
             mVm.Panels = panelItems;
             var view = new WPF.Views.MainWindow();
             view.DataContext = mVm;
+            GenCommand.window = view;
             view.ShowDialog();
             return true;
         }

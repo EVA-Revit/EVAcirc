@@ -131,5 +131,130 @@ namespace EVA_Gen
             return circItems; 
         }
 
+        public static void UseParamViewAppZ(Element el, string nazn)
+        {
+            el.LookupParameter("QF_EVA").Set(0);
+            el.LookupParameter("QF+Н.Р._EVA").Set(0);
+            el.LookupParameter("QFD_EVA").Set(0);
+            el.LookupParameter("QFD+Н.Р._EVA").Set(0);
+            el.LookupParameter("КМ_EVA").Set(0);
+            el.LookupParameter("FU_EVA").Set(0);
+            el.LookupParameter("Мотор_привод_EVA").Set(0);
+            el.LookupParameter("QS_EVA").Set(0);
+            el.LookupParameter("Wh_EVA").Set(0);
+            el.LookupParameter("КТ_EVA").Set(0);
+            el.LookupParameter("QD_EVA").Set(0);
+            try
+            {
+                el.LookupParameter(nazn).Set(1);
+            }
+            catch { TaskDialog.Show("Debug", "worning param"); }
+        }
+        public static void UseParamViewUgo(Element el, string nazn)
+        {
+            ZeroingViewUgo(el); //обнуление видимости УГО
+            try
+            {
+                el.LookupParameter(nazn).Set(1);
+            }
+            catch { TaskDialog.Show("Debug", "worning param"); }
+        }
+
+        public static void UseParamViewUgoInTypeLoad(Element el, string tepeLoad)
+        {
+            ZeroingViewUgo(el); //обнуление видимости УГО
+            try
+            {   
+                switch(tepeLoad)
+                {
+                    case "Вентиляция общеобменная":
+                        el.LookupParameter("Эл.двигатель_EVA").Set(1);
+                        break;
+                    case "Вентиляция противодымная":
+                        el.LookupParameter("Эл.двигатель_EVA").Set(1);
+                        break;
+                    case "Заград. Огни":
+                        el.LookupParameter("Освещение_Рабочее_EVA").Set(1);
+                        break;
+                    case "Квартиры по удельной нагрузки":
+                        el.LookupParameter("УЭР(Б,В,К,М,Н)_EVA").Set(1);
+                        break;
+                    case "Квартиры повышенной комфортности":
+                        el.LookupParameter("УЭР(Б,В,К,М,Н)_EVA").Set(1);
+                        break;
+                    case "Лифты":
+                        el.LookupParameter("Эл.двигатель_EVA").Set(1);
+                        break;
+                    case "Оборудование насосное":
+                        el.LookupParameter("Эл.двигатель_EVA").Set(1);
+                        break;
+                    case "Освещение аварийное":
+                        el.LookupParameter("Освещение_Авар_EVA").Set(1);
+                        break;
+                    case "Освещение наружное":
+                        el.LookupParameter("Освещение_Рабочее_EVA").Set(1);
+                        break;
+                    case "Освещение наружное(реклама)":
+                        el.LookupParameter("Освещение_Рабочее_EVA").Set(1);
+                        break;
+                    case "Освещение рабочее":
+                        el.LookupParameter("Освещение_Рабочее_EVA").Set(1);
+                        break;
+                    case "Противопожарные клапаны":
+                        el.LookupParameter("Клапан_EVA").Set(1);
+                        break;
+                    case "Противопожные слаботочные системы":
+                        el.LookupParameter("Блок_Управления_EVA").Set(1);
+                        break;
+                    case "Слаботочные системы":
+                        el.LookupParameter("ЩУ_EVA").Set(1);
+                        break;
+                    case "Уборочные механизмы":
+                        el.LookupParameter("Розетка_1Ф_IP20_EVA").Set(1);
+                        break;
+                    case "Установки пожаротушения":
+                        el.LookupParameter("Эл.двигатель_EVA").Set(1);
+                        break;
+                    case "Холодоснабжение":
+                        el.LookupParameter("Эл.двигатель_EVA").Set(1);
+                        break;
+                    case "Электрообогрев":
+                        el.LookupParameter("ТЭН_EVA").Set(1);
+                        break;
+
+                    default:
+                        el.LookupParameter("Устройство_EVA").Set(1);
+                        break;
+                }
+            }
+            catch { TaskDialog.Show("Debug", "worning param"); }
+        }
+
+
+
+
+
+
+        private static void ZeroingViewUgo(Element el)
+        {
+            el.LookupParameter("Блок_Управления_EVA").Set(0);
+            el.LookupParameter("Блок_питания_EVA").Set(0);
+            el.LookupParameter("Клапан_EVA").Set(0);
+            el.LookupParameter("Освещение_Авар_EVA").Set(0);
+            el.LookupParameter("Освещение_Рабочее_EVA").Set(0);
+            el.LookupParameter("Розетка_1Ф_IP20_EVA").Set(0);
+            el.LookupParameter("Розетка_1Ф_IP(40,54)_EVA").Set(0);
+            el.LookupParameter("Розетка_3Ф_IP(40,54)_EVA").Set(0);
+            el.LookupParameter("ТЭН_EVA").Set(0);
+            el.LookupParameter("УЭР(Б,В,К,М,Н)_EVA").Set(0);
+            el.LookupParameter("Устройство_EVA").Set(0);
+            el.LookupParameter("ЩАО_EVA").Set(0);
+            el.LookupParameter("ЩО_EVA").Set(0);
+            el.LookupParameter("ЩР_EVA").Set(0);
+            el.LookupParameter("ЩУ_EVA").Set(0);
+            el.LookupParameter("Эл.вывод_EVA").Set(0);
+            el.LookupParameter("Эл.двигатель_EVA").Set(0);
+            el.LookupParameter("ЯТП_EVA").Set(0);
+        }
     }
 }
