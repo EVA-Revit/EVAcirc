@@ -43,8 +43,10 @@ namespace EVA_Gen.WPF.ViewModels
         #endregion
 
 
+
+        private ObservableCollection<PanelItem> _Panels;
         //Свойство Панели для тривью
-        public List<PanelItem> Panels { get; set; }
+        public ObservableCollection<PanelItem> Panels { get => _Panels; set => Set(ref _Panels, value); }
 
 
         //свойство выбранной панели через behavior
@@ -74,6 +76,9 @@ namespace EVA_Gen.WPF.ViewModels
         private bool CanCloseWindowCommandExecuted(object p) => true;
         private void OnCloseWindowCommandExecuted(object p)
         {
+            Panels.Remove(SelectedPanel);
+            //SelectedPanel.Name = "newds";
+           
             //Application.Current.Shutdown(); //закрытие текущего приложения
         }
 

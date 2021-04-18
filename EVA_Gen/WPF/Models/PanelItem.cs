@@ -90,7 +90,7 @@ namespace EVA_Gen.WPF.Models
                 Cable_L_1 = rCirc.LookupParameter("L_факт_кабеля_1_EVA").AsDouble();
                 Cable_L_2 = rCirc.LookupParameter("L_факт_кабеля_2_EVA").AsDouble();
                 Number_Of_Phase = rCirc.PolesNumber;
-                Phase_Connection = rCirc.LookupParameter("Фаза_подключения_EVA").AsString();
+                Phase_Connection = rCirc.LookupParameter("Фаза_подключения_EVA").AsValueString();
                 Device_Type_1 = rCirc.LookupParameter("Тип_аппарата_1_EVA").AsValueString();
                 Device_Type_2 = rCirc.LookupParameter("Тип_аппарата_2_EVA").AsValueString();
                 Device_Type_3 = rCirc.LookupParameter("Тип_аппарата_3_EVA").AsValueString();
@@ -100,9 +100,9 @@ namespace EVA_Gen.WPF.Models
                 Device_I_1 = rCirc.LookupParameter("I_расцепителя_аппарата_1_EVA").AsDouble();
                 Device_I_2 = rCirc.LookupParameter("I_расцепителя_аппарата_2_EVA").AsDouble();
                 Device_I_3 = rCirc.LookupParameter("I_расцепителя_аппарата_3_EVA").AsDouble();
-                Device_Curve_1 = rCirc.LookupParameter("Характеристика_срабатывания_аппарат_1_EVA").AsString();
-                Device_Curve_2 = rCirc.LookupParameter("Характеристика_срабатывания_аппарат_2_EVA").AsString();
-                Device_Curve_3 = rCirc.LookupParameter("Характеристика_срабатывания_аппарат_3_EVA").AsString();
+                Device_Curve_1 = rCirc.LookupParameter("Характеристика_срабатывания_аппарат_1_EVA").AsValueString();
+                Device_Curve_2 = rCirc.LookupParameter("Характеристика_срабатывания_аппарат_2_EVA").AsValueString();
+                Device_Curve_3 = rCirc.LookupParameter("Характеристика_срабатывания_аппарат_3_EVA").AsValueString();
                 Device_Break_1 = rCirc.LookupParameter("Ном_откл_способн_аппарата_1_EVA").AsDouble();
                 Device_Break_2 = rCirc.LookupParameter("Ном_откл_способн_аппарата_2_EVA").AsDouble();
                 Device_Break_3 = rCirc.LookupParameter("Ном_откл_способн_аппарата_3_EVA").AsDouble();
@@ -112,6 +112,8 @@ namespace EVA_Gen.WPF.Models
                 Load_Type = rCirc.LookupParameter("Тип_Нагрузки_EVA").AsValueString();
                 Load_Name = rCirc.LookupParameter("Наименование_нагрузки_EVA").AsString();
                 Ugo = rCirc.LookupParameter("УГО_EVA").AsValueString();
+
+
             }
             
 

@@ -13,9 +13,9 @@
         WindowStartupLocation="CenterScreen"
         Title="{Binding Path=Title}">
     <!--Привязка Data Context для отладки-->
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <vm:MainWindowViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
     <Grid>
         
         <Grid.Resources>
@@ -35,7 +35,7 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Vertical" Grid.Row="1">
-            <Button Margin="5,10,0,5" Content="+" ></Button>
+            <Button Margin="5,10,0,5" Content="+"  Command="{Binding Path=CloseWindowCommand }"></Button>
             <Button Margin="5,5,0,5" Content="-" ></Button>
         </StackPanel>
         
@@ -47,8 +47,8 @@
                 <HierarchicalDataTemplate ItemsSource="{Binding SubPanels}">
                     <!--<TextBlock Text="{Binding Name}"></TextBlock>-->
                     <DockPanel>
-                        <CheckBox IsChecked ="{Binding Path=Is_Checked}" DockPanel.Dock="Left"></CheckBox>
-                        <TextBlock Text="{Binding Name}"></TextBlock>
+                        <CheckBox IsChecked ="{Binding Path=Is_Checked}" DockPanel.Dock="Left"/>
+                        <TextBlock Text="{Binding Name}"/>
                     </DockPanel>
                     <!--<CheckBox Content="{Binding Name}"></CheckBox>-->
                 </HierarchicalDataTemplate>
@@ -73,7 +73,8 @@
                       CanUserAddRows="False"
                       GridLinesVisibility="All" 
                       VerticalGridLinesBrush="DarkGray"
-                      HorizontalGridLinesBrush="DarkGray"  >
+                      HorizontalGridLinesBrush="DarkGray" CanUserSortColumns ="False" SelectionMode="Extended" CanUserResizeColumns="False" CanUserResizeRows="False" SelectionUnit="Cell" >
+                
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="{x:Type DataGridColumnHeader}">
                         
@@ -102,18 +103,18 @@
                             </Setter.Value>
                         </Setter>
                         <Setter Property="Width" Value="120"/>
-                        <Style.Triggers>
+                        <!--<Style.Triggers>
                             <Trigger Property="DataGridCell.IsSelected" Value="True">
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="Foreground"  Value="Black"/>
                                 <Setter Property="BorderBrush" Value="Transparent"/>
                             </Trigger>
-                        </Style.Triggers>
+                        </Style.Triggers>-->
                     </Style>
                 </DataGrid.CellStyle>
 
                 <DataGrid.Columns>
-
+                
 
 
                    
@@ -124,9 +125,9 @@
                     <DataGridTextColumn Header="Имя цепи" Binding="{Binding Name}"></DataGridTextColumn>
                     
                     <DataGridTextColumn Header="Марка аппарата 1" Binding="{Binding Device_Mark_1}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Характеристика срабатывания" Binding="{Binding Device_Сurve_1}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Хар-ка срабатывания" Binding="{Binding Device_Curve_1}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Ток аппарата 1" Binding="{Binding Device_I_1}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Тип аппарата 1" Binding="{Binding Device_Type_1}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Тип аппарата 1" Binding="{Binding Device_Type_1}" ></DataGridTextColumn>
                     
 
                 </DataGrid.Columns>
@@ -139,5 +140,16 @@
                 <cmd:GenCommand></cmd:GenCommand>
             </Button.Command>
         </Button>
+        <DataGrid Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Path=SelectedPanel.Circuits}"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                
+                <DataGridTextColumn Header="Ток аппарата 1" Binding="{Binding Device_I_1}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Тип аппарата 1" Binding="{Binding Device_Type_1}" ></DataGridTextColumn>
+            </DataGrid.Columns>
+            
+
+        </DataGrid>
+        
     </Grid>
 </Window>

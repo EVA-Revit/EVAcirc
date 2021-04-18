@@ -108,7 +108,7 @@ namespace EVA_Gen
                 }
             }
 
-            List<PanelItem> panelItems = new List<PanelItem>();
+            ObservableCollection<PanelItem> panelItems = new ObservableCollection<PanelItem>();
 
             foreach (FamilyInstance fi in boards)
             {
