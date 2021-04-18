@@ -124,6 +124,19 @@ namespace EVA_Gen
                 }
             }
 
+            foreach (PanelItem item in panelItems)
+            {
+                ObservableCollection<PanelItem> nPanel = new ObservableCollection<PanelItem>();
+                ObservableCollection<PanelItem> dPanel = new ObservableCollection<PanelItem>();
+                if (item.Name.StartsWith("ВРУ"))
+                {
+                    dPanel.Add(item);
+                    nPanel.Add(new PanelItem(item));
+                }
+            }
+            
+            //panelItems.
+
 
             var mVm = new MainWindowViewModel();
             mVm.Panels = panelItems;

@@ -209,7 +209,7 @@ namespace EVA_Gen.WPF.Models
             }
         }
 
-        public List<PanelItem> SubPanels { get; set; }
+        public List<PanelItem> SubPanels { get; set; } = new List<PanelItem>();
 
 
         //Цепи щита
@@ -219,7 +219,7 @@ namespace EVA_Gen.WPF.Models
         //Конструктор
         public PanelItem(Element panelRevit)
         {
-            SubPanels = new List<PanelItem>();
+            //SubPanels = new List<PanelItem>();
             Circuits = new ObservableCollection<CircItem>();
 
             //Заполнение свойств паенели
@@ -238,7 +238,22 @@ namespace EVA_Gen.WPF.Models
 
         }
 
+        public PanelItem(PanelItem panelItem)
+        {
+            Name = panelItem.Name;
+            SubPanels.Add(panelItem);
+        }
+
+
+
     }
+
+    //internal class VruItem : ElectricalInfo
+    //{
+
+    //}
+
+
     enum Device
     {
         Mark,
