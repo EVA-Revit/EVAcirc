@@ -27,12 +27,13 @@ namespace EVA_Gen.WPF.Models
         //public static string DeviceMark = "Марка_аппарата";
         //public static string DeviceType = "Т_аппарата";
 
+        public bool Rez { get; set; }
         public string AppZ { get; set; }
         public int Length { get; set; }
         public string Cable_Mark_2 { get; set; }
         public string Cable_Mark_1 { get; set; }
         public string Cable_In_Tray_Pipe { get; set; }
-
+        public string Cable_S_1 { get; set; }
         public string Cable_S_2 { get; set; }
         public double Pipe_L { get; set; }
         public double P1_Calculated { get; set; }
@@ -74,10 +75,11 @@ namespace EVA_Gen.WPF.Models
             if(rCirc.CircuitType == CircuitType.Circuit)
             {
                 Name = rCirc.Name;
-
+                Rez = false;
                 Cable_Mark_2 = rCirc.LookupParameter("Марка_кабеля_2_EVA").AsString();
                 Cable_Mark_1 = rCirc.LookupParameter("Марка_кабеля_1_EVA").AsString();
                 Cable_In_Tray_Pipe = rCirc.LookupParameter("Способ_прокладки_EVA").AsString();
+                Cable_S_1 = rCirc.LookupParameter("Сечение_кабеля_1_EVA").AsString();
                 Cable_S_2 = rCirc.LookupParameter("Сечение_кабеля_2_EVA").AsString();
                 Pipe_L = rCirc.LookupParameter("L_трубы_EVA").AsDouble();
                 P1_Calculated = rCirc.LookupParameter("Pр_отх_линии_EVA").AsDouble();
@@ -116,6 +118,12 @@ namespace EVA_Gen.WPF.Models
 
             }
             
+            else 
+            {
+                Rez = true;
+
+                //подключения расширенного хранилища для получения информации из резервных цепей
+            }
 
 
 
