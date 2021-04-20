@@ -123,19 +123,37 @@ namespace EVA_Gen
 
                 }
             }
-
+            #region Объеденение панелелей в ВРУ
+            ObservableCollection<PanelItem> nPanel = new ObservableCollection<PanelItem>();
+            ObservableCollection<PanelItem> dPanel = new ObservableCollection<PanelItem>();
+            var dd = panelItems.Where(x => x.Name.StartsWith("ВРУ"));
+            
             foreach (PanelItem item in panelItems)
             {
-                ObservableCollection<PanelItem> nPanel = new ObservableCollection<PanelItem>();
-                ObservableCollection<PanelItem> dPanel = new ObservableCollection<PanelItem>();
                 if (item.Name.StartsWith("ВРУ"))
                 {
                     dPanel.Add(item);
-                    nPanel.Add(new PanelItem(item));
+                    var asf = nPanel.Where(x => x.Name.StartsWith(item.Name.Remove(3)));
+                    if (asf.Count() > 0) asf.First().SubPanels.Add(item);
+                    else nPanel.Add(new PanelItem(item));
+
+                    //panelItems.Remove(item);
                 }
+                
             }
-            
-            //panelItems.
+            foreach (var item in dPanel)
+            {
+                panelItems.Remove(item);
+            }
+            foreach (var item in nPanel)
+            {
+                panelItems.Add(item);
+            }
+
+
+           
+
+            #endregion
 
 
             var mVm = new MainWindowViewModel();

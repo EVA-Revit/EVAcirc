@@ -240,7 +240,7 @@ namespace EVA_Gen.WPF.Models
 
         public PanelItem(PanelItem panelItem)
         {
-            Name = panelItem.Name;
+            Name = panelItem.Name.Remove(3);
             SubPanels.Add(panelItem);
         }
 

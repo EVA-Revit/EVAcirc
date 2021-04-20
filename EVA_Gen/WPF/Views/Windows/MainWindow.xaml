@@ -54,11 +54,18 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        
-        
-        <Button Grid.Column="1"  Margin="10" Content="Сгенерировать" HorizontalAlignment="Left"></Button>
-        <Button Grid.Column="1"  Margin="10" Width="85" Content="Обновить" HorizontalAlignment="Right"></Button>
 
+
+        <Button Grid.Column="1" Margin="10" Width="85" Content="Generation" HorizontalAlignment="Left" >
+            <Button.Command >
+                <cmd:GenCommand/>
+            </Button.Command>
+            <Button.CommandParameter>
+                <Binding Path="Panels" ></Binding>
+            </Button.CommandParameter>
+        </Button>
+        <Button Grid.Column="1"  Margin="10" Width="85" Content="Update" HorizontalAlignment="Right"></Button>
+        <TextBlock Grid.Column="2" Text="Данные панели:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
 
 
 
@@ -135,25 +142,15 @@
             </DataGrid>
         </StackPanel>
 
-        <Button Grid.Column="2" Margin="10" Content="Gen" >
+        <!--<Button Grid.Column="2" Margin="10" Content="Gen" >
             <Button.Command >
                 <cmd:GenCommand/>
             </Button.Command>
             <Button.CommandParameter>
                 <Binding Path="Panels" ></Binding>
             </Button.CommandParameter>
-
-        </Button>
-        <DataGrid Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Path=SelectedPanel.Circuits}"
-                  AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                
-                <DataGridTextColumn Header="Ток аппарата 1" Binding="{Binding Device_I_1}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Тип аппарата 1" Binding="{Binding Device_Type_1}" ></DataGridTextColumn>
-            </DataGrid.Columns>
-            
-
-        </DataGrid>
+        </Button>-->
+       
         
     </Grid>
 </Window>
