@@ -20,6 +20,8 @@ namespace EVA_Gen
         private static Document doc;
         private static UIDocument uidoc;
         protected static List<Element> boards;
+        private static Categories categories; 
+        private static ElementId electricalEquipmentCategoryId; 
 
         //Получение id категории
         //private static Categories categories = doc.Settings.Categories;
@@ -31,6 +33,8 @@ namespace EVA_Gen
             uidoc = commandData.Application.ActiveUIDocument;
             doc = uidoc.Document;
             Utilits.Doc = doc;
+            categories = doc.Settings.Categories;
+            electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
             try
             {
                 //Здесь пишется код или метод boolean
@@ -171,8 +175,8 @@ namespace EVA_Gen
         {
             PanelItem panelItem = new PanelItem(board);
 
-            Categories categories = doc.Settings.Categories;
-            ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
+            //Categories categories = doc.Settings.Categories;
+            //ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
 
             foreach (Connector c in board.MEPModel.ConnectorManager.Connectors)
             {
@@ -197,8 +201,8 @@ namespace EVA_Gen
                         if (!e2.Id.Equals(board.Id) && e2.Category.Id == electricalEquipmentCategoryId)
                         {
                             //потомок
-                            var pe = GetPanelItems(e2 as FamilyInstance);
-                            panelItem.SubPanels.Add(pe);
+                            //var pe = GetPanelItems(e2 as FamilyInstance);
+                            //panelItem.SubPanels.Add(pe);
 
                         }
                     }
