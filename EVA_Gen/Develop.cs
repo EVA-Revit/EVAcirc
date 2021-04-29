@@ -20,7 +20,7 @@ namespace EVA_Gen
         private static Document doc;
         private static UIDocument uidoc;
         protected static List<Element> boards;
-        private static Categories categories; 
+        //private static Categories categories; 
         private static ElementId electricalEquipmentCategoryId; 
 
         //Получение id категории
@@ -33,7 +33,7 @@ namespace EVA_Gen
             uidoc = commandData.Application.ActiveUIDocument;
             doc = uidoc.Document;
             Utilits.Doc = doc;
-            categories = doc.Settings.Categories;
+            Categories categories = doc.Settings.Categories;
             electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
             try
             {
@@ -128,31 +128,31 @@ namespace EVA_Gen
                 }
             }
             #region Объеденение панелелей в ВРУ
-            ObservableCollection<PanelItem> nPanel = new ObservableCollection<PanelItem>();
-            ObservableCollection<PanelItem> dPanel = new ObservableCollection<PanelItem>();
-            var dd = panelItems.Where(x => x.Name.StartsWith("ВРУ"));
+            //ObservableCollection<PanelItem> nPanel = new ObservableCollection<PanelItem>();
+            //ObservableCollection<PanelItem> dPanel = new ObservableCollection<PanelItem>();
+            //var dd = panelItems.Where(x => x.Name.StartsWith("ВРУ"));
             
-            foreach (PanelItem item in panelItems)
-            {
-                if (item.Name.StartsWith("ВРУ"))
-                {
-                    dPanel.Add(item);
-                    var asf = nPanel.Where(x => x.Name.StartsWith(item.Name.Remove(3)));
-                    if (asf.Count() > 0) asf.First().SubPanels.Add(item);
-                    else nPanel.Add(new PanelItem(item));
+            //foreach (PanelItem item in panelItems)
+            //{
+            //    if (item.Name.StartsWith("ВРУ"))
+            //    {
+            //        dPanel.Add(item);
+            //        var asf = nPanel.Where(x => x.Name.StartsWith(item.Name.Remove(3)));
+            //        if (asf.Count() > 0) asf.First().SubPanels.Add(item);
+            //        else nPanel.Add(new PanelItem(item));
 
-                    //panelItems.Remove(item);
-                }
+            //        //panelItems.Remove(item);
+            //    }
                 
-            }
-            foreach (var item in dPanel)
-            {
-                panelItems.Remove(item);
-            }
-            foreach (var item in nPanel)
-            {
-                panelItems.Add(item);
-            }
+            //}
+            //foreach (var item in dPanel)
+            //{
+            //    panelItems.Remove(item);
+            //}
+            //foreach (var item in nPanel)
+            //{
+            //    panelItems.Add(item);
+            //}
 
 
            
@@ -201,8 +201,8 @@ namespace EVA_Gen
                         if (!e2.Id.Equals(board.Id) && e2.Category.Id == electricalEquipmentCategoryId)
                         {
                             //потомок
-                            //var pe = GetPanelItems(e2 as FamilyInstance);
-                            //panelItem.SubPanels.Add(pe);
+                            var pe = GetPanelItems(e2 as FamilyInstance);
+                            panelItem.SubPanels.Add(pe);
 
                         }
                     }

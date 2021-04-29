@@ -30,11 +30,16 @@ namespace EVA_Gen.WPF.Models
         public bool Rez { get; set; }
         public string AppZ { get; set; }
         public int Length { get; set; }
-        public string Cable_Mark_2 { get; set; }
+        //public string Cable_Mark_2 { get; set; }
         public string Cable_Mark_1 { get; set; }
         public string Cable_In_Tray_Pipe { get; set; }
-        public string Cable_S_1 { get; set; }
-        public string Cable_S_2 { get; set; }
+        public int Сable_S_1_1 { get; set; }
+        public int Сable_S_1_2 { get; set; }
+        public double Сable_S_1_3 { get; set; }
+        public int Сable_S_2_1 { get; set; }
+        public int Сable_S_2_2 { get; set; }
+        public double Сable_S_2_3 { get; set; }
+
         public double Pipe_L { get; set; }
         public double P1_Calculated { get; set; }
         public double P_Installed { get; set; }
@@ -76,11 +81,17 @@ namespace EVA_Gen.WPF.Models
             {
                 Name = rCirc.Name;
                 Rez = false;
-                Cable_Mark_2 = rCirc.LookupParameter("Марка_кабеля_2_EVA").AsString();
+                //Cable_Mark_2 = rCirc.LookupParameter("Марка_кабеля_2_EVA").AsString();
                 Cable_Mark_1 = rCirc.LookupParameter("Марка_кабеля_1_EVA").AsString();
                 Cable_In_Tray_Pipe = rCirc.LookupParameter("Способ_прокладки_EVA").AsString();
-                Cable_S_1 = rCirc.LookupParameter("Сечение_кабеля_1_EVA").AsString();
-                Cable_S_2 = rCirc.LookupParameter("Сечение_кабеля_2_EVA").AsString();
+
+                Сable_S_1_1 = rCirc.LookupParameter("Сечение_кабеля_1_1_EVA").AsInteger();
+                Сable_S_1_2 = rCirc.LookupParameter("Сечение_кабеля_1_2_EVA").AsInteger();
+                Сable_S_1_3 = rCirc.LookupParameter("Сечение_кабеля_1_3_EVA").AsDouble();
+                Сable_S_2_1 = rCirc.LookupParameter("Сечение_кабеля_2_1_EVA").AsInteger();
+                Сable_S_2_2 = rCirc.LookupParameter("Сечение_кабеля_2_2_EVA").AsInteger();
+                Сable_S_2_3 = rCirc.LookupParameter("Сечение_кабеля_2_3_EVA").AsDouble();
+
                 Pipe_L = rCirc.LookupParameter("L_трубы_EVA").AsDouble();
                 P1_Calculated = rCirc.LookupParameter("Pр_отх_линии_EVA").AsDouble();
                 P_Installed = rCirc.LookupParameter("Pу_EVA").AsDouble();
@@ -240,7 +251,7 @@ namespace EVA_Gen.WPF.Models
             CircBoard = circBoard;
             CountGroup = Circuits.Count;
 
-            Rboard = panelRevit;
+            //Rboard = panelRevit;
 
             //CountGroup=panelRevit.
 
@@ -252,7 +263,10 @@ namespace EVA_Gen.WPF.Models
             SubPanels.Add(panelItem);
         }
 
-
+        public PanelItem()
+        {
+            
+        }
 
     }
 

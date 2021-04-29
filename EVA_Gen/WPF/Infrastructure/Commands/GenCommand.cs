@@ -179,22 +179,22 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                         //bool ap3 = circItemsBoard.Where(x => x.Device_Type_3 != "(нет)").Count() > 0;
 
                         //назначение
-                        othLine.LookupParameter("Название_кабельной_линии_EVA").Set(circ.Name);
-                        othLine.LookupParameter("Марка_кабеля_EVA").Set(circ.Cable_Mark_1);
-                        othLine.LookupParameter("Кол-во_жил_сечение_1_EVA").Set(circ.Cable_S_1);
-                        othLine.LookupParameter("Кол-во_жил_сечение_2_EVA").Set(circ.Cable_S_2);
-                        othLine.LookupParameter("Способ_прокладки_EVA").Set(circ.Cable_In_Tray_Pipe);
-                        othLine.LookupParameter("Рр_EVA").Set(circ.P1_Calculated.ToString());
-                        othLine.LookupParameter("Iр_EVA").Set(circ.I1_Calculated.ToString());
-                        othLine.LookupParameter("cos_EVA").Set(circ.Cos.ToString());
-                        othLine.LookupParameter("Однофазный_ток_КЗ_EVA").Set(circ.Ik_End_Line.ToString());
-                        othLine.LookupParameter("Длина_расч_EVA").Set(circ.Cable_Calculated_L.ToString());
-                        othLine.LookupParameter("ΔU_EVA").Set(circ.DU_Calculated.ToString());
-                        othLine.LookupParameter("Длина_факт_1_EVA").Set(circ.Cable_L_1.ToString());
-                        othLine.LookupParameter("Длина_факт_2_EVA").Set(circ.Cable_L_2.ToString());
-                        othLine.LookupParameter("Длина_трубы_EVA").Set(circ.Pipe_L.ToString());
-                        othLine.LookupParameter("Число_жил_EVA").Set(circ.Number_Of_Phase);
-                        othLine.LookupParameter("Фаза_EVA").Set(circ.Phase_Connection);
+                        //othLine.LookupParameter("Название_кабельной_линии_EVA").Set(circ.Name);
+                        //othLine.LookupParameter("Марка_кабеля_EVA").Set(circ.Cable_Mark_1);
+                        //othLine.LookupParameter("Кол-во_жил_сечение_1_EVA").Set(circ.Cable_S_1);
+                        //othLine.LookupParameter("Кол-во_жил_сечение_2_EVA").Set(circ.Cable_S_2);
+                        //othLine.LookupParameter("Способ_прокладки_EVA").Set(circ.Cable_In_Tray_Pipe);
+                        //othLine.LookupParameter("Рр_EVA").Set(circ.P1_Calculated.ToString());
+                        //othLine.LookupParameter("Iр_EVA").Set(circ.I1_Calculated.ToString());
+                        //othLine.LookupParameter("cos_EVA").Set(circ.Cos.ToString());
+                        //othLine.LookupParameter("Однофазный_ток_КЗ_EVA").Set(circ.Ik_End_Line.ToString());
+                        //othLine.LookupParameter("Длина_расч_EVA").Set(circ.Cable_Calculated_L.ToString());
+                        //othLine.LookupParameter("ΔU_EVA").Set(circ.DU_Calculated.ToString());
+                        //othLine.LookupParameter("Длина_факт_1_EVA").Set(circ.Cable_L_1.ToString());
+                        //othLine.LookupParameter("Длина_факт_2_EVA").Set(circ.Cable_L_2.ToString());
+                        //othLine.LookupParameter("Длина_трубы_EVA").Set(circ.Pipe_L.ToString());
+                        //othLine.LookupParameter("Число_жил_EVA").Set(circ.Number_Of_Phase);
+                        //othLine.LookupParameter("Фаза_EVA").Set(circ.Phase_Connection);
 
 
 
