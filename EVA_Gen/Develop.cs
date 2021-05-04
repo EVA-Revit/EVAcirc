@@ -12,6 +12,7 @@ using System.Collections.ObjectModel;
 using EVA_Gen.WPF.Models;
 using EVA_Gen.WPF.ViewModels;
 using EVA_Gen.WPF.Infrastructure.Commands;
+using System.Threading;
 
 namespace EVA_Gen
 {
@@ -21,12 +22,13 @@ namespace EVA_Gen
         private static UIDocument uidoc;
         protected static List<Element> boards;
         //private static Categories categories; 
-        private static ElementId electricalEquipmentCategoryId; 
+        private static ElementId electricalEquipmentCategoryId;
+        private static ConnectorSet refs;
+        private static ElectricalSystem eq;
+        private static PanelItem panelItem;
+        private static PanelItem panelItem2;
 
-        //Получение id категории
-        //private static Categories categories = doc.Settings.Categories;
-        //private static ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
-        //protected static List<PanelItem> panelItems;
+        
 
         public static Result SomeCode (ExternalCommandData commandData, ref string message)
         {
@@ -121,6 +123,10 @@ namespace EVA_Gen
                     //Если в списке дочерних щитов не содержится щит из списка щитов, то он щитается родительским и:
                     if (!equipmentChildren.Contains(fi.Id))
                     {
+                        //Thread tr = new Thread()
+                        //{
+
+                        //}
                         var panelItem = GetPanelItems(fi); //
                         panelItems.Add(panelItem);
                     }
@@ -171,16 +177,20 @@ namespace EVA_Gen
 
 
 
+        
+
         private static PanelItem GetPanelItems(FamilyInstance board)
         {
-            PanelItem panelItem = new PanelItem(board);
+            //panelItem = new PanelItem(board);
+            panelItem = new PanelItem();
+
 
             //Categories categories = doc.Settings.Categories;
             //ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
 
             foreach (Connector c in board.MEPModel.ConnectorManager.Connectors)
             {
-                ConnectorSet refs = c.AllRefs; //все ссылки на коннектор
+                refs = c.AllRefs; //все ссылки на коннектор
                 foreach (Connector c2 in refs)
                 {
                     Debug.Assert(null != c2.Owner,
@@ -189,7 +199,7 @@ namespace EVA_Gen
                     Debug.Assert(c2.Owner is ElectricalSystem,
                         "ожидаемый элемент щита будет ел.цепью");
 
-                    ElectricalSystem eq = c2.Owner as ElectricalSystem; //Получения из каждой ссылки на коннектор щита его владельца(элцепь)
+                    eq = c2.Owner as ElectricalSystem; //Получения из каждой ссылки на коннектор щита его владельца(элцепь)
 
                     if (eq.CircuitType != CircuitType.Circuit) { continue; }  //добавлена проверка из-зи 18го revit
 
@@ -201,8 +211,8 @@ namespace EVA_Gen
                         if (!e2.Id.Equals(board.Id) && e2.Category.Id == electricalEquipmentCategoryId)
                         {
                             //потомок
-                            var pe = GetPanelItems(e2 as FamilyInstance);
-                            panelItem.SubPanels.Add(pe);
+                            panelItem2 = GetPanelItems(e2 as FamilyInstance);
+                            panelItem.SubPanels.Add(panelItem2);
 
                         }
                     }
