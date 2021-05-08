@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Autodesk.Revit.UI;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.DB.Electrical;
+using System.Windows;
 
 namespace EVA_Gen.WPF.Models
 {
@@ -230,7 +231,9 @@ namespace EVA_Gen.WPF.Models
             {
                 if (Equals(_Is_Checked, value)) return;
                 _Is_Checked = value;
-                //TaskDialog.Show("sdad", "Работает");
+                if (value) SelectedPanels.Panels.Add(this);
+                else SelectedPanels.Panels.Remove(this);
+                
             }
         }
 
@@ -239,6 +242,19 @@ namespace EVA_Gen.WPF.Models
 
         //Цепи щита
         public ObservableCollection<CircItem> Circuits { get; set; }
+
+        //управление видимостью чекбокса
+        private System.Windows.Visibility _visibility;
+        public System.Windows.Visibility Visibility
+        {
+            get => _visibility;
+            set
+            {
+                _visibility = value;
+            }
+        }
+
+
 
 
         //Конструктор
@@ -262,18 +278,23 @@ namespace EVA_Gen.WPF.Models
 
             //CountGroup=panelRevit.
 
+            //управление видимостью чекбоксов
+            Visibility = System.Windows.Visibility.Collapsed;
+
         }
 
-        public PanelItem(PanelItem panelItem)
-        {
-            Name = panelItem.Name.Remove(3);
-            SubPanels.Add(panelItem);
-        }
+        //Конструктор для объеденения панелей ВРУ
+        //public PanelItem(PanelItem panelItem)
+        //{
+        //    Name = panelItem.Name.Remove(3);
+        //    //SubPanels.Add(panelItem);
+        //    SubPanels.Add(this);
+        //}
 
-        public PanelItem()
-        {
+        //public PanelItem()
+        //{
             
-        }
+        //}
 
     }
 
@@ -291,5 +312,10 @@ namespace EVA_Gen.WPF.Models
         I,
         Break,
         Body
+    }
+
+    internal static class SelectedPanels
+    {
+        public static List<PanelItem> Panels { get; set; } = new List<PanelItem>();
     }
 }

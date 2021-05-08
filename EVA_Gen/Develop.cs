@@ -115,14 +115,20 @@ namespace EVA_Gen
 
             //}
             #region Объеденение панелелей в ВРУ
+            
+
             //ObservableCollection<PanelItem> nPanel = new ObservableCollection<PanelItem>();
             //ObservableCollection<PanelItem> dPanel = new ObservableCollection<PanelItem>();
             //var dd = panelItems.Where(x => x.Name.StartsWith("ВРУ"));
 
-            //foreach (PanelItem item in panelItems)
+            //var gf = panelItems.OfType<PanelItem>();
+            //TaskDialog.Show("sadad", gf.Count().ToString());
+            ////foreach (PanelItem item in panelItems)
+            //foreach (PanelItem item in gf)
             //{
             //    if (item.Name.StartsWith("ВРУ"))
             //    {
+            //        TaskDialog.Show("sfs", "VRU");
             //        dPanel.Add(item);
             //        var asf = nPanel.Where(x => x.Name.StartsWith(item.Name.Remove(3)));
             //        if (asf.Count() > 0) asf.First().SubPanels.Add(item);
@@ -130,8 +136,9 @@ namespace EVA_Gen
 
             //        //panelItems.Remove(item);
             //    }
-
+            //    //var lf = UnionPanels(item)
             //}
+
             //foreach (var item in dPanel)
             //{
             //    panelItems.Remove(item);

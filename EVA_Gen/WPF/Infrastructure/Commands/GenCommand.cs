@@ -26,28 +26,20 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
         public override bool CanExecute(object parameter)
         {
-            if(parameter is ObservableCollection<PanelItem>)
-            {
-                ObservableCollection<PanelItem> panelItems = (ObservableCollection<PanelItem>)parameter;
-                var k = panelItems.Where(x => x.Is_Checked == true);
-                if(k.Count() > 0) return true;
-
-            }
+            if (SelectedPanels.Panels.Count > 0) return true;
             return false;
         }
 
-
+        //private ObservableCollection<PanelItem> ChildPanel(PanelItem pi )
        
 
 
         //логика
         public override void Execute(object parameter)
         {
-            //TaskDialog.Show("Testing", parameter.ToString());
-            ObservableCollection<PanelItem> panelItems = (ObservableCollection<PanelItem>)parameter;
-            var k = panelItems.Where(x => x.Is_Checked == true);
+            
 
-            foreach (var item in k)
+            foreach (var item in SelectedPanels.Panels)
             {
 
                 PanelItem SelectedPanel = item;

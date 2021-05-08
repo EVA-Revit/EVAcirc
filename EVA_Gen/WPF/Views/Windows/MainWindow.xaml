@@ -47,7 +47,7 @@
                 <HierarchicalDataTemplate ItemsSource="{Binding SubPanels}">
                     <!--<TextBlock Text="{Binding Name}"></TextBlock>-->
                     <DockPanel>
-                        <CheckBox IsChecked ="{Binding Path=Is_Checked}" DockPanel.Dock="Left"/>
+                        <CheckBox IsChecked ="{Binding Path=Is_Checked}" Visibility="{Binding Visibility}" DockPanel.Dock="Left"/>
                         <TextBlock Text="{Binding Name}"/>
                     </DockPanel>
                     <!--<CheckBox Content="{Binding Name}"></CheckBox>-->
@@ -60,9 +60,9 @@
             <Button.Command >
                 <cmd:GenCommand/>
             </Button.Command>
-            <Button.CommandParameter>
+            <!--<Button.CommandParameter>
                 <Binding Path="Panels" ></Binding>
-            </Button.CommandParameter>
+            </Button.CommandParameter>-->
         </Button>
         <Button Grid.Column="1"  Margin="10" Width="85" Content="Update" HorizontalAlignment="Right"></Button>
         <TextBlock Grid.Column="2" Text="Данные панели:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
@@ -125,8 +125,8 @@
 
 
                    
-                    <DataGridTextColumn Header="Ру" Binding="{Binding P_Installed}"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Фаза подключения" Binding="{Binding Phase_Connection}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Ру" Binding="{Binding P_Installed}" Visibility="Visible"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Фаза подключения" Binding="{Binding Phase_Connection}" Visibility="Visible"></DataGridTextColumn>
                     <DataGridTextColumn Header="Тип нагрузки" Binding="{Binding Load_Type}"></DataGridTextColumn>
                     <DataGridTextColumn Header="УГО" Binding="{Binding Ugo}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Имя цепи" Binding="{Binding Name}"></DataGridTextColumn>

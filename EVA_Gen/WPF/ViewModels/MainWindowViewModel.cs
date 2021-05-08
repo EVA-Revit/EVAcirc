@@ -51,7 +51,9 @@ namespace EVA_Gen.WPF.ViewModels
 
         //свойство выбранной панели через behavior
         private PanelItem _SelectedPanel;
-
+        /// <summary>
+        /// Свойство для заполнения видвого экрана цепей
+        /// </summary>
         public PanelItem SelectedPanel
         {
             get => _SelectedPanel;
@@ -91,7 +93,7 @@ namespace EVA_Gen.WPF.ViewModels
 
 
         #endregion
-
+        /*----------------------------------------------------------------------------------------------------------------*/
 
         //Конструктор
         public MainWindowViewModel()
