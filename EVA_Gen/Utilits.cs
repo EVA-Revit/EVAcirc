@@ -33,6 +33,23 @@ namespace EVA_Gen
             return new List<Element>(collector.ToElements());
         }
 
+        public static List<PanelItem> GetPanelsItems(Document doc)
+        {
+            List<PanelItem> panelItems = new List<PanelItem>();
+            FilteredElementCollector collector = GetElementsOfType(doc, typeof(FamilyInstance), BuiltInCategory.OST_ElectricalEquipment);
+            foreach (Element board in collector)
+            {
+                //PanelItem panelItem = new PanelItem(board);
+                if (board.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_TOTALLOAD_PARAM).AsDouble() != 0)
+                { 
+                    panelItems.Add(new PanelItem(board));
+                }
+            }
+            //возращаем список вместо IList
+            return panelItems;
+        }
+
+
         public static FilteredElementCollector GetElementsOfType(Document doc, Type type, BuiltInCategory bic)
         {
             FilteredElementCollector collector = new FilteredElementCollector(doc);
@@ -121,7 +138,13 @@ namespace EVA_Gen
             {
                 string s = circ.PanelName;
                 if (s == boardName) sortCircuit.Add(circ);
-                else circBoard = new CircItem(circ);
+                else
+                {
+                    circBoard = new CircItem(circ);
+                    if (circ.BaseEquipment != null)
+                    circBoard.ParentBoardId = circ.BaseEquipment.Id;
+                }
+                    
             }
             sortCircuit.OrderBy(x => x.StartSlot);
             foreach (ElectricalSystem circ in sortCircuit)

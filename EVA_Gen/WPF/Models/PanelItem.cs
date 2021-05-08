@@ -19,6 +19,8 @@ namespace EVA_Gen.WPF.Models
         public int elId { get; set; }
 
         public Element Element { get; set; }
+        public ElementId ParentBoardId { get; set; }
+        public ElementId Id { get; set; }
 
     }
 
@@ -27,6 +29,7 @@ namespace EVA_Gen.WPF.Models
         //public static string DeviceMark = "Марка_аппарата";
         //public static string DeviceType = "Т_аппарата";
 
+        
         public bool Rez { get; set; }
         public string AppZ { get; set; }
         public int Length { get; set; }
@@ -81,6 +84,7 @@ namespace EVA_Gen.WPF.Models
             {
                 Name = rCirc.Name;
                 Rez = false;
+                Id = rCirc.Id;
                 //Cable_Mark_2 = rCirc.LookupParameter("Марка_кабеля_2_EVA").AsString();
                 Cable_Mark_1 = rCirc.LookupParameter("Марка_кабеля_1_EVA").AsString();
                 Cable_In_Tray_Pipe = rCirc.LookupParameter("Способ_прокладки_EVA").AsString();
@@ -213,7 +217,8 @@ namespace EVA_Gen.WPF.Models
 
         public Element Rboard { get; set; }
 
-        CircItem CircBoard { get; set; }
+        public CircItem CircBoard { get; set; }
+        
 
         private bool _Is_Checked;
         public bool Is_Checked
@@ -225,6 +230,7 @@ namespace EVA_Gen.WPF.Models
             {
                 if (Equals(_Is_Checked, value)) return;
                 _Is_Checked = value;
+                //TaskDialog.Show("sdad", "Работает");
             }
         }
 
@@ -243,12 +249,13 @@ namespace EVA_Gen.WPF.Models
 
             //Заполнение свойств паенели
             Name = panelRevit.Name;
-            elId = panelRevit.Id.IntegerValue;
-
+            Id = panelRevit.Id;
+            //ParentBoardId = ElementId.InvalidElementId;
 
             //Заполнение свойств цепей
             Circuits = Utilits.GetSortedCircuits(panelRevit, out CircItem circBoard); //отсортированные цепи
             CircBoard = circBoard;
+            ParentBoardId = circBoard.ParentBoardId;
             CountGroup = Circuits.Count;
 
             //Rboard = panelRevit;
