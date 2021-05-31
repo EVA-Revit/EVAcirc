@@ -87,12 +87,12 @@ namespace EVA_Gen.WPF.Models
                 Rez = false;
                 Id = rCirc.Id;
                 //Cable_Mark_2 = rCirc.LookupParameter("Марка_кабеля_2_EVA").AsString();
-                Cable_Mark_1 = rCirc.LookupParameter("Марка_кабеля_1_EVA").AsString();
+                //Cable_Mark_1 = rCirc.LookupParameter("Марка_кабеля_1_EVA").AsString();
                 Cable_In_Tray_Pipe = rCirc.LookupParameter("Способ_прокладки_EVA").AsString();
 
                 Сable_S_1_1 = rCirc.LookupParameter("Сечение_кабеля_1_1_EVA").AsInteger();
                 Сable_S_1_2 = rCirc.LookupParameter("Сечение_кабеля_1_2_EVA").AsInteger();
-                Сable_S_1_3 = rCirc.LookupParameter("Сечение_кабеля_1_3_EVA").AsDouble();
+                //Сable_S_1_3 = rCirc.LookupParameter("Сечение_кабеля_1_3_EVA").AsDouble();
                 Сable_S_2_1 = rCirc.LookupParameter("Сечение_кабеля_2_1_EVA").AsInteger();
                 Сable_S_2_2 = rCirc.LookupParameter("Сечение_кабеля_2_2_EVA").AsInteger();
                 Сable_S_2_3 = rCirc.LookupParameter("Сечение_кабеля_2_3_EVA").AsDouble();
@@ -279,7 +279,9 @@ namespace EVA_Gen.WPF.Models
             //CountGroup=panelRevit.
 
             //управление видимостью чекбоксов
-            Visibility = System.Windows.Visibility.Collapsed;
+            //Visibility = System.Windows.Visibility.Collapsed;
+            Visibility = System.Windows.Visibility.Visible;
+
 
         }
 
@@ -293,7 +295,7 @@ namespace EVA_Gen.WPF.Models
 
         //public PanelItem()
         //{
-            
+
         //}
 
     }

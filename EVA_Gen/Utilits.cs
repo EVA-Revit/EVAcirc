@@ -171,7 +171,7 @@ namespace EVA_Gen
             {
                 el.LookupParameter(nazn).Set(1);
             }
-            catch { TaskDialog.Show("Debug", "worning paramAppZ"); }
+            catch { TaskDialog.Show("Debug", "worning paramAppZ " + nazn); }
         }
         public static void UseParamViewUgo(Element el, string nazn)
         {
