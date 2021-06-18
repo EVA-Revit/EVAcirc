@@ -142,13 +142,26 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                     string panelName = SelectedPanel.Name;
                     if (panelName.Contains("РП-"))
                     {
+
                         string rez = panelName.Substring(panelName.IndexOf("РП-") + 3);
                         numAppStr = rez.Split(' ')[0];
                         numAppStr = rez.Split('(')[0];
                         if (numAppStr.Contains("-")) numAppStr = numAppStr.Remove(numAppStr.IndexOf("-"));
                     }
-
-
+                    else if (panelName.Contains("РП."))
+                    {
+                        string rez = panelName.Substring(panelName.IndexOf("РП.") + 3);
+                        numAppStr = rez.Split(' ')[0];
+                        numAppStr = rez.Split('(')[0];
+                        if (numAppStr.Contains("-")) numAppStr = numAppStr.Remove(numAppStr.IndexOf("-"));
+                    }
+                    else if (panelName.Contains("РП"))
+                    {
+                        string rez = panelName.Substring(panelName.IndexOf("РП") + 2);
+                        numAppStr = rez.Split(' ')[0];
+                        numAppStr = rez.Split('(')[0];
+                        if (numAppStr.Contains("-")) numAppStr = numAppStr.Remove(numAppStr.IndexOf("-"));
+                    }
 
 
 
@@ -167,8 +180,10 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                         if(circ.Rez) //если цепь резервная
                         {
                             othLine.LookupParameter("Резерв_EVA").Set(1);
+                            
                             //othLine.LookupParameter("Название_кабельной_линии_EVA").Set(circ.Load_Name);
                             continue;
+                            
                         }
 
 
@@ -233,27 +248,18 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                             othLine.LookupParameter("Длина_трубы_EVA").Set(circ.Pipe_L.ToString());
                             othLine.LookupParameter("Число_жил_EVA").Set(circ.Number_Of_Phase);
 
-
-
-
-                            //othLine.LookupParameter("Кол-во_жил_сечение_1_EVA").Set(circ.Сable_S_1_1);
-                            //othLine.LookupParameter("Кол-во_жил_сечение_2_EVA").Set(circ.Сable_S__1);
-
-                            //othLine.LookupParameter("Рр_EVA").Set(circ.P1_Calculated.ToString());
-                            //othLine.LookupParameter("Iр_EVA").Set(circ.I1_Calculated.ToString());
-                            //othLine.LookupParameter("cos_EVA").Set(circ.Cos.ToString());
-                            //othLine.LookupParameter("Однофазный_ток_КЗ_EVA").Set(circ.Ik_End_Line.ToString());
-                            //othLine.LookupParameter("Длина_расч_EVA").Set(circ.Cable_Calculated_L.ToString());
-                            //othLine.LookupParameter("ΔU_EVA").Set(circ.DU_Calculated.ToString());
-                            //othLine.LookupParameter("Длина_факт_1_EVA").Set(circ.Cable_L_1.ToString());
-                            //othLine.LookupParameter("Длина_факт_2_EVA").Set(circ.Cable_L_2.ToString());
-
-
-                            //othLine.LookupParameter("Фаза_EVA").Set(circ.Phase_Connection);
-
+                            if(circ.P1_Calculated != 0) othLine.LookupParameter("Рр_EVA").Set(circ.P1_Calculated.ToString());
+                            if (circ.I1_Calculated != 0) othLine.LookupParameter("Iр_EVA").Set(circ.I1_Calculated.ToString());
+                            if (circ.Cos != 0) othLine.LookupParameter("cos_EVA").Set(circ.Cos.ToString());
+                            if (circ.Ik_End_Line != 0) othLine.LookupParameter("Однофазный_ток_КЗ_EVA").Set(circ.Ik_End_Line.ToString());
+                            if (circ.Cable_Calculated_L != 0) othLine.LookupParameter("Длина_расч_EVA").Set(circ.Cable_Calculated_L.ToString());
+                            if (circ.DU_Calculated != 0) othLine.LookupParameter("ΔU_EVA").Set(circ.DU_Calculated.ToString());
+                            if (circ.Cable_L_1 != 0) othLine.LookupParameter("Длина_факт_1_EVA").Set(circ.Cable_L_1.ToString());
+                            if (circ.Number_Of_Phase != 0) othLine.LookupParameter("Фаза_EVA").Set(circ.Phase_Connection);
+                        
 
                             othLine.LookupParameter("Длина_до_кабеля_EVA").Set(Utilits.Ft(50) + d1);
-                            othLine.LookupParameter("Длина_линии_до_УГО_EVA").Set(Utilits.Ft(60));
+                            othLine.LookupParameter("Длина_линии_до_УГО_EVA").Set(Utilits.Ft(75));
                         }
 
 
@@ -314,16 +320,26 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                         }
 
                         //UGO
+                        if (ap3) y = Utilits.Ft(150.5);
+                        else y = Utilits.Ft(115.5);
+                        FamilyInstance ugo = doc.Create.NewFamilyInstance(new XYZ((step * i) - step / 2, y, 0), fam_UGO, view);
 
-                        if (circ.Load_Type == "Вентиляция противодымная" && SelectedPanel.Name == "ЩУ")
+
+                        //SelectedPanel.Name == "ЩУ"
+                        if (circ.Load_Type == "Вентиляция противодымная")
                         {
-
+                            ugo.LookupParameter("Строка1_EVA").Set(panelName + ", " + "text1");
+                            ugo.LookupParameter("Строка2_EVA").Set("text2");
+                            ugo.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(6));
+                            ugo.LookupParameter("Перемещение_по_X_EVA").Set(Utilits.Ft(10));
+                            //установка видимости уго из параметра
+                            Utilits.UseParamViewUgo(ugo, circ.Ugo);
                         }
                         else
                         {
-                            if (ap3) y = Utilits.Ft(150.5);
-                            else y = Utilits.Ft(115.5);
-                            FamilyInstance ugo = doc.Create.NewFamilyInstance(new XYZ((step * i) - step / 2, y, 0), fam_UGO, view);
+                            //if (ap3) y = Utilits.Ft(150.5);
+                            //else y = Utilits.Ft(115.5);
+                            //FamilyInstance ugo = doc.Create.NewFamilyInstance(new XYZ((step * i) - step / 2, y, 0), fam_UGO, view);
 
                             //Назначение
                             ugo.LookupParameter("Строка1_EVA").Set(circ.Load_Name);

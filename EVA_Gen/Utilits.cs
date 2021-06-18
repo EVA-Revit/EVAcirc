@@ -41,7 +41,7 @@ namespace EVA_Gen
             {
                 //PanelItem panelItem = new PanelItem(board);
                 if (board.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_TOTALLOAD_PARAM).AsDouble() != 0)
-                { 
+                {
                     panelItems.Add(new PanelItem(board));
                 }
             }
@@ -146,7 +146,7 @@ namespace EVA_Gen
                 }
                     
             }
-            sortCircuit.OrderBy(x => x.StartSlot);
+            sortCircuit = sortCircuit.OrderBy(x => x.StartSlot).ToList();
             foreach (ElectricalSystem circ in sortCircuit)
             {
                 circItems.Add(new CircItem(circ));

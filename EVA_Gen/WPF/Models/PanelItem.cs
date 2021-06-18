@@ -25,12 +25,19 @@ namespace EVA_Gen.WPF.Models
 
     }
 
+    internal class ElementItem : ElectricalInfo
+    {
+
+
+
+    }
+
+
     internal class CircItem : ElectricalInfo
     {
         //public static string DeviceMark = "Марка_аппарата";
         //public static string DeviceType = "Т_аппарата";
 
-        
         public bool Rez { get; set; }
         public string AppZ { get; set; }
         public int Length { get; set; }
@@ -78,12 +85,14 @@ namespace EVA_Gen.WPF.Models
         public string Load_Name { get; set; }
         public string Ugo { get; set; }
 
+        public List<ElementItem> ElementList { get; set; }
+
         public CircItem(ElectricalSystem rCirc)
         {
             //заполнение свойств
             if(rCirc.CircuitType == CircuitType.Circuit)
             {
-                Name = rCirc.Name;
+                Name = rCirc.LookupParameter("Имя_цепи_EVA").AsString();
                 Rez = false;
                 Id = rCirc.Id;
                 //Cable_Mark_2 = rCirc.LookupParameter("Марка_кабеля_2_EVA").AsString();
@@ -270,8 +279,12 @@ namespace EVA_Gen.WPF.Models
 
             //Заполнение свойств цепей
             Circuits = Utilits.GetSortedCircuits(panelRevit, out CircItem circBoard); //отсортированные цепи
-            CircBoard = circBoard;
-            ParentBoardId = circBoard.ParentBoardId;
+            if(circBoard != null)
+            {
+                CircBoard = circBoard;
+                ParentBoardId = circBoard.ParentBoardId;
+            }
+            
             CountGroup = Circuits.Count;
 
             //Rboard = panelRevit;
