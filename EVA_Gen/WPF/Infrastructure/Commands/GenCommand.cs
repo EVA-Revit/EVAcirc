@@ -20,7 +20,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
         public static Document doc;
         public static UIDocument uidoc;
         public static MainWindow window;
-        //public static PanelItem SelectedPanel { get; set; }
+
 
 
 
@@ -99,10 +99,10 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                 XYZ pt = new XYZ();
 
 
-                double d1 = 0;
+                double y1 = 0;
                 //проверка, есть ли 3ий аппарат
                 bool ap3 = circItemsBoard.Where(x => x.Device_Type_3 != "(нет)").Count() > 0;
-                if(ap3) d1 = Utilits.Ft(20);
+                if(ap3) y1 = Utilits.Ft(25);
 
                 //Получение семейств анотаций
                 var fam_shina = Utilits.FamType(Utilits.GetFamAn("EVA_Панель_Шина").Family, "-")
@@ -117,6 +117,8 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                 var fam_UGO = Utilits.FamType(Utilits.GetFamAn("EVA_Панель_УГО").Family, "-")
                  as FamilySymbol;
 
+                var fam_othLine_add = Utilits.FamType(Utilits.GetFamAn("EVA_Панель_Отходящая_линия_Доп").Family, "-")
+                 as FamilySymbol;
                 //var fam_el = Utilits.FamType(Utilits.GetFamAn(FNt1.el).Family, "-")
                 //    as FamilySymbol;
 
@@ -131,6 +133,8 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                     if (!fam_othLine.IsActive) fam_othLine.Activate();
                     if (!fam_app.IsActive) fam_app.Activate();
                     if (!fam_UGO.IsActive) fam_UGO.Activate();
+                    if (!fam_othLine_add.IsActive) fam_othLine_add.Activate();
+
 
 
                     FamilyInstance shina = doc.Create.NewFamilyInstance(pt, fam_shina, view);
@@ -201,30 +205,30 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                         }
                         else
                         {
-                            if(circ.Сable_S_1_1 != 0)
+                            if(circ.Cable_S_1_1 != 0)
                             {
-                                if (circ.Сable_S_1_1 == 1)
+                                if (circ.Cable_S_1_1 == 1)
                                 {
-                                    str1 = circ.Сable_S_1_2 + " x " + circ.Сable_S_1_3;
+                                    str1 = circ.Cable_S_1_2 + " x " + circ.Cable_S_1_3;
                                 }
                                 else
                                 {
-                                    str1 = circ.Сable_S_1_1 + " x " + circ.Сable_S_1_2 + " x " + circ.Сable_S_1_3;
+                                    str1 = circ.Cable_S_1_1 + " x " + circ.Cable_S_1_2 + " x " + circ.Cable_S_1_3;
                                 }
                             }
     
-                            if (circ.Сable_S_2_1 != 0)
+                            if (circ.Cable_S_2_1 != 0)
                             {
-                                if (circ.Сable_S_2_1 == 1)
+                                if (circ.Cable_S_2_1 == 1)
                                 {
-                                    str2 = circ.Сable_S_1_2 + " x " + circ.Сable_S_1_3;
+                                    str2 = circ.Cable_S_1_2 + " x " + circ.Cable_S_1_3;
 
                                 }
                                 else
                                 {
-                                    str2 = circ.Сable_S_1_1 + " x " + circ.Сable_S_1_2 + " x " + circ.Сable_S_1_3;
+                                    str2 = circ.Cable_S_1_1 + " x " + circ.Cable_S_1_2 + " x " + circ.Cable_S_1_3;
                                 }
-                                if (circ.Сable_S_2_2 == 1)
+                                if (circ.Cable_S_2_2 == 1)
                                 {
                                     othLine.LookupParameter("Кол-во_жил_сечение_EVA").Set(str1 + " + " + str2);
                                 }
@@ -258,7 +262,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                             if (circ.Number_Of_Phase != 0) othLine.LookupParameter("Фаза_EVA").Set(circ.Phase_Connection);
                         
 
-                            othLine.LookupParameter("Длина_до_кабеля_EVA").Set(Utilits.Ft(50) + d1);
+                            othLine.LookupParameter("Длина_до_кабеля_EVA").Set(Utilits.Ft(50) + y1);
                             othLine.LookupParameter("Длина_линии_до_УГО_EVA").Set(Utilits.Ft(75));
                         }
 
@@ -326,14 +330,145 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
 
                         //SelectedPanel.Name == "ЩУ"
-                        if (circ.Load_Type == "Вентиляция противодымная")
+                        //Если имеются отходящие линии 
+                        if (circ.Out_Line_panel != null)
                         {
+                            
+                           
                             ugo.LookupParameter("Строка1_EVA").Set(panelName + ", " + "text1");
                             ugo.LookupParameter("Строка2_EVA").Set("text2");
                             ugo.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(6));
                             ugo.LookupParameter("Перемещение_по_X_EVA").Set(Utilits.Ft(10));
                             //установка видимости уго из параметра
-                            Utilits.UseParamViewUgo(ugo, circ.Ugo);
+                            //Utilits.UseParamViewUgo(ugo, circ.Ugo);
+                            Utilits.UseParamViewUgo(ugo, "ЩУ");
+
+                            double x1 = (step * i) - step / 2;
+                            double y2 = 0;
+
+                            var panelAdd = Develop.boards.FirstOrDefault(pe => pe.Name == circ.Out_Line_panel);
+
+                            for (int i2 = 0; i2 < panelAdd.CountGroup; i2++)
+                            {
+                                if (panelAdd.CountGroup != 1)
+                                {
+                                    x1 = x1 - Utilits.Ft(10);
+                                    y2 = Utilits.Ft(10);
+
+                                }
+
+
+                                str1 = "";
+                                str2 = "";
+                                //создание
+                                FamilyInstance othLine_add = doc.Create.NewFamilyInstance(new XYZ(x1, Utilits.Ft(130.5) + y1 + y2, 0), fam_othLine_add, view);
+                                FamilyInstance ugo2 = doc.Create.NewFamilyInstance(new XYZ(x1, Utilits.Ft(210.5) + y1 + y2, 0), fam_UGO, view);
+
+                                x1 = x1 + Utilits.Ft(30);
+
+                                //назначение
+                                var circAdd = panelAdd.Circuits[i2];
+                                //if (circAdd.Cable_S_1_1 == 0)
+                                //{
+
+                                //}
+                                //else
+                                //{
+                                //    if (circAdd.Cable_S_1_1 == 1)
+                                //    {
+
+                                //    }
+                                //    else
+                                //    {
+                                //        str1 = circAdd.Cable_S_1_1 + "x" + circAdd.Cable_S_1_2 + "x" + circAdd.Cable_S_1_3;
+                                //    }
+                                //}
+                                //if(circAdd.Cable_S_2_1 == 0)
+                                //{
+
+                                //}
+
+
+
+                                if (circAdd.Cable_S_1_1 != 0)
+                                {
+                                    if (circAdd.Cable_S_1_1 == 1)
+                                    {
+                                        str1 = circAdd.Cable_S_1_2 + " x " + circAdd.Cable_S_1_3;
+                                    }
+                                    else
+                                    {
+                                        str1 = circAdd.Cable_S_1_1 + " x " + circAdd.Cable_S_1_2 + " x " + circAdd.Cable_S_1_3;
+                                    }
+                                }
+
+                                if (circAdd.Cable_S_2_1 != 0)
+                                {
+                                    if (circAdd.Cable_S_2_1 == 1)
+                                    {
+                                        str2 = circAdd.Cable_S_1_2 + " x " + circAdd.Cable_S_1_3;
+
+                                    }
+                                    else
+                                    {
+                                        str2 = circAdd.Cable_S_1_1 + " x " + circAdd.Cable_S_1_2 + " x " + circAdd.Cable_S_1_3;
+                                    }
+                                    if (circAdd.Cable_S_2_2 == 1)
+                                    {
+                                        othLine_add.LookupParameter("Кол-во_жил_сечение_EVA").Set(str1 + " + " + str2);
+                                    }
+                                    else
+                                    {
+                                        othLine_add.LookupParameter("Кол-во_жил_сечение_EVA").Set(str1 + "/" + str2);
+                                        if (circAdd.Cable_L_2 != 0) othLine_add.LookupParameter("Длина_факт_2_EVA").Set(circAdd.Cable_L_2);
+                                    }
+                                }
+                                //назначение кабельной линии
+
+                                othLine_add.LookupParameter("Название_кабельной_линии_EVA").Set(circAdd.Name);
+                                othLine_add.LookupParameter("Марка_кабеля_EVA").Set(circAdd.Cable_Mark_1);
+                                othLine_add.LookupParameter("Способ_прокладки_EVA").Set(circAdd.Cable_In_Tray_Pipe);
+
+
+
+
+
+                                othLine_add.LookupParameter("Длина_трубы_EVA").Set(circAdd.Pipe_L.ToString());
+                                othLine_add.LookupParameter("Число_жил_EVA").Set(circAdd.Number_Of_Phase);
+
+                                if (circAdd.P1_Calculated != 0) othLine_add.LookupParameter("Рр_EVA").Set(circAdd.P1_Calculated.ToString());
+                                if (circAdd.I1_Calculated != 0) othLine_add.LookupParameter("Iр_EVA").Set(circAdd.I1_Calculated.ToString());
+                                if (circAdd.Cos != 0) othLine_add.LookupParameter("cos_EVA").Set(circAdd.Cos.ToString());
+                                if (circAdd.Ik_End_Line != 0) othLine_add.LookupParameter("Однофазный_ток_КЗ_EVA").Set(circAdd.Ik_End_Line.ToString());
+                                if (circAdd.Cable_Calculated_L != 0) othLine_add.LookupParameter("Длина_расч_EVA").Set(circAdd.Cable_Calculated_L.ToString());
+                                if (circAdd.DU_Calculated != 0) othLine_add.LookupParameter("ΔU_EVA").Set(circAdd.DU_Calculated.ToString());
+                                if (circAdd.Cable_L_1 != 0) othLine_add.LookupParameter("Длина_факт_1_EVA").Set(circAdd.Cable_L_1.ToString());
+                                if (circAdd.Number_Of_Phase != 0) othLine_add.LookupParameter("Фаза_EVA").Set(circAdd.Phase_Connection);
+
+
+                                
+                                othLine_add.LookupParameter("Длина_линии_до_УГО_EVA").Set(Utilits.Ft(60) + y1);
+
+                                //назначение УГОдоп 
+                                ugo2.LookupParameter("Строка1_EVA").Set(circAdd.Load_Name);
+                                ugo2.LookupParameter("Строка2_EVA").Set("Py= " + circAdd.P_Installed + "кВт");
+                                ugo2.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(25));
+                                ugo2.LookupParameter("Перемещение_по_X_EVA").Set(0);
+
+                                if (circAdd.Ugo != "(нет)")
+                                {
+                                    //установка видимости уго из параметра
+                                    Utilits.UseParamViewUgo(ugo2, circAdd.Ugo);
+                                }
+                                else
+                                {
+
+                                    Utilits.UseParamViewUgoInTypeLoad(ugo2, circAdd.Load_Type);
+                                }
+                            }
+
+
+
                         }
                         else
                         {

@@ -126,6 +126,21 @@ namespace EVA_Gen
             return sortCircuit.OrderBy(x => x.StartSlot);
         }
 
+        public static IEnumerable<ElectricalSystem> GetSortedCircuits(FamilyInstance board)
+        {
+            ElectricalSystemSet fullCircuits = board.MEPModel.ElectricalSystems; //Получение всех цепей щита
+            IList<ElectricalSystem> sortCircuit = new List<ElectricalSystem>();
+            string boardName = board.Name;
+            foreach (ElectricalSystem circ in fullCircuits)
+            {
+                string s = circ.PanelName;
+                if (s == boardName) sortCircuit.Add(circ);
+            }
+            return sortCircuit.OrderBy(x => x.StartSlot);
+        }
+
+
+
         public static ObservableCollection<CircItem> GetSortedCircuits(Element element, out CircItem circBoard)
         {
             FamilyInstance board = element as FamilyInstance;
@@ -244,6 +259,7 @@ namespace EVA_Gen
                     case "Электрообогрев":
                         el.LookupParameter("ТЭН").Set(1);
                         break;
+                    
 
                     default:
                         el.LookupParameter("Устройство").Set(1);

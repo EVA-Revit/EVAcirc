@@ -20,7 +20,7 @@ namespace EVA_Gen
     {
         private static Document doc;
         private static UIDocument uidoc;
-        protected static List<PanelItem> boards;
+        public static List<PanelItem> boards;
         //private static Categories categories; 
         private static ElementId electricalEquipmentCategoryId;
         private static ConnectorSet refs;
@@ -96,7 +96,6 @@ namespace EVA_Gen
             }
 
 
-
             //foreach (var fi in boards)
             //{
 
@@ -115,7 +114,7 @@ namespace EVA_Gen
 
             //}
             #region Объеденение панелелей в ВРУ
-            
+
 
             //ObservableCollection<PanelItem> nPanel = new ObservableCollection<PanelItem>();
             //ObservableCollection<PanelItem> dPanel = new ObservableCollection<PanelItem>();
@@ -154,12 +153,15 @@ namespace EVA_Gen
             #endregion
 
 
+
             var mVm = new MainWindowViewModel();
             mVm.Panels = panelItems;
             var view = new WPF.Views.MainWindow();
             view.DataContext = mVm;
             GenCommand.window = view;
             view.ShowDialog();
+
+            
             return true;
         }
 

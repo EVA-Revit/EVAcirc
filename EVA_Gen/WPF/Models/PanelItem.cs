@@ -37,19 +37,21 @@ namespace EVA_Gen.WPF.Models
     {
         //public static string DeviceMark = "Марка_аппарата";
         //public static string DeviceType = "Т_аппарата";
+        static Categories categories = Utilits.Doc.Settings.Categories;
+        ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
 
-        public bool Rez { get; set; }
+        public bool Rez { get; set; } 
         public string AppZ { get; set; }
         public int Length { get; set; }
         //public string Cable_Mark_2 { get; set; }
         public string Cable_Mark_1 { get; set; }
         public string Cable_In_Tray_Pipe { get; set; }
-        public int Сable_S_1_1 { get; set; }
-        public int Сable_S_1_2 { get; set; }
-        public double Сable_S_1_3 { get; set; }
-        public int Сable_S_2_1 { get; set; }
-        public int Сable_S_2_2 { get; set; }
-        public double Сable_S_2_3 { get; set; }
+        public int Cable_S_1_1 { get; set; }
+        public int Cable_S_1_2 { get; set; }
+        public double Cable_S_1_3 { get; set; }
+        public int Cable_S_2_1 { get; set; }
+        public int Cable_S_2_2 { get; set; }
+        public double Cable_S_2_3 { get; set; }
 
         public double Pipe_L { get; set; }
         public double P1_Calculated { get; set; }
@@ -84,6 +86,8 @@ namespace EVA_Gen.WPF.Models
         public string Load_Type { get; set; }
         public string Load_Name { get; set; }
         public string Ugo { get; set; }
+        public string Out_Line_panel { get; set; }
+
 
         public List<ElementItem> ElementList { get; set; }
 
@@ -99,12 +103,12 @@ namespace EVA_Gen.WPF.Models
                 //Cable_Mark_1 = rCirc.LookupParameter("Марка_кабеля_1_EVA").AsString();
                 Cable_In_Tray_Pipe = rCirc.LookupParameter("Способ_прокладки_EVA").AsString();
 
-                Сable_S_1_1 = rCirc.LookupParameter("Сечение_кабеля_1_1_EVA").AsInteger();
-                Сable_S_1_2 = rCirc.LookupParameter("Сечение_кабеля_1_2_EVA").AsInteger();
-                //Сable_S_1_3 = rCirc.LookupParameter("Сечение_кабеля_1_3_EVA").AsDouble();
-                Сable_S_2_1 = rCirc.LookupParameter("Сечение_кабеля_2_1_EVA").AsInteger();
-                Сable_S_2_2 = rCirc.LookupParameter("Сечение_кабеля_2_2_EVA").AsInteger();
-                Сable_S_2_3 = rCirc.LookupParameter("Сечение_кабеля_2_3_EVA").AsDouble();
+                Cable_S_1_1 = rCirc.LookupParameter("Сечение_кабеля_1_1_EVA").AsInteger();
+                Cable_S_1_2 = rCirc.LookupParameter("Сечение_кабеля_1_2_EVA").AsInteger();
+                Cable_S_1_3 = rCirc.LookupParameter("Сечение_кабеля_1_3_EVA").AsDouble();
+                Cable_S_2_1 = rCirc.LookupParameter("Сечение_кабеля_2_1_EVA").AsInteger();
+                Cable_S_2_2 = rCirc.LookupParameter("Сечение_кабеля_2_2_EVA").AsInteger();
+                Cable_S_2_3 = rCirc.LookupParameter("Сечение_кабеля_2_3_EVA").AsDouble();
 
                 Pipe_L = rCirc.LookupParameter("L_трубы_EVA").AsDouble();
                 P1_Calculated = rCirc.LookupParameter("Pр_отх_линии_EVA").AsDouble();
@@ -139,6 +143,26 @@ namespace EVA_Gen.WPF.Models
                 Load_Type = rCirc.LookupParameter("Тип_Нагрузки_EVA").AsValueString();
                 Load_Name = rCirc.LookupParameter("Наименование_нагрузки_EVA").AsString();
                 Ugo = rCirc.LookupParameter("УГО_EVA").AsValueString();
+
+                // получение параметров от элементов цепи
+                foreach (Element el in rCirc.Elements)
+                {
+                    if (!el.Category.Id.Equals(electricalEquipmentCategoryId))
+                    {
+                        
+                    }
+                    else 
+                    {
+                        if (el.LookupParameter("Отходящие_линии_EVA").AsInteger() == 1)
+                        {
+                            //var circuits = Utilits.GetSortedCircuits(el as FamilyInstance);
+                            Out_Line_panel = el.Name;
+                            
+
+
+                        }
+                    }
+                }
 
 
             }
