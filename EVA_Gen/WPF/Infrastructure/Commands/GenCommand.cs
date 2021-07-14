@@ -190,7 +190,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                             
                         }
 
-
+                        //TaskDialog.Show("adad", circ.Cable_type.ToString());
 
                         //назначение
                         if (circ.Load_Type == "Сигнал от") 
@@ -252,8 +252,8 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                             othLine.LookupParameter("Длина_трубы_EVA").Set(circ.Pipe_L.ToString());
                             othLine.LookupParameter("Число_жил_EVA").Set(circ.Number_Of_Phase);
 
-                            if(circ.P1_Calculated != 0) othLine.LookupParameter("Рр_EVA").Set(circ.P1_Calculated.ToString());
-                            if (circ.I1_Calculated != 0) othLine.LookupParameter("Iр_EVA").Set(circ.I1_Calculated.ToString());
+                            if(circ.P1 != 0) othLine.LookupParameter("Рр_EVA").Set(circ.P1.ToString());
+                            if (circ.I1_Max != 0) othLine.LookupParameter("Iр_EVA").Set(circ.I1_Max.ToString());
                             if (circ.Cos != 0) othLine.LookupParameter("cos_EVA").Set(circ.Cos.ToString());
                             if (circ.Ik_End_Line != 0) othLine.LookupParameter("Однофазный_ток_КЗ_EVA").Set(circ.Ik_End_Line.ToString());
                             if (circ.Cable_Calculated_L != 0) othLine.LookupParameter("Длина_расч_EVA").Set(circ.Cable_Calculated_L.ToString());
@@ -436,8 +436,8 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                                 othLine_add.LookupParameter("Длина_трубы_EVA").Set(circAdd.Pipe_L.ToString());
                                 othLine_add.LookupParameter("Число_жил_EVA").Set(circAdd.Number_Of_Phase);
 
-                                if (circAdd.P1_Calculated != 0) othLine_add.LookupParameter("Рр_EVA").Set(circAdd.P1_Calculated.ToString());
-                                if (circAdd.I1_Calculated != 0) othLine_add.LookupParameter("Iр_EVA").Set(circAdd.I1_Calculated.ToString());
+                                if (circAdd.P1 != 0) othLine_add.LookupParameter("Рр_EVA").Set(circAdd.P1.ToString());
+                                if (circAdd.I1_Max != 0) othLine_add.LookupParameter("Iр_EVA").Set(circAdd.I1_Max.ToString());
                                 if (circAdd.Cos != 0) othLine_add.LookupParameter("cos_EVA").Set(circAdd.Cos.ToString());
                                 if (circAdd.Ik_End_Line != 0) othLine_add.LookupParameter("Однофазный_ток_КЗ_EVA").Set(circAdd.Ik_End_Line.ToString());
                                 if (circAdd.Cable_Calculated_L != 0) othLine_add.LookupParameter("Длина_расч_EVA").Set(circAdd.Cable_Calculated_L.ToString());
@@ -451,7 +451,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
                                 //назначение УГОдоп 
                                 ugo2.LookupParameter("Строка1_EVA").Set(circAdd.Load_Name);
-                                ugo2.LookupParameter("Строка2_EVA").Set("Py= " + circAdd.P_Installed + "кВт");
+                                ugo2.LookupParameter("Строка2_EVA").Set("Py= " + circAdd.P + "кВт");
                                 ugo2.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(25));
                                 ugo2.LookupParameter("Перемещение_по_X_EVA").Set(0);
 
@@ -478,7 +478,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
                             //Назначение
                             ugo.LookupParameter("Строка1_EVA").Set(circ.Load_Name);
-                            ugo.LookupParameter("Строка2_EVA").Set("Py= " + circ.P_Installed + "кВт");
+                            ugo.LookupParameter("Строка2_EVA").Set("Py= " + circ.P + "кВт");
                             ugo.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(25));
                             ugo.LookupParameter("Перемещение_по_X_EVA").Set(0);
 

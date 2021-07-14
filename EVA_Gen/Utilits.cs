@@ -295,5 +295,11 @@ namespace EVA_Gen
             el.LookupParameter("Эл.двигатель").Set(0);
             el.LookupParameter("ЯТП").Set(0);
         }
+
+        public static double Voltage(double volt)
+        {
+            //return UnitUtils.ConvertToInternalUnits(volt, DisplayUnitType.DUT_VOLTS);
+            return UnitUtils.ConvertFromInternalUnits(volt, DisplayUnitType.DUT_VOLTS);
+        }
     }
 }

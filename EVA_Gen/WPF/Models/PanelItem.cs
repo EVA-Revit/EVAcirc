@@ -23,6 +23,19 @@ namespace EVA_Gen.WPF.Models
         public ElementId ParentBoardId { get; set; }
         public ElementId Id { get; set; }
 
+        public double P2W { get; set; }
+        public double P2WF { get; set; }
+        public double P2S { get; set; }
+        public double P2SF { get; set; }
+        public double Q2W { get; set; }
+        public double Q2WF { get; set; }
+        public double Q2S { get; set; }
+        public double Q2SF { get; set; }
+        public double P_L1 { get; set; }
+        public double P_L2 { get; set; }
+        public double P_L3 { get; set; }
+
+
     }
 
     internal class ElementItem : ElectricalInfo
@@ -41,6 +54,7 @@ namespace EVA_Gen.WPF.Models
         ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
 
         public bool Rez { get; set; } 
+
         public string AppZ { get; set; }
         public int Length { get; set; }
         //public string Cable_Mark_2 { get; set; }
@@ -54,9 +68,12 @@ namespace EVA_Gen.WPF.Models
         public double Cable_S_2_3 { get; set; }
 
         public double Pipe_L { get; set; }
-        public double P1_Calculated { get; set; }
-        public double P_Installed { get; set; }
-        public double I1_Calculated { get; set; }
+       
+        public double P { get; set; }
+        public double P1 { get; set; }
+        public double I1_Max { get; set; }
+        public double Q1 { get; set; }
+
         public double Cos { get; set; }
         public double Ik_End_Line { get; set; }
         public double Cable_Calculated_L { get; set; }
@@ -80,13 +97,74 @@ namespace EVA_Gen.WPF.Models
         public double Device_Break_1 { get; set; }
         public double Device_Break_2 { get; set; }
         public double Device_Break_3 { get; set; }
-        public double Device_dI_bodyI_1 { get; set; }
-        public double Device_dI_bodyI_2 { get; set; }
-        public double Device_dI_bodyI_3 { get; set; }
+        public double Device_dI_body_I_Meter_TT_1 { get; set; }
+        public double Device_dI_body_I_Meter_TT_2 { get; set; }
+        public double Device_dI_body_I_Meter_TT_3 { get; set; }
+       
+        public string PanelName { get; set; }
+
+        public bool Cable_type { get; set; }
+        public bool Cable_method { get; set; }
+        public bool Cos_Lock { get; set; }
+        public bool Phase_Connection_Lock { get; set; }
+        public bool Сable_S_1_Lock { get; set; }
+
+        public string Load_Winter_Summer { get; set; }
+        public bool Load_Winter_Summer_Lock { get; set; }
+        public string Load_Mode_Operating { get; set; }
+        public bool Load_Mode_Operating_Lock { get; set; }
+
+        public string Cable_Mark { get; set; }
+        public double DU_Allowable { get; set; }
+        public string Text1 { get; set; }
+        public string Text2 { get; set; }
+        public double Q { get; set; }
+        public double S { get; set; }
+        public double S1 { get; set; }
+
+
         public string Load_Type { get; set; }
         public string Load_Name { get; set; }
         public string Ugo { get; set; }
         public string Out_Line_panel { get; set; }
+        public double Kc1 { get; set; }
+        public double Kc2 { get; set; }
+        public double Kc3 { get; set; }
+        public double Kc4 { get; set; }
+        public double Voltage { get; set; }
+
+        public bool Device_I_1_Lock { get; set; }
+        public bool Device_I_2_Lock { get; set; }
+        public bool Device_I_3_Lock { get; set; }
+
+
+        
+        
+        public double P3W { get; set; }
+        public double P4W { get; set; }
+        public double P3WF { get; set; }
+        public double P4WF { get; set; }
+        public double P3S { get; set; }
+        public double P4S { get; set; }
+        public double P3SF { get; set; }
+        public double P4SF { get; set; }
+        public double Q3W { get; set; }
+        public double Q4W { get; set; }
+        public double Q3WF { get; set; }
+        public double Q4WF { get; set; }
+        public double Q3S { get; set; }
+        public double Q4S { get; set; }
+        public double Q3SF { get; set; }
+        public double Q4SF { get; set; }
+        public double I1_L1 { get; set; }
+        public double I1_L2 { get; set; }
+        public double I1_L3 { get; set; }
+        public double Kd { get; set; }
+
+
+
+
+
 
 
         public List<ElementItem> ElementList { get; set; }
@@ -99,25 +177,32 @@ namespace EVA_Gen.WPF.Models
                 Name = rCirc.LookupParameter("Имя_цепи_EVA").AsString();
                 Rez = false;
                 Id = rCirc.Id;
+                Cos = rCirc.LookupParameter("Cos_EVA").AsDouble();
+
+
+
                 //Cable_Mark_2 = rCirc.LookupParameter("Марка_кабеля_2_EVA").AsString();
                 //Cable_Mark_1 = rCirc.LookupParameter("Марка_кабеля_1_EVA").AsString();
                 Cable_In_Tray_Pipe = rCirc.LookupParameter("Способ_прокладки_EVA").AsString();
 
                 Cable_S_1_1 = rCirc.LookupParameter("Сечение_кабеля_1_1_EVA").AsInteger();
                 Cable_S_1_2 = rCirc.LookupParameter("Сечение_кабеля_1_2_EVA").AsInteger();
-                Cable_S_1_3 = rCirc.LookupParameter("Сечение_кабеля_1_3_EVA").AsDouble();
+                //Cable_S_1_3 = rCirc.LookupParameter("Сечение_кабеля_1_3_EVA").AsDouble();
                 Cable_S_2_1 = rCirc.LookupParameter("Сечение_кабеля_2_1_EVA").AsInteger();
                 Cable_S_2_2 = rCirc.LookupParameter("Сечение_кабеля_2_2_EVA").AsInteger();
                 Cable_S_2_3 = rCirc.LookupParameter("Сечение_кабеля_2_3_EVA").AsDouble();
 
+                
+
+
                 Pipe_L = rCirc.LookupParameter("L_трубы_EVA").AsDouble();
-                P1_Calculated = rCirc.LookupParameter("Pр_отх_линии_EVA").AsDouble();
-                P_Installed = rCirc.LookupParameter("Pу_EVA").AsDouble();
-                I1_Calculated = rCirc.LookupParameter("Iр_отх_линии_EVA").AsDouble();
+                P1 = rCirc.LookupParameter("Pр_отх_линии_EVA").AsDouble();
+                P = rCirc.LookupParameter("Pу_EVA").AsDouble();
+                I1_Max = rCirc.LookupParameter("Iр_отх_линии_EVA").AsDouble();
                 Cos = rCirc.LookupParameter("Cos_EVA").AsDouble();
                 Ik_End_Line = rCirc.LookupParameter("I_1ф_кз_EVA").AsDouble();
                 Cable_Calculated_L = rCirc.LookupParameter("L_расч_кабеля_EVA").AsDouble();
-                DU_Calculated = rCirc.LookupParameter("ΔU_EVA").AsDouble();
+                //DU_Calculated = rCirc.LookupParameter("ΔU_EVA").AsDouble();
                 Cable_L_1 = rCirc.LookupParameter("L_факт_кабеля_1_EVA").AsDouble();
                 Cable_L_2 = rCirc.LookupParameter("L_факт_кабеля_2_EVA").AsDouble();
                 Number_Of_Phase = rCirc.PolesNumber;
@@ -137,12 +222,93 @@ namespace EVA_Gen.WPF.Models
                 Device_Break_1 = rCirc.LookupParameter("Ном_откл_способн_аппарата_1_EVA").AsDouble();
                 Device_Break_2 = rCirc.LookupParameter("Ном_откл_способн_аппарата_2_EVA").AsDouble();
                 Device_Break_3 = rCirc.LookupParameter("Ном_откл_способн_аппарата_3_EVA").AsDouble();
-                Device_dI_bodyI_1 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_1_EVA").AsDouble();
-                Device_dI_bodyI_2 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_2_EVA").AsDouble();
-                Device_dI_bodyI_3 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_3_EVA").AsDouble();
+                Device_dI_body_I_Meter_TT_1 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_1_EVA").AsDouble();
+                Device_dI_body_I_Meter_TT_2 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_2_EVA").AsDouble();
+                Device_dI_body_I_Meter_TT_3 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_3_EVA").AsDouble();
+                
+                PanelName = rCirc.PanelName;
+
+
                 Load_Type = rCirc.LookupParameter("Тип_Нагрузки_EVA").AsValueString();
                 Load_Name = rCirc.LookupParameter("Наименование_нагрузки_EVA").AsString();
                 Ugo = rCirc.LookupParameter("УГО_EVA").AsValueString();
+
+
+                Kc1 = rCirc.LookupParameter("Кс_отх_линии_EVA").AsDouble();
+                Kc2 = rCirc.LookupParameter("Кс_щита_EVA").AsDouble();
+                Kc3 = rCirc.LookupParameter("Кс_на_вводах_ВРУ_EVA").AsDouble();
+                Kc4 = rCirc.LookupParameter("Кс_ВРУ_авар_реж_EVA").AsDouble();
+                Voltage = rCirc.get_Parameter(BuiltInParameter.RBS_ELEC_VOLTAGE).AsDouble();
+                Q1 = rCirc.LookupParameter("Q_отх_линии_EVA").AsDouble();
+                Cable_type = rCirc.LookupParameter("Тип_кабеля_Алюм_EVA").AsInteger() == 1;
+                Cable_method = rCirc.LookupParameter("Способ_прокладки_кабеля_Земля_EVA").AsInteger() == 1;
+                Cos_Lock = rCirc.LookupParameter("Cos_Lock_EVA").AsInteger() == 1;
+                Phase_Connection_Lock = rCirc.LookupParameter("Фаза_подключения_Lock_EVA").AsInteger() == 1;
+                Сable_S_1_Lock = rCirc.LookupParameter("Сечение_кабеля_1_Lock_EVA").AsInteger() == 1;
+
+                Load_Winter_Summer = rCirc.LookupParameter("Режим_работы_Зима_Лето_EVA").AsValueString();
+                Load_Winter_Summer_Lock = rCirc.LookupParameter("Режим_работы_Зима_Лето_Lock_EVA").AsInteger() == 1;
+
+                Load_Mode_Operating = rCirc.LookupParameter("Режим_учета_нагрузки_EVA").AsValueString();
+                Load_Mode_Operating_Lock = rCirc.LookupParameter("Режим_учета_нагрузки_Lock_EVA").AsInteger() == 1;
+
+                Cable_Mark = rCirc.LookupParameter("Марка_кабеля_EVA").AsString();
+                DU_Allowable = rCirc.LookupParameter("ΔU_допустимые_EVA").AsDouble();
+                Text1 = rCirc.LookupParameter("Текст1_EVA").AsString();
+                Text2 = rCirc.LookupParameter("Текст2_EVA").AsString();
+                Q = rCirc.LookupParameter("Qу_EVA").AsDouble();
+                S = rCirc.LookupParameter("Sу_EVA").AsDouble();
+                S1 = rCirc.LookupParameter("S_отх_линии_EVA").AsDouble();
+
+                Device_I_1_Lock = rCirc.LookupParameter("I_расцепителя_аппарата_1_Lock_EVA").AsInteger() == 1;
+                Load_Mode_Operating_Lock = rCirc.LookupParameter("I_расцепителя_аппарата_2_Lock_EVA").AsInteger() == 1;
+                Load_Mode_Operating_Lock = rCirc.LookupParameter("I_расцепителя_аппарата_3_Lock_EVA").AsInteger() == 1;
+
+
+                P_L1 = rCirc.LookupParameter("Pу_L1_EVA").AsDouble();
+                P_L2 = rCirc.LookupParameter("Pу_L2_EVA").AsDouble();
+                P_L3 = rCirc.LookupParameter("Pу_L3_EVA").AsDouble();
+                P2W = rCirc.LookupParameter("Pр_щита_Зима_EVA").AsDouble();
+                P3W = rCirc.LookupParameter("Pр_на_вводах_ВРУ_Зима_EVA").AsDouble();
+                P4W = rCirc.LookupParameter("Pр_ВРУ_авар_реж_Зима_EVA").AsDouble();
+                P2WF = rCirc.LookupParameter("Pр_щита_Зима_Пожар_EVA").AsDouble();
+                P3WF = rCirc.LookupParameter("Pр_на_вводах_ВРУ_Зима_Пожар_EVA").AsDouble();
+                P4WF = rCirc.LookupParameter("Pр_ВРУ_авар_реж_Зима_Пожар_EVA").AsDouble();
+                P2S = rCirc.LookupParameter("Pр_щита_Лето_EVA").AsDouble();
+                P3S = rCirc.LookupParameter("Pр_на_вводах_ВРУ_Лето_EVA").AsDouble();
+                P4S = rCirc.LookupParameter("Pр_ВРУ_авар_реж_Лето_EVA").AsDouble();
+                P2SF = rCirc.LookupParameter("Pр_щита_Лето_Пожар_EVA").AsDouble();
+                P3SF = rCirc.LookupParameter("Pр_на_вводах_ВРУ_Лето_Пожар_EVA").AsDouble();
+                P4SF = rCirc.LookupParameter("Pр_ВРУ_авар_реж_Лето_Пожар_EVA").AsDouble();
+                Q2W = rCirc.LookupParameter("Qр_щита_Зима_EVA").AsDouble();
+                Q3W = rCirc.LookupParameter("Qр_на_вводах_ВРУ_Зима_EVA").AsDouble();
+                Q4W = rCirc.LookupParameter("Qр_ВРУ_авар_реж_Зима_EVA").AsDouble();
+                Q2WF = rCirc.LookupParameter("Qр_щита_Зима_Пожар_EVA").AsDouble();
+                Q3WF = rCirc.LookupParameter("Qр_на_вводах_ВРУ_Зима_Пожар_EVA").AsDouble();
+                Q4WF = rCirc.LookupParameter("Qр_ВРУ_авар_реж_Зима_Пожар_EVA").AsDouble();
+                Q2S = rCirc.LookupParameter("Qр_щита_Лето_EVA").AsDouble();
+                Q3S = rCirc.LookupParameter("Qр_на_вводах_ВРУ_Лето_EVA").AsDouble();
+                Q4S = rCirc.LookupParameter("Qр_ВРУ_авар_реж_Лето_EVA").AsDouble();
+                Q2SF = rCirc.LookupParameter("Qр_щита_Лето_Пожар_EVA").AsDouble();
+                Q3SF = rCirc.LookupParameter("Qр_на_вводах_ВРУ_Лето_Пожар_EVA").AsDouble();
+                Q4SF = rCirc.LookupParameter("Qр_ВРУ_авар_реж_Лето_Пожар_EVA").AsDouble();
+                I1_L1 = rCirc.LookupParameter("Iр_отх_линии_L1_EVA").AsDouble();
+                I1_L2 = rCirc.LookupParameter("Iр_отх_линии_L2_EVA").AsDouble();
+                I1_L3 = rCirc.LookupParameter("Iр_отх_линии_L3_EVA").AsDouble();
+                Kd = rCirc.LookupParameter("Кс_доп_EVA").AsDouble();
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 // получение параметров от элементов цепи
                 foreach (Element el in rCirc.Elements)
@@ -231,9 +397,9 @@ namespace EVA_Gen.WPF.Models
                 case Device.Body:
                     switch (order)
                     {
-                        case 1: return Device_dI_bodyI_1.ToString();
-                        case 2: return Device_dI_bodyI_2.ToString();
-                        case 3: return Device_dI_bodyI_3.ToString();
+                        case 1: return Device_dI_body_I_Meter_TT_1.ToString();
+                        case 2: return Device_dI_body_I_Meter_TT_2.ToString();
+                        case 3: return Device_dI_body_I_Meter_TT_3.ToString();
                         default: return "ошибка";
                     }
 
@@ -249,10 +415,43 @@ namespace EVA_Gen.WPF.Models
         public string AppVvod { get; set; }
         public int CountGroup { get; set; }
 
-        public Element Rboard { get; set; }
+        //public Element Rboard { get; set; }
 
         public CircItem CircBoard { get; set; }
         
+        public double Line_step { get; set; }
+        public string circ_Text1 { get; set; }
+        public string circ_Text2 { get; set; }
+        public double S2W { get; set; }
+        public double S2WF { get; set; }
+        public double S2S { get; set; }
+        public double S2SF { get; set; }
+        public double cos2W { get; set; }
+        public double cos2WF { get; set; }
+        public double cos2S { get; set; }
+        public double cos2SF { get; set; }
+        public double K2W { get; set; }
+        public double K2WF { get; set; }
+        public double K2S { get; set; }
+        public double K2SF { get; set; }
+        public double I2W_L1 { get; set; }
+        public double I2W_L2 { get; set; }
+        public double I2W_L3 { get; set; }
+        public double I2W_max { get; set; }
+        public double I2WF_L1 { get; set; }
+        public double I2WF_L2 { get; set; }
+        public double I2WF_L3 { get; set; }
+        public double I2WF_max { get; set; }
+        public double I2S_L1 { get; set; }
+        public double I2S_L2 { get; set; }
+        public double I2S_L3 { get; set; }
+        public double I2S_max { get; set; }
+        public double I2SF_L1 { get; set; }
+        public double I2SF_L2 { get; set; }
+        public double I2SF_L3 { get; set; }
+        public double I2SF_max { get; set; }
+                                 
+
 
         private bool _Is_Checked;
         public bool Is_Checked
@@ -301,6 +500,50 @@ namespace EVA_Gen.WPF.Models
             Id = panelRevit.Id;
             //ParentBoardId = ElementId.InvalidElementId;
 
+            Line_step = panelRevit.LookupParameter("Шаг_линии_EVA").AsDouble();
+            circ_Text1 = panelRevit.LookupParameter("Текст1_EVA").AsString();
+            circ_Text2 = panelRevit.LookupParameter("Текст2_EVA").AsString();
+            S2W = panelRevit.LookupParameter("Sр_щита_Зима_EVA").AsDouble();
+            S2WF = panelRevit.LookupParameter("Sр_щита_Зима_Пожар_EVA").AsDouble();
+            S2S = panelRevit.LookupParameter("Sр_щита_Лето_EVA").AsDouble();
+            S2SF = panelRevit.LookupParameter("Sр_щита_Лето_Пожар_EVA").AsDouble();
+            cos2W = panelRevit.LookupParameter("Cos_щита_Зима_EVA").AsDouble();
+            cos2WF = panelRevit.LookupParameter("Cos_щита_Зима_Пожар_EVA").AsDouble();
+            cos2S = panelRevit.LookupParameter("Cos_щита_Лето_EVA").AsDouble();
+            cos2SF = panelRevit.LookupParameter("Cos_щита_Лето_Пожар_EVA").AsDouble();
+            K2W = panelRevit.LookupParameter("Кс_щита_Зима_EVA").AsDouble();
+            K2WF = panelRevit.LookupParameter("Кс_щита_Зима_Пожар_EVA").AsDouble();
+            K2S = panelRevit.LookupParameter("Кс_щита_Лето_EVA").AsDouble();
+            K2SF = panelRevit.LookupParameter("Кс_щита_Лето_Пожар_EVA").AsDouble();
+            I2W_L1 = panelRevit.LookupParameter("Iр_щита_Зима_L1_EVA").AsDouble();
+            I2W_L2 = panelRevit.LookupParameter("Iр_щита_Зима_L2_EVA").AsDouble();
+            I2W_L3 = panelRevit.LookupParameter("Iр_щита_Зима_L3_EVA").AsDouble();
+            I2W_max = panelRevit.LookupParameter("Iр_щита_Зима_EVA").AsDouble();
+            I2WF_L1 = panelRevit.LookupParameter("Iр_щита_Зима_L1_EVA").AsDouble();
+            I2WF_L2 = panelRevit.LookupParameter("Iр_щита_Зима_Пожар_L2_EVA").AsDouble();
+            I2WF_L3 = panelRevit.LookupParameter("Iр_щита_Зима_Пожар_L3_EVA").AsDouble();
+            I2WF_max = panelRevit.LookupParameter("Iр_щита_Зима_Пожар_EVA").AsDouble();
+            I2S_L1 = panelRevit.LookupParameter("Iр_щита_Лето_L1_EVA").AsDouble();
+            I2S_L2 = panelRevit.LookupParameter("Iр_щита_Лето_L2_EVA").AsDouble();
+            I2S_L3 = panelRevit.LookupParameter("Iр_щита_Лето_L3_EVA").AsDouble();
+            I2S_max = panelRevit.LookupParameter("Iр_щита_Лето_EVA").AsDouble();
+            I2SF_L1 = panelRevit.LookupParameter("Iр_щита_Лето_Пожар_L1_EVA").AsDouble();
+            I2SF_L2 = panelRevit.LookupParameter("Iр_щита_Лето_Пожар_L2_EVA").AsDouble();
+            I2SF_L3 = panelRevit.LookupParameter("Iр_щита_Лето_Пожар_L3_EVA").AsDouble();
+            I2SF_max = panelRevit.LookupParameter("Iр_щита_Лето_Пожар_EVA").AsDouble();
+
+
+
+
+
+
+
+
+
+
+
+
+
             //Заполнение свойств цепей
             Circuits = Utilits.GetSortedCircuits(panelRevit, out CircItem circBoard); //отсортированные цепи
             if(circBoard != null)
@@ -318,6 +561,13 @@ namespace EVA_Gen.WPF.Models
             //управление видимостью чекбоксов
             //Visibility = System.Windows.Visibility.Collapsed;
             Visibility = System.Windows.Visibility.Visible;
+
+
+
+
+
+
+
 
 
         }
