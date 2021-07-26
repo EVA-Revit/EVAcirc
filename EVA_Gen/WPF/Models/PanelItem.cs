@@ -35,12 +35,35 @@ namespace EVA_Gen.WPF.Models
         public double P_L2 { get; set; }
         public double P_L3 { get; set; }
 
+        public double S { get; set; }
+        public double Cos { get; set; }
+        public double P { get; set; }
+        public double Q { get; set; }
 
     }
 
     internal class ElementItem : ElectricalInfo
     {
+        public bool IsPanel { get; set; }
+        //public PanelItem PanIt { get; set; }
 
+
+        public ElementItem()
+        {
+
+        }
+        public ElementItem (Element el)
+        {
+            ConnectorSet connectors = (el as FamilyInstance).MEPModel.ConnectorManager.Connectors;
+            foreach (var obj in connectors)
+            {
+                var conn = obj as Connector;
+                var famConnInfo = conn.GetMEPConnectorInfo() as MEPFamilyConnectorInfo;
+
+                S = (famConnInfo.GetConnectorParameterValue(new ElementId(BuiltInParameter.RBS_ELEC_APPARENT_LOAD)) as DoubleParameterValue).Value;
+                Cos = (famConnInfo.GetConnectorParameterValue(new ElementId(BuiltInParameter.RBS_ELEC_POWER_FACTOR)) as DoubleParameterValue).Value;
+            }
+        }
 
 
     }
@@ -69,12 +92,12 @@ namespace EVA_Gen.WPF.Models
 
         public double Pipe_L { get; set; }
        
-        public double P { get; set; }
+        //public double P { get; set; }
         public double P1 { get; set; }
         public double I1_Max { get; set; }
         public double Q1 { get; set; }
 
-        public double Cos { get; set; }
+        //public double Cos { get; set; }
         public double Ik_End_Line { get; set; }
         public double Cable_Calculated_L { get; set; }
         public double DU_Calculated { get; set; }
@@ -107,7 +130,7 @@ namespace EVA_Gen.WPF.Models
         public bool Cable_method { get; set; }
         public bool Cos_Lock { get; set; }
         public bool Phase_Connection_Lock { get; set; }
-        public bool Сable_S_1_Lock { get; set; }
+        public bool Cable_S_1_Lock { get; set; }
 
         public string Load_Winter_Summer { get; set; }
         public bool Load_Winter_Summer_Lock { get; set; }
@@ -118,8 +141,8 @@ namespace EVA_Gen.WPF.Models
         public double DU_Allowable { get; set; }
         public string Text1 { get; set; }
         public string Text2 { get; set; }
-        public double Q { get; set; }
-        public double S { get; set; }
+        //public double Q { get; set; }
+        //public double S { get; set; }
         public double S1 { get; set; }
 
 
@@ -160,11 +183,6 @@ namespace EVA_Gen.WPF.Models
         public double I1_L2 { get; set; }
         public double I1_L3 { get; set; }
         public double Kd { get; set; }
-
-
-
-
-
 
 
         public List<ElementItem> ElementList { get; set; }
@@ -244,7 +262,7 @@ namespace EVA_Gen.WPF.Models
                 Cable_method = rCirc.LookupParameter("Способ_прокладки_кабеля_Земля_EVA").AsInteger() == 1;
                 Cos_Lock = rCirc.LookupParameter("Cos_Lock_EVA").AsInteger() == 1;
                 Phase_Connection_Lock = rCirc.LookupParameter("Фаза_подключения_Lock_EVA").AsInteger() == 1;
-                Сable_S_1_Lock = rCirc.LookupParameter("Сечение_кабеля_1_Lock_EVA").AsInteger() == 1;
+                Cable_S_1_Lock = rCirc.LookupParameter("Сечение_кабеля_1_Lock_EVA").AsInteger() == 1;
 
                 Load_Winter_Summer = rCirc.LookupParameter("Режим_работы_Зима_Лето_EVA").AsValueString();
                 Load_Winter_Summer_Lock = rCirc.LookupParameter("Режим_работы_Зима_Лето_Lock_EVA").AsInteger() == 1;
@@ -313,23 +331,35 @@ namespace EVA_Gen.WPF.Models
                 // получение параметров от элементов цепи
                 foreach (Element el in rCirc.Elements)
                 {
-                    if (!el.Category.Id.Equals(electricalEquipmentCategoryId))
+                    var eli = new ElementItem();
+                    if (!el.Category.Id.Equals(electricalEquipmentCategoryId)) //если элемент не панель
                     {
-                        
+                        eli.IsPanel = false;
+                        ConnectorSet connectors = (el as FamilyInstance).MEPModel.ConnectorManager.Connectors;
+                        foreach (var obj in connectors)
+                        {
+                            var conn = obj as Connector;
+                            var famConnInfo = conn.GetMEPConnectorInfo() as MEPFamilyConnectorInfo; 
+
+                            eli.S = (famConnInfo.GetConnectorParameterValue(new ElementId(BuiltInParameter.RBS_ELEC_APPARENT_LOAD)) as DoubleParameterValue).Value;
+                            eli.Cos = (famConnInfo.GetConnectorParameterValue(new ElementId(BuiltInParameter.RBS_ELEC_POWER_FACTOR)) as DoubleParameterValue).Value;
+                        }
+                        //ElementList.Add(new ElementItem(el));
                     }
                     else 
                     {
+                        eli.IsPanel = true;
+                        //eli.PanIt = this;
                         if (el.LookupParameter("Отходящие_линии_EVA").AsInteger() == 1)
                         {
                             //var circuits = Utilits.GetSortedCircuits(el as FamilyInstance);
-                            Out_Line_panel = el.Name;
-                            
-
-
+                            Out_Line_panel = el.Name;                         
                         }
                     }
-                }
 
+                    ElementList.Add(eli);
+                }
+                
 
             }
             
@@ -419,6 +449,7 @@ namespace EVA_Gen.WPF.Models
 
         public CircItem CircBoard { get; set; }
         
+        public int ParentNumber { get; set; }
         public double Line_step { get; set; }
         public string circ_Text1 { get; set; }
         public string circ_Text2 { get; set; }
@@ -498,6 +529,7 @@ namespace EVA_Gen.WPF.Models
             //Заполнение свойств паенели
             Name = panelRevit.Name;
             Id = panelRevit.Id;
+
             //ParentBoardId = ElementId.InvalidElementId;
 
             Line_step = panelRevit.LookupParameter("Шаг_линии_EVA").AsDouble();
@@ -544,7 +576,7 @@ namespace EVA_Gen.WPF.Models
 
 
 
-            //Заполнение свойств цепей
+            //Заполнение свойств цепей, точка входа создания экземпляров цепей
             Circuits = Utilits.GetSortedCircuits(panelRevit, out CircItem circBoard); //отсортированные цепи
             if(circBoard != null)
             {

@@ -74,6 +74,7 @@
     <Compile Include="WPF\Views\Windows\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Сalculation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="WPF\Views\Windows\MainWindow.xaml">

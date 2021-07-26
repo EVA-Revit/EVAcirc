@@ -136,6 +136,7 @@
                     <DataGridTextColumn Header="Ток аппарата 1" Binding="{Binding Device_I_1}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Тип аппарата 1" Binding="{Binding Device_Type_1}" ></DataGridTextColumn>
                     
+                    
 
                 </DataGrid.Columns>
                 

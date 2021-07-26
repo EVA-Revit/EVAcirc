@@ -35,6 +35,7 @@ namespace EVA_Gen
             uidoc = commandData.Application.ActiveUIDocument;
             doc = uidoc.Document;
             Utilits.Doc = doc;
+            Calculation.Doc = doc;
             Categories categories = doc.Settings.Categories;
             electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
             try
@@ -83,17 +84,21 @@ namespace EVA_Gen
 
                 //Перебор коннекторов щита (исходящие + входящий)
 
-                //Если в листе щитов содержится эквивалент элемента эл.цепи то он является дочерним true:
+                //Если отсутствует родительский ID, то этот щит является родительским:
                 if (fi.ParentBoardId == null)
                 {
                     //equipmentParents[e2.Id] = eq.Id; //в словарь записать значение id элемента цепи (дочернего)
                     //equipmentChildren.Add(fi.Id);
-                    var panelItem = GetPanelItems(fi);
+                    var panelItem = GetPanelItems(fi, 0);
                     panelItems.Add(panelItem);
                 }
                 
                 
             }
+            //выполнение расчетов
+            //сортировка щитов
+            var calcBoardsList = boards.OrderByDescending(x => x.ParentNumber);
+            
 
 
             //foreach (var fi in boards)
@@ -169,15 +174,10 @@ namespace EVA_Gen
 
 
 
-        private static PanelItem GetPanelItems(PanelItem board)
+        private static PanelItem GetPanelItems(PanelItem board, int parNumber)
         {
-            //panelItem = new PanelItem(board);
-            //panelItem = new PanelItem();
-
-
-            //Categories categories = doc.Settings.Categories;
-            //ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
-
+            board.ParentNumber = parNumber;
+            parNumber += 1;
             foreach (var c in boards)
             {
          
@@ -186,7 +186,8 @@ namespace EVA_Gen
                 if (board.Id == c.ParentBoardId)
                 {
                     //потомок
-                    panelItem2 = GetPanelItems(c);
+
+                    panelItem2 = GetPanelItems(c, parNumber); //рекурсия
                     board.SubPanels.Add(panelItem2);
 
                 }
@@ -197,47 +198,7 @@ namespace EVA_Gen
 
 
 
-        //private static PanelItem GetPanelsItems(FamilyInstance board)
-        //{
-        //    //panelItem = new PanelItem(board);
-        //    //panelItem = new PanelItem();
-
-
-        //    //Categories categories = doc.Settings.Categories;
-        //    //ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
-
-        //    foreach (Connector c in board.MEPModel.ConnectorManager.Connectors)
-        //    {
-        //        refs = c.AllRefs; //все ссылки на коннектор
-        //        foreach (Connector c2 in refs)
-        //        {
-        //            Debug.Assert(null != c2.Owner,
-        //                "ожидается владелец соединителя");
-
-        //            Debug.Assert(c2.Owner is ElectricalSystem,
-        //                "ожидаемый элемент щита будет ел.цепью");
-
-        //            eq = c2.Owner as ElectricalSystem; //Получения из каждой ссылки на коннектор щита его владельца(элцепь)
-
-        //            if (eq.CircuitType != CircuitType.Circuit) { continue; }  //добавлена проверка из-зи 18го revit
-
-        //            foreach (Element e2 in eq.Elements)// Перебор элементов цепи
-        //            {
-        //                Debug.Assert(e2 is FamilyInstance, "ожидаемый элемент эл.цепи будет экземпляром семейства");
-
-        //                //если id элемента цепи не будет равен id щита и элемент будет щитом то:
-        //                if (!e2.Id.Equals(board.Id) && e2.Category.Id == electricalEquipmentCategoryId)
-        //                {
-        //                    //потомок
-        //                    panelItem2 = GetPanelItems(e2 as FamilyInstance);
-        //                    panelItem.SubPanels.Add(panelItem2);
-
-        //                }
-        //            }
-        //        }
-        //    }
-        //    return panelItem;
-        //}
+        
 
     }
 
