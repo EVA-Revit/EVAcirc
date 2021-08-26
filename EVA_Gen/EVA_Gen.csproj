@@ -88,5 +88,9 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="WPF\Views\Resources\lock.png" />
+    <EmbeddedResource Include="WPF\Views\Resources\unlocked.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

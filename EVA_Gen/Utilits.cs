@@ -301,5 +301,11 @@ namespace EVA_Gen
             //return UnitUtils.ConvertToInternalUnits(volt, DisplayUnitType.DUT_VOLTS);
             return UnitUtils.ConvertFromInternalUnits(volt, DisplayUnitType.DUT_VOLTS);
         }
+
+        public static double VoltAmperage(double voltAmper)
+        {
+            //return UnitUtils.ConvertToInternalUnits(volt, DisplayUnitType.DUT_VOLTS);
+            return UnitUtils.ConvertFromInternalUnits(voltAmper, DisplayUnitType.DUT_VOLT_AMPERES);
+        }
     }
 }

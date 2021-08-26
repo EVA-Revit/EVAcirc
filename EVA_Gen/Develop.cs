@@ -98,7 +98,23 @@ namespace EVA_Gen
             //выполнение расчетов
             //сортировка щитов
             var calcBoardsList = boards.OrderByDescending(x => x.ParentNumber);
-            
+
+            using (Transaction newTran = new Transaction(doc, "RecordingCalc"))
+            {
+                newTran.Start();
+
+                foreach (var pitem in calcBoardsList)
+                {
+                    Calculation.Circuits(pitem);
+                    Calculation.Panels(pitem);
+                }
+
+                newTran.Commit();
+            }
+
+
+
+           
 
 
             //foreach (var fi in boards)
@@ -152,12 +168,7 @@ namespace EVA_Gen
             //    panelItems.Add(item);
             //}
 
-
-
-
             #endregion
-
-
 
             var mVm = new MainWindowViewModel();
             mVm.Panels = panelItems;
@@ -166,12 +177,8 @@ namespace EVA_Gen
             GenCommand.window = view;
             view.ShowDialog();
 
-            
             return true;
         }
-
-
-
 
 
         private static PanelItem GetPanelItems(PanelItem board, int parNumber)
@@ -180,25 +187,16 @@ namespace EVA_Gen
             parNumber += 1;
             foreach (var c in boards)
             {
-         
-
                 //если id элемента цепи не будет равен id щита и элемент будет щитом то:
                 if (board.Id == c.ParentBoardId)
                 {
                     //потомок
-
                     panelItem2 = GetPanelItems(c, parNumber); //рекурсия
                     board.SubPanels.Add(panelItem2);
-
-                }
-                    
+                }   
             }
             return board;
         }
-
-
-
-        
 
     }
 

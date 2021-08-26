@@ -9,7 +9,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:beh="clr-namespace:EVA_Gen.WPF.ViewModels"
         xmlns:vm="clr-namespace:EVA_Gen.WPF.ViewModels"   
-        Height="450" Width="1200"
+        Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
         Title="{Binding Path=Title}">
     <!--Привязка Data Context для отладки-->
@@ -80,7 +80,7 @@
                       CanUserAddRows="False"
                       GridLinesVisibility="All" 
                       VerticalGridLinesBrush="DarkGray"
-                      HorizontalGridLinesBrush="DarkGray" CanUserSortColumns ="False" SelectionMode="Extended" CanUserResizeColumns="False" CanUserResizeRows="False" SelectionUnit="Cell" >
+                      HorizontalGridLinesBrush="DarkGray" CanUserSortColumns ="False" SelectionMode="Extended" CanUserResizeColumns="False" CanUserResizeRows="False" SelectionUnit="Cell"  IsReadOnly="True">
                 
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -121,11 +121,9 @@
                 </DataGrid.CellStyle>
 
                 <DataGrid.Columns>
-                
-
-
-                   
-                    <DataGridTextColumn Header="Ру" Binding="{Binding P_Installed}" Visibility="Visible"></DataGridTextColumn>
+                    <DataGridTextColumn Header="CosF" Binding="{Binding Cos}" Visibility="Visible"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Расчетная мощность" Binding="{Binding P1}" Visibility="Visible"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Ток" Binding="{Binding I1_Max}" Visibility="Visible"></DataGridTextColumn>
                     <DataGridTextColumn Header="Фаза подключения" Binding="{Binding Phase_Connection}" Visibility="Visible"></DataGridTextColumn>
                     <DataGridTextColumn Header="Тип нагрузки" Binding="{Binding Load_Type}"></DataGridTextColumn>
                     <DataGridTextColumn Header="УГО" Binding="{Binding Ugo}"></DataGridTextColumn>
@@ -135,9 +133,50 @@
                     <DataGridTextColumn Header="Хар-ка срабатывания" Binding="{Binding Device_Curve_1}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Ток аппарата 1" Binding="{Binding Device_I_1}"></DataGridTextColumn>
                     <DataGridTextColumn Header="Тип аппарата 1" Binding="{Binding Device_Type_1}" ></DataGridTextColumn>
-                    
-                    
 
+                    <DataGridTextColumn Header="Установленная мощность, Ру (кВт)" Binding="{Binding P}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="Установленная мощность, Ру (кВт)" Binding="{Binding P}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="Установленная мощность, Ру (кВт)" Binding="{Binding P}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="Установленная мощность, Ру (кВт)" Binding="{Binding P}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="P2W" Binding="{Binding P2W}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="Коэффициент спроса на отх. линии, Кс" Binding="{Binding Kc1}" ></DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Установленная мощность, Ру (кВт)" Binding="{Binding P}" ></DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Наименование кабельной линии" Binding="{Binding Name}" ></DataGridTextColumn>
+
+                    <DataGridTemplateColumn Header="Режим работы Зима/лето">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <TextBox Text="{Binding Load_Winter_Summer}"></TextBox>
+                                    <Button Height="20" Width="20">
+                                        <!--<ContentControl Content="{}"></ContentControl>-->
+                                        <!--<Image Source="unlocked.png"></Image>-->
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Режим учета нагрузки">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Grid.Row="1">
+                                    <TextBox Text="{Binding Load_Mode_Operating}"></TextBox>
+                                    <Button Height="20" Width="20">
+                                        <!--<ContentControl Content="{}"></ContentControl>-->
+                                        <!--<Image Source="unlocked.png"></Image>-->
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    
+                   
+                    <DataGridTextColumn Header="Наименование нагрузки" Binding="{Binding Load_Name}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="УГО" Binding="{Binding Ugo}" ></DataGridTextColumn>
+                    <DataGridTextColumn Header="Тип нагрузки" Binding="{Binding Load_Type}" ></DataGridTextColumn>
                 </DataGrid.Columns>
                 
             </DataGrid>

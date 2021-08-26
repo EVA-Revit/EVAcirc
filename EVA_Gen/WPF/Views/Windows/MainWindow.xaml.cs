@@ -24,5 +24,6 @@ namespace EVA_Gen.WPF.Views
         {
             InitializeComponent();
         }
+
     }
 }

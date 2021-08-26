@@ -35,9 +35,9 @@ namespace EVA_Gen.WPF.Models
         public double P_L2 { get; set; }
         public double P_L3 { get; set; }
 
-        public double S { get; set; }
-        public double Cos { get; set; }
-        public double P { get; set; }
+        public double S { get; set; } 
+        public double Cos { get; set; } 
+        public double P { get; set; } 
         public double Q { get; set; }
 
     }
@@ -52,7 +52,7 @@ namespace EVA_Gen.WPF.Models
         {
 
         }
-        public ElementItem (Element el)
+        public ElementItem(Element el)
         {
             ConnectorSet connectors = (el as FamilyInstance).MEPModel.ConnectorManager.Connectors;
             foreach (var obj in connectors)
@@ -105,9 +105,9 @@ namespace EVA_Gen.WPF.Models
         public double Cable_L_2 { get; set; }
         public int Number_Of_Phase { get; set; }
         public string Phase_Connection { get; set; }
-        public string Device_Type_1 { get; set; }
-        public string Device_Type_2 { get; set; }
-        public string Device_Type_3 { get; set; }
+        public string Device_Type_1 { get; set; } = "нет";
+        public string Device_Type_2 { get; set; } = "нет";
+        public string Device_Type_3 { get; set; } = "нет";
         public string Device_Mark_1 { get; set; }
         public string Device_Mark_2 { get; set; }
         public string Device_Mark_3 { get; set; }
@@ -150,10 +150,10 @@ namespace EVA_Gen.WPF.Models
         public string Load_Name { get; set; }
         public string Ugo { get; set; }
         public string Out_Line_panel { get; set; }
-        public double Kc1 { get; set; }
-        public double Kc2 { get; set; }
-        public double Kc3 { get; set; }
-        public double Kc4 { get; set; }
+        public double Kc1 { get; set; } = 1;
+        public double Kc2 { get; set; } = 1;
+        public double Kc3 { get; set; } = 1;
+        public double Kc4 { get; set; } = 1;
         public double Voltage { get; set; }
 
         public bool Device_I_1_Lock { get; set; }
@@ -185,7 +185,7 @@ namespace EVA_Gen.WPF.Models
         public double Kd { get; set; }
 
 
-        public List<ElementItem> ElementList { get; set; }
+        public List<ElementItem> ElementList { get; set; } = new List<ElementItem>();
 
         public CircItem(ElectricalSystem rCirc)
         {
@@ -332,6 +332,7 @@ namespace EVA_Gen.WPF.Models
                 foreach (Element el in rCirc.Elements)
                 {
                     var eli = new ElementItem();
+                    eli.Id = el.Id;
                     if (!el.Category.Id.Equals(electricalEquipmentCategoryId)) //если элемент не панель
                     {
                         eli.IsPanel = false;
@@ -339,16 +340,20 @@ namespace EVA_Gen.WPF.Models
                         foreach (var obj in connectors)
                         {
                             var conn = obj as Connector;
-                            var famConnInfo = conn.GetMEPConnectorInfo() as MEPFamilyConnectorInfo; 
+                            var famConnInfo = conn.GetMEPConnectorInfo() as MEPFamilyConnectorInfo;
 
-                            eli.S = (famConnInfo.GetConnectorParameterValue(new ElementId(BuiltInParameter.RBS_ELEC_APPARENT_LOAD)) as DoubleParameterValue).Value;
-                            eli.Cos = (famConnInfo.GetConnectorParameterValue(new ElementId(BuiltInParameter.RBS_ELEC_POWER_FACTOR)) as DoubleParameterValue).Value;
+                            if (conn.Domain == Domain.DomainElectrical)
+                            {
+                                eli.S = (famConnInfo.GetConnectorParameterValue(new ElementId(BuiltInParameter.RBS_ELEC_APPARENT_LOAD)) as DoubleParameterValue).Value;
+                                eli.Cos = (famConnInfo.GetConnectorParameterValue(new ElementId(BuiltInParameter.RBS_ELEC_POWER_FACTOR)) as DoubleParameterValue).Value;
+                            }
                         }
                         //ElementList.Add(new ElementItem(el));
                     }
-                    else 
+                    else if(el.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_TOTALLOAD_PARAM).AsDouble() != 0)
                     {
                         eli.IsPanel = true;
+
                         //eli.PanIt = this;
                         if (el.LookupParameter("Отходящие_линии_EVA").AsInteger() == 1)
                         {
@@ -461,10 +466,10 @@ namespace EVA_Gen.WPF.Models
         public double cos2WF { get; set; }
         public double cos2S { get; set; }
         public double cos2SF { get; set; }
-        public double K2W { get; set; }
-        public double K2WF { get; set; }
-        public double K2S { get; set; }
-        public double K2SF { get; set; }
+        public double K2W { get; set; } = 1;
+        public double K2WF { get; set; } = 1;
+        public double K2S { get; set; } = 1;
+        public double K2SF { get; set; } = 1;
         public double I2W_L1 { get; set; }
         public double I2W_L2 { get; set; }
         public double I2W_L3 { get; set; }
@@ -551,7 +556,7 @@ namespace EVA_Gen.WPF.Models
             I2W_L2 = panelRevit.LookupParameter("Iр_щита_Зима_L2_EVA").AsDouble();
             I2W_L3 = panelRevit.LookupParameter("Iр_щита_Зима_L3_EVA").AsDouble();
             I2W_max = panelRevit.LookupParameter("Iр_щита_Зима_EVA").AsDouble();
-            I2WF_L1 = panelRevit.LookupParameter("Iр_щита_Зима_L1_EVA").AsDouble();
+            I2WF_L1 = panelRevit.LookupParameter("Iр_щита_Зима_Пожар_L1_EVA").AsDouble();
             I2WF_L2 = panelRevit.LookupParameter("Iр_щита_Зима_Пожар_L2_EVA").AsDouble();
             I2WF_L3 = panelRevit.LookupParameter("Iр_щита_Зима_Пожар_L3_EVA").AsDouble();
             I2WF_max = panelRevit.LookupParameter("Iр_щита_Зима_Пожар_EVA").AsDouble();
