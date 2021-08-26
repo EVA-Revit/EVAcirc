@@ -321,6 +321,7 @@ namespace EVA_Gen
         static void RecordingCalcCirc(CircItem circ)
         {
             Element rCirc = Doc.GetElement(circ.Id);
+            if (rCirc == null) return;
 
             if (rCirc.LookupParameter("Pу_EVA").AsDouble() != circ.P) rCirc.LookupParameter("Pу_EVA").Set(circ.P);
             if (rCirc.LookupParameter("Sу_EVA").AsDouble() != circ.S) rCirc.LookupParameter("Sу_EVA").Set(circ.S);
@@ -372,6 +373,7 @@ namespace EVA_Gen
         static void RecordingCalcPanel(PanelItem panel)
         {
             Element rPanel = Doc.GetElement(panel.Id);
+            if (rPanel == null) return;
 
             if (rPanel.LookupParameter("Pу_EVA").AsDouble() != panel.P) rPanel.LookupParameter("Pу_EVA").Set(panel.P);
             if (rPanel.LookupParameter("Pр_щита_Зима_EVA").AsDouble() != panel.P2W) rPanel.LookupParameter("Pр_щита_Зима_EVA").Set(panel.P2W);

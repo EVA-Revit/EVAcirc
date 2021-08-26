@@ -150,10 +150,10 @@ namespace EVA_Gen.WPF.Models
         public string Load_Name { get; set; }
         public string Ugo { get; set; }
         public string Out_Line_panel { get; set; }
-        public double Kc1 { get; set; } = 1;
-        public double Kc2 { get; set; } = 1;
-        public double Kc3 { get; set; } = 1;
-        public double Kc4 { get; set; } = 1;
+        public double Kc1 { get; set; }
+        public double Kc2 { get; set; } 
+        public double Kc3 { get; set; } 
+        public double Kc4 { get; set; } 
         public double Voltage { get; set; }
 
         public bool Device_I_1_Lock { get; set; }
@@ -221,10 +221,14 @@ namespace EVA_Gen.WPF.Models
                 Ik_End_Line = rCirc.LookupParameter("I_1ф_кз_EVA").AsDouble();
                 Cable_Calculated_L = rCirc.LookupParameter("L_расч_кабеля_EVA").AsDouble();
                 //DU_Calculated = rCirc.LookupParameter("ΔU_EVA").AsDouble();
+
                 Cable_L_1 = rCirc.LookupParameter("L_факт_кабеля_1_EVA").AsDouble();
                 Cable_L_2 = rCirc.LookupParameter("L_факт_кабеля_2_EVA").AsDouble();
                 Number_Of_Phase = rCirc.PolesNumber;
-                Phase_Connection = rCirc.LookupParameter("Фаза_подключения_EVA").AsValueString();
+                if (rCirc.get_Parameter(BuiltInParameter.RBS_ELEC_NUMBER_OF_POLES).AsInteger() == 3) Phase_Connection = "-";
+                else if (rCirc.LookupParameter("Фаза_подключения_EVA").AsValueString() == "") Phase_Connection = "L1";
+                else Phase_Connection = rCirc.LookupParameter("Фаза_подключения_EVA").AsValueString();
+
                 Device_Type_1 = rCirc.LookupParameter("Тип_аппарата_1_EVA").AsValueString();
                 Device_Type_2 = rCirc.LookupParameter("Тип_аппарата_2_EVA").AsValueString();
                 Device_Type_3 = rCirc.LookupParameter("Тип_аппарата_3_EVA").AsValueString();
@@ -251,11 +255,15 @@ namespace EVA_Gen.WPF.Models
                 Load_Name = rCirc.LookupParameter("Наименование_нагрузки_EVA").AsString();
                 Ugo = rCirc.LookupParameter("УГО_EVA").AsValueString();
 
+                if (rCirc.LookupParameter("Кс_отх_линии_EVA").AsDouble() == 0) Kc1 = 1;
+                else Kc1 = rCirc.LookupParameter("Кс_отх_линии_EVA").AsDouble();
+                if (rCirc.LookupParameter("Кс_щита_EVA").AsDouble() == 0) Kc2 = 1;
+                else Kc2 = rCirc.LookupParameter("Кс_щита_EVA").AsDouble();
+                if (rCirc.LookupParameter("Кс_на_вводах_ВРУ_EVA").AsDouble() == 0) Kc3 = 1;
+                else Kc3 = rCirc.LookupParameter("Кс_на_вводах_ВРУ_EVA").AsDouble();
+                if (rCirc.LookupParameter("Кс_ВРУ_авар_реж_EVA").AsDouble() == 0) Kc4 = 1;
+                else Kc4 = rCirc.LookupParameter("Кс_ВРУ_авар_реж_EVA").AsDouble();
 
-                Kc1 = rCirc.LookupParameter("Кс_отх_линии_EVA").AsDouble();
-                Kc2 = rCirc.LookupParameter("Кс_щита_EVA").AsDouble();
-                Kc3 = rCirc.LookupParameter("Кс_на_вводах_ВРУ_EVA").AsDouble();
-                Kc4 = rCirc.LookupParameter("Кс_ВРУ_авар_реж_EVA").AsDouble();
                 Voltage = rCirc.get_Parameter(BuiltInParameter.RBS_ELEC_VOLTAGE).AsDouble();
                 Q1 = rCirc.LookupParameter("Q_отх_линии_EVA").AsDouble();
                 Cable_type = rCirc.LookupParameter("Тип_кабеля_Алюм_EVA").AsInteger() == 1;
@@ -264,14 +272,18 @@ namespace EVA_Gen.WPF.Models
                 Phase_Connection_Lock = rCirc.LookupParameter("Фаза_подключения_Lock_EVA").AsInteger() == 1;
                 Cable_S_1_Lock = rCirc.LookupParameter("Сечение_кабеля_1_Lock_EVA").AsInteger() == 1;
 
-                Load_Winter_Summer = rCirc.LookupParameter("Режим_работы_Зима_Лето_EVA").AsValueString();
-                Load_Winter_Summer_Lock = rCirc.LookupParameter("Режим_работы_Зима_Лето_Lock_EVA").AsInteger() == 1;
+                if (rCirc.LookupParameter("Режим_работы_Зима_Лето_EVA").AsValueString() == "") Load_Winter_Summer = "круглый год";
+                else Load_Winter_Summer = rCirc.LookupParameter("Режим_работы_Зима_Лето_EVA").AsValueString();
 
-                Load_Mode_Operating = rCirc.LookupParameter("Режим_учета_нагрузки_EVA").AsValueString();
+                Load_Winter_Summer_Lock = rCirc.LookupParameter("Режим_работы_Зима_Лето_Lock_EVA").AsInteger() == 1;
+                if (rCirc.LookupParameter("Режим_учета_нагрузки_EVA").AsValueString() == "") Load_Mode_Operating = "в обоих режимах";
+                else Load_Mode_Operating = rCirc.LookupParameter("Режим_учета_нагрузки_EVA").AsValueString();
+
                 Load_Mode_Operating_Lock = rCirc.LookupParameter("Режим_учета_нагрузки_Lock_EVA").AsInteger() == 1;
 
                 Cable_Mark = rCirc.LookupParameter("Марка_кабеля_EVA").AsString();
-                DU_Allowable = rCirc.LookupParameter("ΔU_допустимые_EVA").AsDouble();
+                if (rCirc.LookupParameter("ΔU_допустимые_EVA").AsDouble() == 0) DU_Allowable = 3;
+                else DU_Allowable = rCirc.LookupParameter("ΔU_допустимые_EVA").AsDouble();
                 Text1 = rCirc.LookupParameter("Текст1_EVA").AsString();
                 Text2 = rCirc.LookupParameter("Текст2_EVA").AsString();
                 Q = rCirc.LookupParameter("Qу_EVA").AsDouble();
@@ -313,7 +325,9 @@ namespace EVA_Gen.WPF.Models
                 I1_L1 = rCirc.LookupParameter("Iр_отх_линии_L1_EVA").AsDouble();
                 I1_L2 = rCirc.LookupParameter("Iр_отх_линии_L2_EVA").AsDouble();
                 I1_L3 = rCirc.LookupParameter("Iр_отх_линии_L3_EVA").AsDouble();
-                Kd = rCirc.LookupParameter("Кс_доп_EVA").AsDouble();
+                if (rCirc.LookupParameter("Кс_доп_EVA").AsDouble() == 0) Kd = 1;
+                else Kd = rCirc.LookupParameter("Кс_доп_EVA").AsDouble();
+
 
 
 

@@ -121,7 +121,7 @@
                 </DataGrid.CellStyle>
 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="CosF" Binding="{Binding Cos}" Visibility="Visible"></DataGridTextColumn>
+                    
                     <DataGridTextColumn Header="Расчетная мощность" Binding="{Binding P1}" Visibility="Visible"></DataGridTextColumn>
                     <DataGridTextColumn Header="Ток" Binding="{Binding I1_Max}" Visibility="Visible"></DataGridTextColumn>
                     <DataGridTextColumn Header="Фаза подключения" Binding="{Binding Phase_Connection}" Visibility="Visible"></DataGridTextColumn>
