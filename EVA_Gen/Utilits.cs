@@ -182,6 +182,8 @@ namespace EVA_Gen
             el.LookupParameter("Wh_EVA").Set(0);
             el.LookupParameter("КТ_EVA").Set(0);
             el.LookupParameter("QD_EVA").Set(0);
+            el.LookupParameter("QF_Выкатной_EVA").Set(0);
+            el.LookupParameter("QF+N_EVA").Set(0);
             try
             {
                 el.LookupParameter(nazn).Set(1);
@@ -323,5 +325,174 @@ namespace EVA_Gen
             //var sd = filter.PassesFilter(keysp.FirstElement());
             return keysp.FirstElement();
         }
+
+
+        public static ViewDrafting GetDrawingsView(string nameView)
+        {
+            var view = new FilteredElementCollector(doc).OfClass(typeof(ViewDrafting)).FirstOrDefault(x => x.Name == nameView);
+
+            return view as ViewDrafting;
+        }
+
+        public static void SetParamApZ(FamilyInstance app, CircItem circ, string numApStg, int i, int order)
+        {
+            //Назначение
+            //app.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(16));
+            app.LookupParameter("Перемещение_по_Х_EVA").Set(Utilits.Ft(16));
+
+            //if (circ.Device_Type_1 == "QF")
+            if (circ.GetProp(Device.Type, order) == "QF")
+            {
+                UseParamViewAppZ(app, "QF_EVA");
+                //1
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "QF" + i.ToString());
+
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
+                app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
+
+                if (circ.GetProp(Device.Body, order) != "0")
+                {
+                    app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "А");
+                }
+
+
+
+
+            }
+
+            else if (circ.GetProp(Device.Type, order) == "QF+Н.Р.")
+            {
+                UseParamViewAppZ(app, "QF+Н.Р._EVA");
+                //1
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "QF" + i.ToString());
+
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
+                app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
+
+                if (circ.GetProp(Device.Body, order) != "0")
+                {
+                    app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "А");
+                }
+
+
+            }
+
+            else if (circ.GetProp(Device.Type, order) == "QFD")
+            {
+                UseParamViewAppZ(app, "QFD_EVA");
+
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "QFD" + i.ToString());
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + (circ.Number_Of_Phase + 1).ToString() + "P");
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
+                app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "мА");
+                app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
+
+            }
+
+            else if (circ.GetProp(Device.Type, order) == "QFD+Н.Р.")
+            {
+                UseParamViewAppZ(app, "QFD+Н.Р._EVA");
+
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "QFD" + i.ToString());
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + (circ.Number_Of_Phase + 1).ToString() + "P");
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
+                app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "мА");
+                app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
+
+            }
+
+            else if (circ.GetProp(Device.Type, order) == "FU")
+            {
+                UseParamViewAppZ(app, "FU_EVA");
+
+
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A");
+                if (circ.Number_Of_Phase == 3)
+                {
+                    app.LookupParameter("Строка1_EVA").Set(numApStg + "FU" + i.ToString() + ".1 " + numApStg + "FU" +
+                        i.ToString() + ".3");
+                }
+                else app.LookupParameter("Строка1_EVA").Set(numApStg + "FU" + i.ToString());
+            }
+
+            else if (circ.GetProp(Device.Type, order) == "QD")
+            {
+                UseParamViewAppZ(app, "QD_EVA");
+
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "QD" + i.ToString());
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + (circ.Number_Of_Phase + 1).ToString() + "P");
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A");
+                app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Break, order) + "мА");
+
+            }
+
+
+            else if (circ.GetProp(Device.Type, order) == "QS")
+            {
+                UseParamViewAppZ(app, "QS_EVA");
+
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "QS" + i.ToString());
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A");
+            }
+
+            else if (circ.GetProp(Device.Type, order) == "KM")
+            {
+                UseParamViewAppZ(app, "КМ_EVA");
+
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "KM" + i.ToString());
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A");
+            }
+
+
+            else if (circ.GetProp(Device.Type, order) == "Wh")
+            {
+                UseParamViewAppZ(app, "Wh_EVA");
+
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "Wh" + i.ToString());
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+
+            }
+
+            else if (circ.GetProp(Device.Type, order) == "QF+N")
+            {
+                UseParamViewAppZ(app, "QF+N_EVA");
+
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "QF" + i.ToString());
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + (circ.Number_Of_Phase + 1).ToString() + "P");
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
+                app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
+            }
+
+            else if (circ.GetProp(Device.Type, order) == "QF_Выкатной")
+            {
+                UseParamViewAppZ(app, "QF_Выкатной_EVA");
+
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "QF" + i.ToString());
+
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
+                app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
+
+                if (circ.GetProp(Device.Body, order) != "0")
+                {
+                    app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "А");
+                }
+            }
+
+
+
+
+
+        }
+
+
+
+
+
     }
 }

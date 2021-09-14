@@ -74,6 +74,9 @@ namespace EVA_Gen
 
             GenCommand.doc = doc;
             GenCommand.uidoc = uidoc;
+            GenBoardCommand.doc = doc;
+            GenBoardCommand.uidoc = uidoc;
+
 
             List<ElementId> equipmentChildren = new List<ElementId>();
             ObservableCollection<PanelItem> panelItems = new ObservableCollection<PanelItem>();
@@ -197,6 +200,7 @@ namespace EVA_Gen
             var view = new WPF.Views.MainWindow();
             view.DataContext = mVm;
             GenCommand.window = view;
+            GenBoardCommand.window = view;
             view.ShowDialog();
 
             return true;

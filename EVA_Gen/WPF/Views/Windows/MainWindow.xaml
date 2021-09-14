@@ -64,7 +64,11 @@
                 <Binding Path="Panels" ></Binding>
             </Button.CommandParameter>-->
         </Button>
-        <Button Grid.Column="1"  Margin="10" Width="85" Content="Update" HorizontalAlignment="Right"></Button>
+        <Button Grid.Column="1"  Margin="10" Width="85" Content="GenBoard" HorizontalAlignment="Right">
+            <Button.Command >
+                <cmd:GenBoardCommand/>
+            </Button.Command>
+        </Button>
         <TextBlock Grid.Column="2" Text="Данные панели:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
 
 
