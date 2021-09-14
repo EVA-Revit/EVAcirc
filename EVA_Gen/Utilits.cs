@@ -307,5 +307,21 @@ namespace EVA_Gen
             //return UnitUtils.ConvertToInternalUnits(volt, DisplayUnitType.DUT_VOLTS);
             return UnitUtils.ConvertFromInternalUnits(voltAmper, DisplayUnitType.DUT_VOLT_AMPERES);
         }
+
+        /// <summary>
+        /// Получение элементов ключевой спецификации по её имени
+        /// </summary>
+        public static Element ViewKeyElement(string nameTabl)
+        {
+            FilterRule rule = ParameterFilterRuleFactory.CreateEqualsRule(new ElementId(BuiltInParameter.VIEW_NAME), nameTabl, false);
+            var filter = new ElementParameterFilter(rule);
+
+            FilteredElementCollector keysp = new FilteredElementCollector(doc);
+            keysp.OfClass(typeof(ViewSchedule)).WherePasses(filter);
+            if (keysp.Count() != 1) return null;
+
+            //var sd = filter.PassesFilter(keysp.FirstElement());
+            return keysp.FirstElement();
+        }
     }
 }

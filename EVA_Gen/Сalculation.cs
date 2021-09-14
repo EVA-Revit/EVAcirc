@@ -23,12 +23,30 @@ namespace EVA_Gen
             set { doc = value; }
         }
 
+        //поля для работы с ключевыми спеками 
+        public static ElementId L1_id { get; set; }
+        public static ElementId L2_id { get; set; }
+        public static ElementId L3_id { get; set; }
+        public static ElementId L123_id { get; set; }
+
+        public static ElementId Load_Winter { get; set; }
+        public static ElementId Load_Summer { get; set; }
+        public static ElementId Load_All_Year { get; set; }
+
+        public static ElementId Load_Mode_Double { get; set; }
+        public static ElementId Load_Mode_Fire { get; set; }
+        public static ElementId Load_Mode_Work { get; set; }
+        public static ElementId Load_Mode_Ignore { get; set; }
+
         const int U1f = 220;
         const int U3f= 380;
 
+
+       
+
         public static void Circuits (PanelItem pi)
         {
-
+            
             foreach (CircItem circ in pi.Circuits)
             {
                 circ.P = 0;
@@ -110,19 +128,26 @@ namespace EVA_Gen
                     {
                         //переписать данные из панели
                         //TaskDialog.Show("dad", elItem.Id.IntegerValue.ToString() + elItem.Name); 
-                        var ghf = Develop.boards;
-                        //var panelItem = Develop.boards.FirstOrDefault(x => x.Id.IntegerValue == elItem.Id.IntegerValue);
+                        //var ghf = Develop.boards;
+                        var panelItem = Develop.boards.FirstOrDefault(x => x.Id.IntegerValue == elItem.Id.IntegerValue);
+                        if(panelItem != null)
+                        {
+                            circ.P += panelItem.P;
 
-                        //circ.P += panelItem.P;
-                        //circ.Q += panelItem.Q;
+                            circ.Q += panelItem.Q;
 
-                        //circ.P_L1 += panelItem.P_L1;
-                        //circ.P_L2 += panelItem.P_L2;
-                        //circ.P_L3 += panelItem.P_L3;
+                            circ.P_L1 += panelItem.P_L1;
+                            circ.P_L2 += panelItem.P_L2;
+                            circ.P_L3 += panelItem.P_L3;
+                        }
+
+                        
                     }
                    
                 }
+
                 circ.S = Math.Sqrt(circ.P * circ.P + circ.Q * circ.Q);
+
                 if (circ.S == 0) circ.Cos = 1;
                 else circ.Cos = circ.P / circ.S;
 
@@ -145,9 +170,9 @@ namespace EVA_Gen
                 circ.Q2W = circ.P2W * Math.Tan(Math.Acos(circ.Cos));
                 circ.Q3W = circ.P3W * Math.Tan(Math.Acos(circ.Cos)) * circ.Kd;
                 circ.Q4W = circ.P4W * Math.Tan(Math.Acos(circ.Cos)) * circ.Kd;
-                circ.Q2WF = circ.P2W * Math.Tan(Math.Acos(circ.Cos));
-                circ.Q3WF = circ.P3W * Math.Tan(Math.Acos(circ.Cos)) * circ.Kd;
-                circ.Q4WF = circ.P4W * Math.Tan(Math.Acos(circ.Cos)) * circ.Kd;
+                circ.Q2WF = circ.P2WF * Math.Tan(Math.Acos(circ.Cos));
+                circ.Q3WF = circ.P3WF * Math.Tan(Math.Acos(circ.Cos)) * circ.Kd;
+                circ.Q4WF = circ.P4WF * Math.Tan(Math.Acos(circ.Cos)) * circ.Kd;
                 circ.Q2S = circ.P2S * Math.Tan(Math.Acos(circ.Cos));
                 circ.Q3S = circ.P3S * Math.Tan(Math.Acos(circ.Cos)) * circ.Kd;
                 circ.Q4S = circ.P4S * Math.Tan(Math.Acos(circ.Cos)) * circ.Kd;
@@ -226,7 +251,9 @@ namespace EVA_Gen
             {
                 pi.P += circ.P;
                 pi.P2W += circ.P2W;
+                
                 pi.P2WF += circ.P2WF;
+                
                 pi.P2S += circ.P2S;
                 pi.P2SF += circ.P2SF;
 
@@ -248,6 +275,7 @@ namespace EVA_Gen
 
             pi.S2W = Math.Sqrt(pi.P2W * pi.P2W + pi.Q2W * pi.Q2W);
             pi.S2WF = Math.Sqrt(pi.P2WF * pi.P2WF + pi.Q2WF * pi.Q2WF);
+            
             pi.S2S = Math.Sqrt(pi.P2S * pi.P2S + pi.Q2S * pi.Q2S);
             pi.S2SF = Math.Sqrt(pi.P2SF * pi.P2SF + pi.Q2SF * pi.Q2SF);
             if (pi.S2W == 0) pi.cos2W = 1;
@@ -322,8 +350,9 @@ namespace EVA_Gen
         {
             Element rCirc = Doc.GetElement(circ.Id);
             if (rCirc == null) return;
-
+            //if (!rCirc.LookupParameter("Pу_EVA").HasValue) rCirc.LookupParameter("Pу_EVA").Set(circ.P);
             if (rCirc.LookupParameter("Pу_EVA").AsDouble() != circ.P) rCirc.LookupParameter("Pу_EVA").Set(circ.P);
+            else if (!rCirc.LookupParameter("Pу_EVA").HasValue) rCirc.LookupParameter("Pу_EVA").Set(circ.P);
             if (rCirc.LookupParameter("Sу_EVA").AsDouble() != circ.S) rCirc.LookupParameter("Sу_EVA").Set(circ.S);
             //TaskDialog.Show("sd", rCirc.Name + circ.Cos.ToString());
             if (rCirc.LookupParameter("Cos_EVA").AsDouble() != circ.Cos) rCirc.LookupParameter("Cos_EVA").Set(circ.Cos);
@@ -366,6 +395,37 @@ namespace EVA_Gen
 
             if (rCirc.LookupParameter("Iр_отх_линии_EVA").AsDouble() != circ.I1_Max) rCirc.LookupParameter("Iр_отх_линии_EVA").Set(circ.I1_Max);
 
+            if (circ.Kc1 == 1) rCirc.LookupParameter("Кс_отх_линии_EVA").Set(1);
+            if (circ.Kc2 == 1) rCirc.LookupParameter("Кс_щита_EVA").Set(1);
+            if (circ.Kc3 == 1) rCirc.LookupParameter("Кс_на_вводах_ВРУ_EVA").Set(1);
+            if (circ.Kc4 == 1) rCirc.LookupParameter("Кс_ВРУ_авар_реж_EVA").Set(1);
+
+            //TaskDialog.Show("dada", rCirc.LookupParameter("Тип_аппарата_3_EVA").AsElementId().ToString());
+            if (rCirc.get_Parameter(BuiltInParameter.RBS_ELEC_NUMBER_OF_POLES).AsInteger() == 3)
+            {
+                rCirc.LookupParameter("Фаза_подключения_EVA").Set(L123_id);
+            }
+            //else if (rCirc.LookupParameter("Фаза_подключения_EVA").AsValueString() == "(нет)")
+            //else if (rCirc.LookupParameter("Фаза_подключения_EVA").AsElementId() == null)
+            
+            else if (rCirc.LookupParameter("Фаза_подключения_EVA").AsElementId() == ElementId.InvalidElementId)
+            {
+                rCirc.LookupParameter("Фаза_подключения_EVA").Set(L1_id);
+            }
+
+            if (rCirc.LookupParameter("Режим_работы_Зима_Лето_EVA").AsElementId() == ElementId.InvalidElementId)
+            {
+                rCirc.LookupParameter("Режим_работы_Зима_Лето_EVA").Set(Load_All_Year);
+            }
+            if (rCirc.LookupParameter("Режим_учета_нагрузки_EVA").AsElementId() == ElementId.InvalidElementId)
+            {
+                rCirc.LookupParameter("Режим_учета_нагрузки_EVA").Set(Load_Mode_Double);
+            }
+
+
+            if (rCirc.LookupParameter("Имя_нагрузки_EVA").AsString() != circ.Name_Load_T) rCirc.LookupParameter("Имя_нагрузки_EVA").Set(circ.Name_Load_T);
+
+
         }
 
 
@@ -377,9 +437,9 @@ namespace EVA_Gen
 
             if (rPanel.LookupParameter("Pу_EVA").AsDouble() != panel.P) rPanel.LookupParameter("Pу_EVA").Set(panel.P);
             if (rPanel.LookupParameter("Pр_щита_Зима_EVA").AsDouble() != panel.P2W) rPanel.LookupParameter("Pр_щита_Зима_EVA").Set(panel.P2W);
-            if (rPanel.LookupParameter("Pр_щита_Зима_Пожар_EVA").AsDouble() != panel.P2WF) rPanel.LookupParameter("Pр_щита_Зима_EVA").Set(panel.P2WF);
+            if (rPanel.LookupParameter("Pр_щита_Зима_Пожар_EVA").AsDouble() != panel.P2WF) rPanel.LookupParameter("Pр_щита_Зима_Пожар_EVA").Set(panel.P2WF);
             if (rPanel.LookupParameter("Pр_щита_Лето_EVA").AsDouble() != panel.P2S) rPanel.LookupParameter("Pр_щита_Лето_EVA").Set(panel.P2S);
-            if (rPanel.LookupParameter("Pр_щита_Лето_Пожар_EVA").AsDouble() != panel.P2SF) rPanel.LookupParameter("Pр_щита_Зима_EVA").Set(panel.P2SF);
+            if (rPanel.LookupParameter("Pр_щита_Лето_Пожар_EVA").AsDouble() != panel.P2SF) rPanel.LookupParameter("Pр_щита_Лето_Пожар_EVA").Set(panel.P2SF);
             if (rPanel.LookupParameter("Qу_EVA").AsDouble() != panel.Q) rPanel.LookupParameter("Qу_EVA").Set(panel.Q);
             if (rPanel.LookupParameter("Qр_щита_Зима_EVA").AsDouble() != panel.Q2W) rPanel.LookupParameter("Qр_щита_Зима_EVA").Set(panel.Q2W);
             if (rPanel.LookupParameter("Qр_щита_Зима_Пожар_EVA").AsDouble() != panel.Q2WF) rPanel.LookupParameter("Qр_щита_Зима_Пожар_EVA").Set(panel.Q2WF);

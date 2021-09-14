@@ -37,7 +37,13 @@ namespace EVA_Gen.WPF.Models
 
         public double S { get; set; } 
         public double Cos { get; set; } 
-        public double P { get; set; } 
+        public double P { get; set; }
+        public string P_Visable
+        {
+            get { return (P / 1000).ToString(); }
+        }
+
+
         public double Q { get; set; }
 
     }
@@ -77,7 +83,7 @@ namespace EVA_Gen.WPF.Models
         ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
 
         public bool Rez { get; set; } 
-
+        public bool HasValueP { get; set; }
         public string AppZ { get; set; }
         public int Length { get; set; }
         //public string Cable_Mark_2 { get; set; }
@@ -94,11 +100,29 @@ namespace EVA_Gen.WPF.Models
        
         //public double P { get; set; }
         public double P1 { get; set; }
+        public string P1_Visable
+        {
+            get { return (P1 / 1000).ToString() ; }
+        }
+
+
+
         public double I1_Max { get; set; }
+        public string I1_Max_Visable
+        {
+            get { return Math.Round(I1_Max, 2).ToString(); }
+            //set;
+        }
         public double Q1 { get; set; }
 
         //public double Cos { get; set; }
         public double Ik_End_Line { get; set; }
+        public string Ik_End_Line_Visable
+        {
+            get { return Math.Round(Ik_End_Line, 2).ToString(); }
+            //set;
+        }
+
         public double Cable_Calculated_L { get; set; }
         public double DU_Calculated { get; set; }
         public double Cable_L_1 { get; set; }
@@ -183,6 +207,7 @@ namespace EVA_Gen.WPF.Models
         public double I1_L2 { get; set; }
         public double I1_L3 { get; set; }
         public double Kd { get; set; }
+        public string Name_Load_T { get; set; } = "";
 
 
         public List<ElementItem> ElementList { get; set; } = new List<ElementItem>();
@@ -216,6 +241,7 @@ namespace EVA_Gen.WPF.Models
                 Pipe_L = rCirc.LookupParameter("L_трубы_EVA").AsDouble();
                 P1 = rCirc.LookupParameter("Pр_отх_линии_EVA").AsDouble();
                 P = rCirc.LookupParameter("Pу_EVA").AsDouble();
+                HasValueP = rCirc.LookupParameter("Pу_EVA").HasValue;
                 I1_Max = rCirc.LookupParameter("Iр_отх_линии_EVA").AsDouble();
                 Cos = rCirc.LookupParameter("Cos_EVA").AsDouble();
                 Ik_End_Line = rCirc.LookupParameter("I_1ф_кз_EVA").AsDouble();
@@ -226,7 +252,7 @@ namespace EVA_Gen.WPF.Models
                 Cable_L_2 = rCirc.LookupParameter("L_факт_кабеля_2_EVA").AsDouble();
                 Number_Of_Phase = rCirc.PolesNumber;
                 if (rCirc.get_Parameter(BuiltInParameter.RBS_ELEC_NUMBER_OF_POLES).AsInteger() == 3) Phase_Connection = "-";
-                else if (rCirc.LookupParameter("Фаза_подключения_EVA").AsValueString() == "") Phase_Connection = "L1";
+                else if (rCirc.LookupParameter("Фаза_подключения_EVA").AsValueString() == "(нет)") Phase_Connection = "L1";
                 else Phase_Connection = rCirc.LookupParameter("Фаза_подключения_EVA").AsValueString();
 
                 Device_Type_1 = rCirc.LookupParameter("Тип_аппарата_1_EVA").AsValueString();
@@ -362,9 +388,19 @@ namespace EVA_Gen.WPF.Models
                                 eli.Cos = (famConnInfo.GetConnectorParameterValue(new ElementId(BuiltInParameter.RBS_ELEC_POWER_FACTOR)) as DoubleParameterValue).Value;
                             }
                         }
-                        //ElementList.Add(new ElementItem(el));
+                        //ElementList.Add(new ElementItem(el));   
+                        //var sd = el.LookupParameter("Имя_нагрузки_EVA").AsString();
+                        if(el.LookupParameter("Имя_нагрузки_EVA").AsString() != null)
+                        {
+                            if (!Name_Load_T.Contains(el.LookupParameter("Имя_нагрузки_EVA").AsString()))
+                            {
+                                if(Name_Load_T == "") Name_Load_T = el.LookupParameter("Имя_нагрузки_EVA").AsString();
+                                else Name_Load_T = Name_Load_T + ", " + el.LookupParameter("Имя_нагрузки_EVA").AsString();
+                            }
+                        }
+                       
                     }
-                    else if(el.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_TOTALLOAD_PARAM).AsDouble() != 0)
+                    else //if(el.get_Parameter(BuiltInParameter.RBS_ELEC_PANEL_TOTALLOAD_PARAM).AsDouble() != 0)
                     {
                         eli.IsPanel = true;
 

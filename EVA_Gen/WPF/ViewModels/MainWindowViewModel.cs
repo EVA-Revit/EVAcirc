@@ -15,7 +15,7 @@ namespace EVA_Gen.WPF.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
-        private string _Title = "E V A";
+        private string _Title = "E V A v0.1";
 
         #region Заголовок окна
         /// <summary>Заголовок окна</summary>

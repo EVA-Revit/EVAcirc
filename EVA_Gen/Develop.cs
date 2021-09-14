@@ -99,6 +99,28 @@ namespace EVA_Gen
             //сортировка щитов
             var calcBoardsList = boards.OrderByDescending(x => x.ParentNumber);
 
+            //получения id строк ключевой спецификации
+            Element view_AAZGL = Utilits.ViewKeyElement("Фаза_подключения_EVA");
+            FilteredElementCollector string_table_app = new FilteredElementCollector(doc, view_AAZGL.Id);
+            Calculation.L1_id = string_table_app.FirstOrDefault(x => x.Name == "L1").Id;
+            Calculation.L2_id = string_table_app.FirstOrDefault(x => x.Name == "L2").Id;
+            Calculation.L3_id = string_table_app.FirstOrDefault(x => x.Name == "L3").Id;
+            Calculation.L123_id = string_table_app.FirstOrDefault(x => x.Name == "-").Id;
+
+            view_AAZGL = Utilits.ViewKeyElement("Режим_работы_Зима_Лето_EVA");
+            string_table_app = new FilteredElementCollector(doc, view_AAZGL.Id);
+            Calculation.Load_Winter = string_table_app.FirstOrDefault(x => x.Name == "зима").Id;
+            Calculation.Load_Summer = string_table_app.FirstOrDefault(x => x.Name == "лето").Id;
+            Calculation.Load_All_Year = string_table_app.FirstOrDefault(x => x.Name == "круглый год").Id;
+
+            view_AAZGL = Utilits.ViewKeyElement("Режим_учета_нагрузки_EVA");
+            string_table_app = new FilteredElementCollector(doc, view_AAZGL.Id);
+            Calculation.Load_Mode_Double = string_table_app.FirstOrDefault(x => x.Name == "в обоих режимах").Id;
+            Calculation.Load_Mode_Fire = string_table_app.FirstOrDefault(x => x.Name == "в пожарном режиме").Id;
+            Calculation.Load_Mode_Work = string_table_app.FirstOrDefault(x => x.Name == "в рабочем режиме").Id;
+            Calculation.Load_Mode_Ignore = string_table_app.FirstOrDefault(x => x.Name == "не учитывать").Id;
+
+
             using (Transaction newTran = new Transaction(doc, "RecordingCalc"))
             {
                 newTran.Start();
