@@ -276,6 +276,10 @@ namespace EVA_Gen
 
 
 
+
+
+
+
         private static void ZeroingViewUgo(Element el)
         {
             el.LookupParameter("Блок_Управления").Set(0);

@@ -292,7 +292,17 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                         }
 
 
+                        //УГО
+                        if (circ.Ugo != "No")
+                        {
+                            //установка видимости уго из параметра
+                            Utilits.UseParamViewUgo(othLine, circ.Ugo);
+                        }
+                        else
+                        {
 
+                            Utilits.UseParamViewUgoInTypeLoad(othLine, circ.Load_Type);
+                        }
 
 
 
