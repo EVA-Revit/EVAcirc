@@ -24,9 +24,25 @@ namespace EVA_Gen.WPF.Models
         public ElementId Id { get; set; }
 
         public double P2W { get; set; }
+        public string P2W_Visable
+        {
+            get { return (P2W / 1000).ToString(); }
+        }
         public double P2WF { get; set; }
+        public string P2WF_Visable
+        {
+            get { return (P2WF / 1000).ToString(); }
+        }
         public double P2S { get; set; }
+        public string P2S_Visable
+        {
+            get { return (P2S / 1000).ToString(); }
+        }
         public double P2SF { get; set; }
+        public string P2SF_Visable
+        {
+            get { return (P2SF / 1000).ToString(); }
+        }
         public double Q2W { get; set; }
         public double Q2WF { get; set; }
         public double Q2S { get; set; }
@@ -45,6 +61,8 @@ namespace EVA_Gen.WPF.Models
 
 
         public double Q { get; set; }
+
+        public string Proekt { get; set; }
 
     }
 
@@ -144,9 +162,9 @@ namespace EVA_Gen.WPF.Models
         public double Device_Break_1 { get; set; }
         public double Device_Break_2 { get; set; }
         public double Device_Break_3 { get; set; }
-        public double Device_dI_body_I_Meter_TT_1 { get; set; }
-        public double Device_dI_body_I_Meter_TT_2 { get; set; }
-        public double Device_dI_body_I_Meter_TT_3 { get; set; }
+        public string Device_dI_body_I_Meter_TT_1 { get; set; }
+        public string Device_dI_body_I_Meter_TT_2 { get; set; }
+        public string Device_dI_body_I_Meter_TT_3 { get; set; }
        
         public string PanelName { get; set; }
 
@@ -208,6 +226,21 @@ namespace EVA_Gen.WPF.Models
         public double I1_L3 { get; set; }
         public double Kd { get; set; }
         public string Name_Load_T { get; set; } = "";
+        public string Name_VRU { get; set; }
+        public string Name_vvod_panel { get; set; }
+        public string Device_Article_1 { get; set; } = "";
+        public string Device_Article_2 { get; set; }
+        public string Device_Article_3 { get; set; }
+        public string Device_Manufacturer_1 { get; set; }
+        public string Device_Manufacturer_2 { get; set; }
+        public string Device_Manufacturer_3 { get; set; }
+        
+    
+
+
+
+
+
 
 
         public List<ElementItem> ElementList { get; set; } = new List<ElementItem>();
@@ -278,9 +311,9 @@ namespace EVA_Gen.WPF.Models
                 Device_Break_1 = rCirc.LookupParameter("Ном_откл_способн_аппарата_1_EVA").AsDouble();
                 Device_Break_2 = rCirc.LookupParameter("Ном_откл_способн_аппарата_2_EVA").AsDouble();
                 Device_Break_3 = rCirc.LookupParameter("Ном_откл_способн_аппарата_3_EVA").AsDouble();
-                Device_dI_body_I_Meter_TT_1 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_1_EVA").AsDouble();
-                Device_dI_body_I_Meter_TT_2 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_2_EVA").AsDouble();
-                Device_dI_body_I_Meter_TT_3 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_3_EVA").AsDouble();
+                Device_dI_body_I_Meter_TT_1 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_1_EVA").AsString();
+                Device_dI_body_I_Meter_TT_2 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_2_EVA").AsString();
+                Device_dI_body_I_Meter_TT_3 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_3_EVA").AsString();
                 
                 PanelName = rCirc.PanelName;
 
@@ -365,8 +398,15 @@ namespace EVA_Gen.WPF.Models
                 else Kd = rCirc.LookupParameter("Кс_доп_EVA").AsDouble();
 
 
-
-
+                Name_VRU = rCirc.LookupParameter("Имя_ВРУ_ГРЩ_EVA").AsString();
+                Name_vvod_panel = rCirc.LookupParameter("Имя_вводной_Панели_EVA").AsString();
+                Device_Article_1 = rCirc.LookupParameter("Артикул_1_EVA").AsString();
+                Device_Article_2 = rCirc.LookupParameter("Артикул_2_EVA").AsString();
+                Device_Article_3 = rCirc.LookupParameter("Артикул_3_EVA").AsString();
+                Device_Manufacturer_1 = rCirc.LookupParameter("Завод_изготовитель_1_EVA").AsString();
+                Device_Manufacturer_2 = rCirc.LookupParameter("Завод_изготовитель_2_EVA").AsString();
+                Device_Manufacturer_3 = rCirc.LookupParameter("Завод_изготовитель_3_EVA").AsString();
+                Proekt = rCirc.LookupParameter("Проект_EVA").AsString();
 
 
 
@@ -492,9 +532,25 @@ namespace EVA_Gen.WPF.Models
                 case Device.Body:
                     switch (order)
                     {
-                        case 1: return Device_dI_body_I_Meter_TT_1.ToString();
-                        case 2: return Device_dI_body_I_Meter_TT_2.ToString();
-                        case 3: return Device_dI_body_I_Meter_TT_3.ToString();
+                        case 1: return Device_dI_body_I_Meter_TT_1;
+                        case 2: return Device_dI_body_I_Meter_TT_2;
+                        case 3: return Device_dI_body_I_Meter_TT_3;
+                        default: return "ошибка";
+                    }
+                case Device.Article:
+                    switch (order)
+                    {
+                        case 1: return Device_Article_1;
+                        case 2: return Device_Article_2;
+                        case 3: return Device_Article_3;
+                        default: return "ошибка";
+                    }
+                case Device.Manufacturer:
+                    switch (order)
+                    {
+                        case 1: return Device_Manufacturer_1;
+                        case 2: return Device_Manufacturer_2;
+                        case 3: return Device_Manufacturer_3;
                         default: return "ошибка";
                     }
 
@@ -519,34 +575,97 @@ namespace EVA_Gen.WPF.Models
         public string circ_Text1 { get; set; }
         public string circ_Text2 { get; set; }
         public double S2W { get; set; }
+        public string S2W_Visable
+        {
+            get { return Math.Round(S2W, 2).ToString(); }
+        }
         public double S2WF { get; set; }
+        public string S2WF_Visable
+        {
+            get { return Math.Round(S2WF, 2).ToString(); }
+        }
         public double S2S { get; set; }
+        public string S2S_Visable
+        {
+            get { return Math.Round(S2S, 2).ToString(); }
+        }
         public double S2SF { get; set; }
+        public string S2SF_Visable
+        {
+            get { return Math.Round(S2SF, 2).ToString(); }
+        }
         public double cos2W { get; set; }
+        public string cos2W_Visable
+        {
+            get { return Math.Round(cos2W, 2).ToString(); }
+        }
         public double cos2WF { get; set; }
+        public string cos2WF_Visable
+        {
+            get { return Math.Round(cos2WF, 2).ToString(); }
+        }
         public double cos2S { get; set; }
+        public string cos2S_Visable
+        {
+            get { return Math.Round(cos2S, 2).ToString(); }
+        }
         public double cos2SF { get; set; }
+        public string cos2SF_Visable
+        {
+            get { return Math.Round(cos2SF, 2).ToString(); }
+        }
         public double K2W { get; set; } = 1;
+        public string K2W_Visable
+        {
+            get { return Math.Round(K2W, 2).ToString(); }
+        }
         public double K2WF { get; set; } = 1;
+        public string K2WF_Visable
+        {
+            get { return Math.Round(K2WF, 2).ToString(); }
+        }
         public double K2S { get; set; } = 1;
+        public string K2S_Visable
+        {
+            get { return Math.Round(K2S, 2).ToString(); }
+        }
         public double K2SF { get; set; } = 1;
+        public string K2SF_Visable
+        {
+            get { return Math.Round(K2SF, 2).ToString(); }
+        }
         public double I2W_L1 { get; set; }
         public double I2W_L2 { get; set; }
         public double I2W_L3 { get; set; }
         public double I2W_max { get; set; }
+        public string I2W_max_Visable
+        {
+            get { return Math.Round(I2W_max, 2).ToString(); }
+        }
         public double I2WF_L1 { get; set; }
         public double I2WF_L2 { get; set; }
         public double I2WF_L3 { get; set; }
         public double I2WF_max { get; set; }
+        public string I2WF_max_Visable
+        {
+            get { return Math.Round(I2WF_max, 2).ToString(); }
+        }
         public double I2S_L1 { get; set; }
         public double I2S_L2 { get; set; }
         public double I2S_L3 { get; set; }
         public double I2S_max { get; set; }
+        public string I2S_max_Visable
+        {
+            get { return Math.Round(I2S_max, 2).ToString(); }
+        }
         public double I2SF_L1 { get; set; }
         public double I2SF_L2 { get; set; }
         public double I2SF_L3 { get; set; }
         public double I2SF_max { get; set; }
-                                 
+        public string I2SF_max_Visable
+        {
+            get { return Math.Round(I2SF_max, 2).ToString(); }
+        }
 
 
         private bool _Is_Checked;
@@ -631,7 +750,7 @@ namespace EVA_Gen.WPF.Models
 
 
 
-
+            Proekt = panelRevit.LookupParameter("Проект_EVA").AsString();
 
 
 
@@ -697,7 +816,9 @@ namespace EVA_Gen.WPF.Models
         Curve,
         I,
         Break,
-        Body
+        Body,
+        Article,
+        Manufacturer
     }
 
     internal static class SelectedPanels

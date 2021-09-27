@@ -171,19 +171,21 @@ namespace EVA_Gen
 
         public static void UseParamViewAppZ(Element el, string nazn)
         {
-            el.LookupParameter("QF_EVA").Set(0);
-            el.LookupParameter("QF+Н.Р._EVA").Set(0);
-            el.LookupParameter("QFD_EVA").Set(0);
-            el.LookupParameter("QFD+Н.Р._EVA").Set(0);
-            el.LookupParameter("КМ_EVA").Set(0);
-            el.LookupParameter("FU_EVA").Set(0);
-            el.LookupParameter("Мотор_привод_EVA").Set(0);
-            el.LookupParameter("QS_EVA").Set(0);
-            el.LookupParameter("Wh_EVA").Set(0);
-            el.LookupParameter("КТ_EVA").Set(0);
-            el.LookupParameter("QD_EVA").Set(0);
-            el.LookupParameter("QF_Выкатной_EVA").Set(0);
-            el.LookupParameter("QF+N_EVA").Set(0);
+            el.LookupParameter("AFDD").Set(0);
+            el.LookupParameter("QF").Set(0);
+            el.LookupParameter("QF+Н.Р.").Set(0);
+            el.LookupParameter("QFD").Set(0);
+            el.LookupParameter("QFD+Н.Р.").Set(0);
+            el.LookupParameter("QS+N").Set(0);
+            el.LookupParameter("TT").Set(0);
+            el.LookupParameter("КМ").Set(0);
+            el.LookupParameter("FU").Set(0);
+            el.LookupParameter("QS").Set(0);
+            el.LookupParameter("Wh").Set(0);
+            el.LookupParameter("КТ").Set(0);
+            el.LookupParameter("QD").Set(0);
+            el.LookupParameter("QF_Выкатной").Set(0);
+            el.LookupParameter("QF+N").Set(0);
             try
             {
                 el.LookupParameter(nazn).Set(1);
@@ -347,19 +349,26 @@ namespace EVA_Gen
             //if (circ.Device_Type_1 == "QF")
             if (circ.GetProp(Device.Type, order) == "QF")
             {
-                UseParamViewAppZ(app, "QF_EVA");
+                UseParamViewAppZ(app, "QF");
                 //1
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "QF" + i.ToString());
 
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
                 app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
 
-                if (circ.GetProp(Device.Body, order) != "0")
+                if (circ.GetProp(Device.Body, order) != "")
                 {
                     app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "А");
+                    app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Автоматический выключатель "
+                        + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "A характеристика" 
+                        + circ.GetProp(Device.Curve, order) + "кА");
                 }
-
+                else
+                {
+                    app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Автоматический выключатель "
+                        + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Break, order) + "кА");
+                }
 
 
 
@@ -367,53 +376,68 @@ namespace EVA_Gen
 
             else if (circ.GetProp(Device.Type, order) == "QF+Н.Р.")
             {
-                UseParamViewAppZ(app, "QF+Н.Р._EVA");
+                UseParamViewAppZ(app, "QF+Н.Р.");
                 //1
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "QF" + i.ToString());
 
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
                 app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
 
-                if (circ.GetProp(Device.Body, order) != "0")
+                if (circ.GetProp(Device.Body, order) != "")
                 {
                     app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "А");
+                    app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Автоматический выключатель "
+                       + (circ.Number_Of_Phase + 1).ToString() + "x" + circ.GetProp(Device.I, order) + "A характеристика"
+                       + circ.GetProp(Device.Curve, order) + "кА");
                 }
-
+                else
+                {
+                    app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Автоматический выключатель "
+                        + (circ.Number_Of_Phase + 1).ToString() + "x" + circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Break, order) + "кА");
+                }
 
             }
 
             else if (circ.GetProp(Device.Type, order) == "QFD")
             {
-                UseParamViewAppZ(app, "QFD_EVA");
+                UseParamViewAppZ(app, "QFD");
 
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "QFD" + i.ToString());
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + (circ.Number_Of_Phase + 1).ToString() + "P");
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
                 app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "мА");
                 app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
-
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Дифф. автоматический выключатель " +
+                    circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "А, характеристика " + circ.GetProp(Device.Curve, order) 
+                    + ", " + circ.GetProp(Device.Body, order) + "мА, " + circ.GetProp(Device.Break, order) + "кА");
             }
 
             else if (circ.GetProp(Device.Type, order) == "QFD+Н.Р.")
             {
-                UseParamViewAppZ(app, "QFD+Н.Р._EVA");
+                UseParamViewAppZ(app, "QFD+Н.Р.");
 
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "QFD" + i.ToString());
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + (circ.Number_Of_Phase + 1).ToString() + "P");
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
                 app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "мА");
                 app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Дифф. автоматический выключатель " +
+                    (circ.Number_Of_Phase +1).ToString() + "x" + circ.GetProp(Device.I, order) + "А, характеристика " + circ.GetProp(Device.Curve, order)
+                    + ", " + circ.GetProp(Device.Body, order) + "мА, " + circ.GetProp(Device.Break, order) + "кА");
 
             }
 
             else if (circ.GetProp(Device.Type, order) == "FU")
             {
-                UseParamViewAppZ(app, "FU_EVA");
+                UseParamViewAppZ(app, "FU");
 
 
                 app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A");
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Плавкая вставка " 
+                    + circ.GetProp(Device.I, order) + "А");
+
                 if (circ.Number_Of_Phase == 3)
                 {
                     app.LookupParameter("Строка1_EVA").Set(numApStg + "FU" + i.ToString() + ".1 " + numApStg + "FU" +
@@ -424,71 +448,144 @@ namespace EVA_Gen
 
             else if (circ.GetProp(Device.Type, order) == "QD")
             {
-                UseParamViewAppZ(app, "QD_EVA");
+                UseParamViewAppZ(app, "QD");
 
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "QD" + i.ToString());
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + (circ.Number_Of_Phase + 1).ToString() + "P");
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A");
                 app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Break, order) + "мА");
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Устр. защитного отключения "
+                    + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "А");
 
             }
 
 
             else if (circ.GetProp(Device.Type, order) == "QS")
             {
-                UseParamViewAppZ(app, "QS_EVA");
+                UseParamViewAppZ(app, "QS");
 
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "QS" + i.ToString());
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A");
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Рубильник "
+                    + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "А");
             }
 
             else if (circ.GetProp(Device.Type, order) == "KM")
             {
-                UseParamViewAppZ(app, "КМ_EVA");
+                UseParamViewAppZ(app, "КМ");
 
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "KM" + i.ToString());
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A");
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Контактор "
+                    + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "А");
             }
 
 
             else if (circ.GetProp(Device.Type, order) == "Wh")
             {
-                UseParamViewAppZ(app, "Wh_EVA");
+                UseParamViewAppZ(app, "Wh");
 
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "Wh" + i.ToString());
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
-
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Счетчик эл. энергии");
             }
 
             else if (circ.GetProp(Device.Type, order) == "QF+N")
             {
-                UseParamViewAppZ(app, "QF+N_EVA");
+                UseParamViewAppZ(app, "QF+N");
 
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "QF" + i.ToString());
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + (circ.Number_Of_Phase + 1).ToString() + "P");
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
                 app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
+                if (circ.GetProp(Device.Body, order) != "")
+                {
+                    app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "А");
+                    app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Автоматический выключатель "
+                        + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "A характеристика"
+                        + circ.GetProp(Device.Curve, order) + "кА");
+                }
+                else
+                {
+                    app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Автоматический выключатель "
+                        + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Break, order) + "кА");
+                }
             }
 
             else if (circ.GetProp(Device.Type, order) == "QF_Выкатной")
             {
-                UseParamViewAppZ(app, "QF_Выкатной_EVA");
+                UseParamViewAppZ(app, "QF_Выкатной");
 
                 app.LookupParameter("Строка1_EVA").Set(numApStg + "QF" + i.ToString());
 
-                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order) + " " + circ.Number_Of_Phase.ToString() + "P");
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
                 app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Curve, order));
                 app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
 
-                if (circ.GetProp(Device.Body, order) != "0")
+                if (circ.GetProp(Device.Body, order) != "")
                 {
                     app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "А");
+                    app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Автоматический выключатель "
+                        + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "A характеристика"
+                        + circ.GetProp(Device.Curve, order) + "кА");
+                }
+                else
+                {
+                    app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Автоматический выключатель "
+                        + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "A " + circ.GetProp(Device.Break, order) + "кА");
                 }
             }
 
+            else if (circ.GetProp(Device.Type, order) == "AFDD")
+            {
+                UseParamViewAppZ(app, "AFDD");
 
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "AFDD" + i.ToString());
+
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A ");
+                app.LookupParameter("Строка5_EVA").Set(circ.GetProp(Device.Break, order) + "кА");
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Устр. защиты при дуговой пробое");
+
+            }
+            else if (circ.GetProp(Device.Type, order) == "Wh+TT")
+            {
+                UseParamViewAppZ(app, "TT");
+
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
+
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Тр-тр тока");
+
+                if (circ.Number_Of_Phase == 3)
+                {
+                    app.LookupParameter("Строка1_EVA").Set(numApStg + "Т" + i.ToString() + ".1 " + numApStg + "Т" +
+                        i.ToString() + ".3");
+                }
+                else app.LookupParameter("Строка1_EVA").Set(numApStg + "Т" + i.ToString());
+
+
+            }
+
+            else if (circ.GetProp(Device.Type, order) == "QS+N")
+            {
+                UseParamViewAppZ(app, "QS+N");
+
+                app.LookupParameter("Строка1_EVA").Set(numApStg + "QS" + i.ToString());
+                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Mark, order));
+                app.LookupParameter("Строка3_EVA").Set(circ.GetProp(Device.I, order) + "A");
+                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Рубильник "
+                    + (circ.Number_Of_Phase + 1).ToString() + "x" + circ.GetProp(Device.I, order) + "А");
+            }
+
+            //Общее назначения
+            app.LookupParameter("Тип_марка_обозначение_документа_EVA").Set(circ.GetProp(Device.Mark, order));
+            app.LookupParameter("Код_оборудования_EVA").Set(circ.GetProp(Device.Article, order));
+            app.LookupParameter("Завод-изготовитель_EVA").Set(circ.GetProp(Device.Manufacturer, order));
+            app.LookupParameter("Проект_EVA").Set(circ.Proekt);
+            app.LookupParameter("Имя_щита_EVA").Set(circ.PanelName);
+            app.LookupParameter("ID_IN_EVA").Set(circ.Id.ToString() + "$" + i.ToString());
 
 
 

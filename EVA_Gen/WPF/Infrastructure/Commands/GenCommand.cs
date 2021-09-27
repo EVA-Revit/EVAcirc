@@ -42,9 +42,9 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
             foreach (var item in SelectedPanels.Panels)
             {
 
-                PanelItem SelectedPanel = item;
+                PanelItem selectedPanel = item;
                 window.Close();
-                var view = Utilits.GetDrawingsView(SelectedPanel.Name);
+                var view = Utilits.GetDrawingsView(selectedPanel.Name);
                 using (Transaction newTran = new Transaction(doc, "Создание вида EVA"))
                 {
                     newTran.Start();
@@ -58,14 +58,14 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                         //создание нового 2D вида
                         view = ViewDrafting.Create(doc, viewFamilyType.Id);
                         //view= View3D.CreateIsometric(doc, viewFamilyType.Id);
-                        view.Name = SelectedPanel.Name;
+                        view.Name = selectedPanel.Name;
                     }
 
                     else
                     {
                         for (int i = 1; i < 100; i++)
                         {
-                            view = Utilits.GetDrawingsView(SelectedPanel.Name + " копия " + i.ToString());
+                            view = Utilits.GetDrawingsView(selectedPanel.Name + " копия " + i.ToString());
                             if (view == null)
                             {
                                 var viewFamilyType = new FilteredElementCollector(doc).OfClass(typeof(ViewFamilyType)).Cast<ViewFamilyType>()
@@ -74,7 +74,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                                 //создание нового  вида
                                 view = ViewDrafting.Create(doc, viewFamilyType.Id);
                                 //view= View3D.CreateIsometric(doc, viewFamilyType.Id);
-                                view.Name = SelectedPanel.Name + " копия " + i.ToString();
+                                view.Name = selectedPanel.Name + " копия " + i.ToString();
                                 break;
                             }
 
@@ -94,8 +94,8 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
                 //ElectricalSystem circBoard = null;
                 //List<ElectricalSystem> circSortBoard = Utilits.GetSortedCircuits(SelectedPanelCommand.Rboard as FamilyInstance, out circBoard).ToList(); //отсортированные цепи
-                List<CircItem> circItemsBoard = SelectedPanel.Circuits.ToList();
-                int nn = SelectedPanel.CountGroup;
+                List<CircItem> circItemsBoard = selectedPanel.Circuits.ToList();
+                int nn = selectedPanel.CountGroup;
                 XYZ pt = new XYZ();
 
 
@@ -119,6 +119,9 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
                 var fam_othLine_add = Utilits.FamType(Utilits.GetFamAn("EVA_Панель_Отходящая_линия_Доп").Family, "-")
                  as FamilySymbol;
+
+                var fam_legenda = Utilits.FamType(Utilits.GetFamAn("EVA_Легенда_Нагрузка").Family, "-")
+                as FamilySymbol;
                 //var fam_el = Utilits.FamType(Utilits.GetFamAn(FNt1.el).Family, "-")
                 //    as FamilySymbol;
 
@@ -134,16 +137,19 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                     if (!fam_app.IsActive) fam_app.Activate();
                     if (!fam_UGO.IsActive) fam_UGO.Activate();
                     if (!fam_othLine_add.IsActive) fam_othLine_add.Activate();
-
+                    if (!fam_legenda.IsActive) fam_legenda.Activate();
 
 
                     FamilyInstance shina = doc.Create.NewFamilyInstance(pt, fam_shina, view);
 
                     if (nn == 0) TaskDialog.Show("Отладка", "Кол-во груп равно 0");
                     shina.LookupParameter("L_шины_EVA").Set(nn * step);
+                    shina.LookupParameter("Проект_EVA").Set(selectedPanel.Proekt);
+                    shina.LookupParameter("Имя_щита_EVA").Set(selectedPanel.Name);
+                    shina.LookupParameter("ID_IN_EVA").Set(selectedPanel.Id.ToString());
 
                     string numAppStr = "";
-                    string panelName = SelectedPanel.Name;
+                    string panelName = selectedPanel.Name;
                     if (panelName.Contains("РП-"))
                     {
 
@@ -166,6 +172,13 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                         numAppStr = rez.Split('(')[0];
                         if (numAppStr.Contains("-")) numAppStr = numAppStr.Remove(numAppStr.IndexOf("-"));
                     }
+
+                    //legend
+                    LegendBoard(pt, fam_legenda, view, selectedPanel);
+
+                    
+
+
 
 
 
@@ -264,6 +277,10 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
                             othLine.LookupParameter("Длина_до_кабеля_EVA").Set(Utilits.Ft(50) + y1);
                             othLine.LookupParameter("Длина_линии_до_УГО_EVA").Set(Utilits.Ft(75));
+
+                            othLine.LookupParameter("Проект_EVA").Set(circ.Proekt);
+                            othLine.LookupParameter("Имя_щита_EVA").Set(circ.PanelName);
+                            othLine.LookupParameter("ID_IN_EVA").Set(circ.Id.ToString());
                         }
 
 
@@ -297,6 +314,25 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                             //Назначение
                             Utilits.SetParamApZ(app, circ, numAppStr, i, 1);
                             app.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(16));
+                            if (circ.Device_Type_1 == "Wh+TT")
+                            {
+                                app = doc.Create.NewFamilyInstance(new XYZ((step * i), y, 0), fam_app, view);
+                                //SetParameters
+                                app.LookupParameter("Перемещение_по_Х_EVA").Set(Utilits.Ft(16));
+                                Utilits.UseParamViewAppZ(app, "Wh");
+                                //1
+                                app.LookupParameter("Строка1_EVA").Set(numAppStr + "Wh" + i.ToString());
+                                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Break, 1));
+
+                                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Счетчик эл. энергии");
+                                app.LookupParameter("Тип_марка_обозначение_документа_EVA").Set(circ.GetProp(Device.Break, 1));
+                                app.LookupParameter("Проект_EVA ").Set(circ.Proekt);
+                                app.LookupParameter("Имя_щита_EVA ").Set(circ.PanelName);
+                                app.LookupParameter("ID_IN_EVA ").Set(circ.Id.ToString()+"$" + i.ToString() + i.ToString());
+
+                                //TODO: добавить параметры для спеки
+                            }
+
                         }
 
 
@@ -309,6 +345,24 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                             //Назначение
                             Utilits.SetParamApZ(app, circ, numAppStr, i, 2);
                             app.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(16));
+                            if (circ.Device_Type_2 == "Wh+TT")
+                            {
+                                app = doc.Create.NewFamilyInstance(new XYZ((step * i), y, 0), fam_app, view);
+                                //SetParameters
+                                app.LookupParameter("Перемещение_по_Х_EVA").Set(Utilits.Ft(16));
+                                Utilits.UseParamViewAppZ(app, "Wh");
+                                //1
+                                app.LookupParameter("Строка1_EVA").Set(numAppStr + "Wh" + i.ToString());
+                                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Break, 1));
+
+                                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Счетчик эл. энергии");
+                                app.LookupParameter("Тип_марка_обозначение_документа_EVA").Set(circ.GetProp(Device.Break, 1));
+                                app.LookupParameter("Проект_EVA ").Set(circ.Proekt);
+                                app.LookupParameter("Имя_щита_EVA ").Set(circ.PanelName);
+                                app.LookupParameter("ID_IN_EVA ").Set(circ.Id.ToString() + "$" + i.ToString() + i.ToString());
+
+                                //TODO: добавить параметры для спеки
+                            }
                         }
 
                         if (circ.Device_Type_3 != "No")
@@ -322,12 +376,34 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
                             Utilits.SetParamApZ(app, circ, numAppStr, i, 3);
                             app.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(16));
+                            if (circ.Device_Type_3 == "Wh+TT")
+                            {
+                                app = doc.Create.NewFamilyInstance(new XYZ((step * i), y, 0), fam_app, view);
+                                //SetParameters
+                                app.LookupParameter("Перемещение_по_Х_EVA").Set(Utilits.Ft(16));
+                                Utilits.UseParamViewAppZ(app, "Wh");
+                                //1
+                                app.LookupParameter("Строка1_EVA").Set(numAppStr + "Wh" + i.ToString());
+                                app.LookupParameter("Строка2_EVA").Set(circ.GetProp(Device.Break, 1));
+
+                                app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Счетчик эл. энергии");
+                                app.LookupParameter("Тип_марка_обозначение_документа_EVA").Set(circ.GetProp(Device.Break, 1));
+                                app.LookupParameter("Проект_EVA ").Set(circ.Proekt);
+                                app.LookupParameter("Имя_щита_EVA ").Set(circ.PanelName);
+                                app.LookupParameter("ID_IN_EVA ").Set(circ.Id.ToString() + "$" + i.ToString() + i.ToString());
+
+                                //TODO: добавить параметры для спеки
+                            }
                         }
 
                         //UGO
                         if (ap3) y = Utilits.Ft(155.5);
                         else y = Utilits.Ft(130.5);
                         FamilyInstance ugo = doc.Create.NewFamilyInstance(new XYZ((step * i) - step / 2, y, 0), fam_UGO, view);
+
+                        ugo.LookupParameter("Проект_EVA").Set(circ.Proekt);
+                        ugo.LookupParameter("Имя_щита_EVA").Set(circ.PanelName);
+                        ugo.LookupParameter("ID_IN_EVA").Set(circ.Id.ToString());
 
 
                         //SelectedPanel.Name == "ЩУ"
@@ -365,10 +441,21 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                                 FamilyInstance othLine_add = doc.Create.NewFamilyInstance(new XYZ(x1, Utilits.Ft(130.5) + y1 + y2, 0), fam_othLine_add, view);
                                 FamilyInstance ugo2 = doc.Create.NewFamilyInstance(new XYZ(x1, Utilits.Ft(190.5) + y1 + y2, 0), fam_UGO, view);
 
+                                othLine_add.LookupParameter("Проект_EVA ").Set(circ.Proekt);
+                                othLine_add.LookupParameter("Имя_щита_EVA ").Set(circ.PanelName);
+                                othLine_add.LookupParameter("ID_IN_EVA ").Set(circ.Id.ToString());
+                                ugo2.LookupParameter("Проект_EVA ").Set(circ.Proekt);
+                                ugo2.LookupParameter("Имя_щита_EVA ").Set(circ.PanelName);
+                                ugo2.LookupParameter("ID_IN_EVA ").Set(circ.Id.ToString());
+
+
                                 x1 = x1 + Utilits.Ft(30);
 
                                 //назначение
                                 var circAdd = panelAdd.Circuits[i2];
+
+
+
                                 //if (circAdd.Cable_S_1_1 == 0)
                                 //{
 
@@ -388,8 +475,8 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                                 //{
 
                                 //}
-
-
+                                if (circAdd.Load_Type == "Сигнал от") continue;
+                                if (circAdd.Load_Type == "Резерв") continue;
 
                                 if (circAdd.Cable_S_1_1 != 0)
                                 {
@@ -452,9 +539,10 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
                                 //назначение УГОдоп 
                                 ugo2.LookupParameter("Строка1_EVA").Set(circAdd.Load_Name);
-                                ugo2.LookupParameter("Строка2_EVA").Set("Py= " + circAdd.P_Visable);
+                                ugo2.LookupParameter("Строка2_EVA").Set("Py= " + circAdd.P_Visable + "кВт");
                                 ugo2.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(25));
                                 ugo2.LookupParameter("Перемещение_по_X_EVA").Set(0);
+
 
                                 if (circAdd.Ugo != "No")
                                 {
@@ -479,7 +567,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
 
                             //Назначение
                             ugo.LookupParameter("Строка1_EVA").Set(circ.Load_Name);
-                            ugo.LookupParameter("Строка2_EVA").Set("Py= " + circ.P_Visable);
+                            ugo.LookupParameter("Строка2_EVA").Set("Py= " + circ.P_Visable + " кВт");
                             ugo.LookupParameter("Перемещение_по_Y_EVA").Set(Utilits.Ft(25));
                             ugo.LookupParameter("Перемещение_по_X_EVA").Set(0);
 
@@ -528,13 +616,97 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
            
         }
 
+        public static void LegendBoard(XYZ pt, FamilySymbol fam_legenda,ViewDrafting view, PanelItem selectedPanel)
+        {
+            FamilyInstance legenda = doc.Create.NewFamilyInstance(new XYZ(pt.X, pt.Y - Utilits.Ft(50), 0), fam_legenda, view);
+
+            //назначение легенды
+            if (selectedPanel.P2W == selectedPanel.P2S)
+            {
+                legenda.LookupParameter("kс_EVA").Set(selectedPanel.K2W_Visable);
+                legenda.LookupParameter("Рр_EVA").Set(selectedPanel.P2W_Visable);
+                legenda.LookupParameter("Iр_EVA").Set(selectedPanel.I2W_max_Visable);
+                legenda.LookupParameter("cos_EVA").Set(selectedPanel.cos2W_Visable);
+                legenda.LookupParameter("Sр_EVA").Set(selectedPanel.S2W_Visable);
+                legenda.LookupParameter("Ру_EVA").Set(selectedPanel.P_Visable);
+                legenda.LookupParameter("Имя_Панели_EVA").Set(selectedPanel.Name);
+                
+                legenda.LookupParameter("ID_IN_EVA").Set(selectedPanel.Id + "Р");
+
+                if (selectedPanel.P2W != selectedPanel.P2SF)
+                {
+                    legenda.LookupParameter("Режим_EVA").Set("Рабочий режим");
+                }
+                else return;
+            }
+            else
+            {
+                legenda.LookupParameter("kс_EVA").Set(selectedPanel.K2S_Visable);
+                legenda.LookupParameter("Рр_EVA").Set(selectedPanel.P2S_Visable);
+                legenda.LookupParameter("Iр_EVA").Set(selectedPanel.I2S_max_Visable);
+                legenda.LookupParameter("cos_EVA").Set(selectedPanel.cos2S_Visable);
+                legenda.LookupParameter("Sр_EVA").Set(selectedPanel.S2S_Visable);
+                legenda.LookupParameter("Ру_EVA").Set(selectedPanel.P_Visable);
+                legenda.LookupParameter("Имя_Панели_EVA").Set(selectedPanel.Name);
+                legenda.LookupParameter("Режим_EVA").Set("Рабочий режим(лето)");
+                legenda.LookupParameter("ID_IN_EVA").Set(selectedPanel.Id + "Р_Л");
 
 
+                legenda = doc.Create.NewFamilyInstance(new XYZ(pt.X, pt.Y - Utilits.Ft(100), 0), fam_legenda, view);
 
-       
+                legenda.LookupParameter("kс_EVA").Set(selectedPanel.K2W_Visable);
+                legenda.LookupParameter("Рр_EVA").Set(selectedPanel.P2W_Visable);
+                legenda.LookupParameter("Iр_EVA").Set(selectedPanel.I2W_max_Visable);
+                legenda.LookupParameter("cos_EVA").Set(selectedPanel.cos2W_Visable);
+                legenda.LookupParameter("Sр_EVA").Set(selectedPanel.S2W_Visable);
+                legenda.LookupParameter("Ру_EVA").Set(selectedPanel.P_Visable);
+                legenda.LookupParameter("Имя_Панели_EVA").Set(selectedPanel.Name);
+                legenda.LookupParameter("Режим_EVA").Set("Рабочий режим(зима)");
+                legenda.LookupParameter("ID_IN_EVA").Set(selectedPanel.Id + "Р_З");
 
+                if (selectedPanel.P2S == selectedPanel.P2SF) return;
+            }
+            
+            
+            legenda = doc.Create.NewFamilyInstance(new XYZ(pt.X + Utilits.Ft(50), pt.Y - Utilits.Ft(50), 0), fam_legenda, view);
 
-        
+            if (selectedPanel.P2WF != selectedPanel.P2SF)
+            {
+                legenda.LookupParameter("kс_EVA").Set(selectedPanel.K2WF_Visable);
+                legenda.LookupParameter("Рр_EVA").Set(selectedPanel.P2WF_Visable);
+                legenda.LookupParameter("Iр_EVA").Set(selectedPanel.I2WF_max_Visable);
+                legenda.LookupParameter("cos_EVA").Set(selectedPanel.cos2WF_Visable);
+                legenda.LookupParameter("Sр_EVA").Set(selectedPanel.S2WF_Visable);
+                legenda.LookupParameter("Ру_EVA").Set(selectedPanel.P_Visable);
+                legenda.LookupParameter("Имя_Панели_EVA").Set(selectedPanel.Name);
+                legenda.LookupParameter("Режим_EVA").Set("Аварийный режим");
+                legenda.LookupParameter("ID_IN_EVA").Set(selectedPanel.Id + "А");
+                return;
+            }
+            else
+            {
+                legenda.LookupParameter("kс_EVA").Set(selectedPanel.K2SF_Visable);
+                legenda.LookupParameter("Рр_EVA").Set(selectedPanel.P2SF_Visable);
+                legenda.LookupParameter("Iр_EVA").Set(selectedPanel.I2SF_max_Visable);
+                legenda.LookupParameter("cos_EVA").Set(selectedPanel.cos2SF_Visable);
+                legenda.LookupParameter("Sр_EVA").Set(selectedPanel.S2SF_Visable);
+                legenda.LookupParameter("Ру_EVA").Set(selectedPanel.P_Visable);
+                legenda.LookupParameter("Имя_Панели_EVA").Set(selectedPanel.Name);
+                legenda.LookupParameter("Режим_EVA").Set("Аварийный режим(лето)");
+                legenda.LookupParameter("ID_IN_EVA").Set(selectedPanel.Id + "А_Л");
 
+                legenda = doc.Create.NewFamilyInstance(new XYZ(pt.X + Utilits.Ft(150), pt.Y - Utilits.Ft(100), 0), fam_legenda, view);
+
+                legenda.LookupParameter("kс_EVA").Set(selectedPanel.K2WF_Visable);
+                legenda.LookupParameter("Рр_EVA").Set(selectedPanel.P2WF_Visable);
+                legenda.LookupParameter("Iр_EVA").Set(selectedPanel.I2WF_max_Visable);
+                legenda.LookupParameter("cos_EVA").Set(selectedPanel.cos2WF_Visable);
+                legenda.LookupParameter("Sр_EVA").Set(selectedPanel.S2WF_Visable);
+                legenda.LookupParameter("Ру_EVA").Set(selectedPanel.P_Visable);
+                legenda.LookupParameter("Имя_Панели_EVA").Set(selectedPanel.Name);
+                legenda.LookupParameter("Режим_EVA").Set("Аварийный режим(зима)");
+                legenda.LookupParameter("ID_IN_EVA").Set(selectedPanel.Id + "А_З");
+            }
+        }
     }
 }
