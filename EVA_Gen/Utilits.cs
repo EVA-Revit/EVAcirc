@@ -359,6 +359,9 @@ namespace EVA_Gen
 
                 if (circ.GetProp(Device.Body, order) != "")
                 {
+                    var el = doc.GetElement(circ.Id);
+
+                    TaskDialog.Show("ss", el.LookupParameter("I_утеч-корп_аппарата-транф_1_EVA").AsString());
                     app.LookupParameter("Строка4_EVA").Set(circ.GetProp(Device.Body, order) + "А");
                     app.LookupParameter("Наименование_и_техническая_характеристика_EVA").Set("Автоматический выключатель "
                         + circ.Number_Of_Phase + "x" + circ.GetProp(Device.I, order) + "A характеристика" 

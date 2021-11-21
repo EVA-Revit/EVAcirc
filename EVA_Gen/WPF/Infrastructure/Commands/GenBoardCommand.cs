@@ -50,6 +50,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                         view = ViewDrafting.Create(doc, viewFamilyType.Id);
                         //view= View3D.CreateIsometric(doc, viewFamilyType.Id);
                         view.Name = selectedPanel.Name;
+                        view.Scale = 1;
                     }
 
                     else
@@ -66,6 +67,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                                 view = ViewDrafting.Create(doc, viewFamilyType.Id);
                                 //view= View3D.CreateIsometric(doc, viewFamilyType.Id);
                                 view.Name = selectedPanel.Name + " копия " + i.ToString();
+                                view.Scale = 1;
                                 break;
                             }
 
@@ -208,56 +210,64 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                             {
                                 if (circ.Cable_S_1_1 == 1)
                                 {
-                                    str1 = circ.Cable_S_1_2 + " x " + circ.Cable_S_1_3;
+                                    str1 = circ.Cable_S_1_2 + "x" + circ.Cable_S_1_3;
                                 }
                                 else
                                 {
-                                    str1 = circ.Cable_S_1_1 + " x " + circ.Cable_S_1_2 + " x " + circ.Cable_S_1_3;
+                                    str1 = circ.Cable_S_1_1 + "x" + circ.Cable_S_1_2 + "x" + circ.Cable_S_1_3;
                                 }
+                                
                             }
 
                             if (circ.Cable_S_2_1 != 0)
                             {
                                 if (circ.Cable_S_2_1 == 1)
                                 {
-                                    str2 = circ.Cable_S_1_2 + " x " + circ.Cable_S_1_3;
+                                    str2 = circ.Cable_S_2_2 + "x" + circ.Cable_S_2_3;
 
                                 }
                                 else
                                 {
-                                    str2 = circ.Cable_S_1_1 + " x " + circ.Cable_S_1_2 + " x " + circ.Cable_S_1_3;
+                                    str2 = circ.Cable_S_2_1 + "x" + circ.Cable_S_2_2 + "x" + circ.Cable_S_2_3;
                                 }
                                 if (circ.Cable_S_2_2 == 1)
                                 {
-                                    othLine.LookupParameter("Кол-во_жил_сечение_EVA").Set(str1 + " + " + str2);
+                                    othLine.LookupParameter("Кол-во_жил_сечение_EVA").Set(str1 + "+" + str2);
                                 }
                                 else
                                 {
                                     othLine.LookupParameter("Кол-во_жил_сечение_EVA").Set(str1 + "/" + str2);
-                                    if (circ.Cable_L_2 != 0) othLine.LookupParameter("Длина_факт_2_EVA").Set(circ.Cable_L_2);
+                                    if (circ.Cable_L_2 != 0) othLine.LookupParameter("Длина_факт_2_EVA").Set(circ.Cable_L_2.ToString());
                                 }
                             }
+                            else
+                            {
+                                othLine.LookupParameter("Кол-во_жил_сечение_EVA").Set(str1);
+                            }
+
 
                             //назначение кабельной линии
 
+
+
                             othLine.LookupParameter("Название_кабельной_линии_EVA").Set(circ.Name);
-                            othLine.LookupParameter("Марка_кабеля_EVA").Set(circ.Cable_Mark_1);
+                            othLine.LookupParameter("Марка_кабеля_EVA").Set(circ.Cable_Mark);
                             othLine.LookupParameter("Способ_прокладки_EVA").Set(circ.Cable_In_Tray_Pipe);
 
 
 
 
 
-                            othLine.LookupParameter("Длина_трубы_EVA").Set(circ.Pipe_L.ToString());
+                            if (circ.Pipe_L != 0) othLine.LookupParameter("Длина_трубы_EVA").Set(circ.Pipe_L.ToString());
                             othLine.LookupParameter("Число_жил_EVA").Set(circ.Number_Of_Phase);
 
                             if (circ.P1 != 0) othLine.LookupParameter("Рр_EVA").Set(circ.P1_Visable);
                             if (circ.I1_Max != 0) othLine.LookupParameter("Iр_EVA").Set(circ.I1_Max_Visable);
-                            if (circ.Cos != 0) othLine.LookupParameter("cos_EVA").Set(circ.Cos.ToString());
+                            if (circ.Cos != 0) othLine.LookupParameter("cos_EVA").Set(circ.Cos_Visable);
                             if (circ.Ik_End_Line != 0) othLine.LookupParameter("Однофазный_ток_КЗ_EVA").Set(circ.Ik_End_Line_Visable);
                             if (circ.Cable_Calculated_L != 0) othLine.LookupParameter("Длина_расч_EVA").Set(circ.Cable_Calculated_L.ToString());
                             if (circ.DU_Calculated != 0) othLine.LookupParameter("ΔU_EVA").Set(circ.DU_Calculated.ToString());
-                            if (circ.Cable_L_1 != 0) othLine.LookupParameter("Длина_факт_EVA").Set(circ.Cable_L_1.ToString());
+                            if (circ.Cable_L_1 != 0) othLine.LookupParameter("Длина_факт_1_EVA").Set(circ.Cable_L_1.ToString());
                             if (circ.Number_Of_Phase != 0) othLine.LookupParameter("Фаза_EVA").Set(circ.Phase_Connection);
 
 
@@ -270,6 +280,7 @@ namespace EVA_Gen.WPF.Infrastructure.Commands
                             othLine.LookupParameter("Имя_щита_EVA").Set(circ.PanelName);
                             othLine.LookupParameter("ID_IN_EVA").Set(circ.Id.ToString());
 
+                            othLine.LookupParameter("Имя_потребителя_EVA").Set(circ.Load_Name);
 
 
                         }

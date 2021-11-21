@@ -52,7 +52,12 @@ namespace EVA_Gen.WPF.Models
         public double P_L3 { get; set; }
 
         public double S { get; set; } 
-        public double Cos { get; set; } 
+        public double Cos { get; set; }
+        public string Cos_Visable
+        {
+            get { return Math.Round(Cos, 2).ToString(); }
+            //set;
+        }
         public double P { get; set; }
         public string P_Visable
         {
@@ -162,7 +167,7 @@ namespace EVA_Gen.WPF.Models
         public double Device_Break_1 { get; set; }
         public double Device_Break_2 { get; set; }
         public double Device_Break_3 { get; set; }
-        public string Device_dI_body_I_Meter_TT_1 { get; set; }
+        public string Device_dI_body_I_Meter_TT_1 { get; set; } 
         public string Device_dI_body_I_Meter_TT_2 { get; set; }
         public string Device_dI_body_I_Meter_TT_3 { get; set; }
        
@@ -263,7 +268,7 @@ namespace EVA_Gen.WPF.Models
 
                 Cable_S_1_1 = rCirc.LookupParameter("Сечение_кабеля_1_1_EVA").AsInteger();
                 Cable_S_1_2 = rCirc.LookupParameter("Сечение_кабеля_1_2_EVA").AsInteger();
-                //Cable_S_1_3 = rCirc.LookupParameter("Сечение_кабеля_1_3_EVA").AsDouble();
+                Cable_S_1_3 = rCirc.LookupParameter("Сечение_кабеля_1_3_EVA").AsDouble();
                 Cable_S_2_1 = rCirc.LookupParameter("Сечение_кабеля_2_1_EVA").AsInteger();
                 Cable_S_2_2 = rCirc.LookupParameter("Сечение_кабеля_2_2_EVA").AsInteger();
                 Cable_S_2_3 = rCirc.LookupParameter("Сечение_кабеля_2_3_EVA").AsDouble();
@@ -311,9 +316,14 @@ namespace EVA_Gen.WPF.Models
                 Device_Break_1 = rCirc.LookupParameter("Ном_откл_способн_аппарата_1_EVA").AsDouble();
                 Device_Break_2 = rCirc.LookupParameter("Ном_откл_способн_аппарата_2_EVA").AsDouble();
                 Device_Break_3 = rCirc.LookupParameter("Ном_откл_способн_аппарата_3_EVA").AsDouble();
-                Device_dI_body_I_Meter_TT_1 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_1_EVA").AsString();
-                Device_dI_body_I_Meter_TT_2 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_2_EVA").AsString();
-                Device_dI_body_I_Meter_TT_3 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_3_EVA").AsString();
+                if (!rCirc.LookupParameter("I_утеч-корп_аппарата-транф_1_EVA").HasValue) Device_dI_body_I_Meter_TT_1 = "";
+                else Device_dI_body_I_Meter_TT_1 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_1_EVA").AsString();
+                if (!rCirc.LookupParameter("I_утеч-корп_аппарата-транф_2_EVA").HasValue) Device_dI_body_I_Meter_TT_2 = "";
+                else Device_dI_body_I_Meter_TT_2 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_2_EVA").AsString();
+                if (!rCirc.LookupParameter("I_утеч-корп_аппарата-транф_3_EVA").HasValue) Device_dI_body_I_Meter_TT_3 = "";
+                else Device_dI_body_I_Meter_TT_3 = rCirc.LookupParameter("I_утеч-корп_аппарата-транф_3_EVA").AsString();
+
+                
                 
                 PanelName = rCirc.PanelName;
 
