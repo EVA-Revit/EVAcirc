@@ -98,6 +98,15 @@ namespace EVA_Gen
                 
                 
             }
+
+
+            Element view_Combo = Utilits.ViewKeyElement("Тип_Нагрузки_EVA");
+            FilteredElementCollector string_table_combo = new FilteredElementCollector(doc, view_Combo.Id);
+            foreach (var item in string_table_combo)
+            {
+                CircItem.TypeLoadCB.Add(item.Name);
+            }
+
             //выполнение расчетов
             //сортировка щитов
             var calcBoardsList = boards.OrderByDescending(x => x.ParentNumber);

@@ -100,6 +100,7 @@ namespace EVA_Gen.WPF.Models
 
     internal class CircItem : ElectricalInfo
     {
+        public static List<string> TypeLoadCB { get; set; } = new List<string>();
         //public static string DeviceMark = "Марка_аппарата";
         //public static string DeviceType = "Т_аппарата";
         static Categories categories = Utilits.Doc.Settings.Categories;
@@ -194,6 +195,12 @@ namespace EVA_Gen.WPF.Models
 
 
         public string Load_Type { get; set; }
+
+        public List<string> Load_type_combo { get; set; } = new List<string>();
+
+
+
+
         public string Load_Name { get; set; }
         public string Ugo { get; set; }
         public string Out_Line_panel { get; set; }
@@ -261,6 +268,10 @@ namespace EVA_Gen.WPF.Models
                 Cos = rCirc.LookupParameter("Cos_EVA").AsDouble();
 
 
+                Load_type_combo.Add("dsfsv");
+                Load_type_combo.Add("7777");
+                Load_type_combo.Add("8888");
+                //Load_type_combo.Add("No");
 
                 //Cable_Mark_2 = rCirc.LookupParameter("Марка_кабеля_2_EVA").AsString();
                 //Cable_Mark_1 = rCirc.LookupParameter("Марка_кабеля_1_EVA").AsString();
