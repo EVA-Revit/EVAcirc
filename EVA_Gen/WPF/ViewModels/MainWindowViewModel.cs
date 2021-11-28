@@ -78,9 +78,15 @@ namespace EVA_Gen.WPF.ViewModels
         private bool CanCloseWindowCommandExecuted(object p) => true;
         private void OnCloseWindowCommandExecuted(object p)
         {
-            Panels.Remove(SelectedPanel);
+            //Panels.Remove(SelectedPanel);
             //SelectedPanel.Name = "newds";
-           
+
+            var str = SelectedPanel.Circuits.First().Text1;
+
+            TaskDialog.Show("sad", str);
+
+
+
             //Application.Current.Shutdown(); //закрытие текущего приложения
         }
 

@@ -37,6 +37,7 @@
         <StackPanel Orientation="Vertical" Grid.Row="1">
             <Button Margin="5,10,0,5" Content="+"  Command="{Binding Path=CloseWindowCommand }"></Button>
             <Button Margin="5,5,0,5" Content="-" ></Button>
+            
         </StackPanel>
         
         <TreeView Grid.Row="1" Grid.Column="1" Margin="10" BorderThickness="1" ItemsSource="{Binding Panels}">
@@ -70,7 +71,7 @@
             </Button.Command>
         </Button>
         <TextBlock Grid.Column="2" Text="Данные панели:" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
-
+        <TextBox Grid.Column="2" Grid.Row="1" Height="20"  Text="{Binding SelectedPanel.Name}" ></TextBox>
 
 
         <!--AlternatingRowBackground="LightBlue"  полосатые столбцы-->
@@ -87,7 +88,7 @@
                       CanUserAddRows="False"
                       GridLinesVisibility="All" 
                       VerticalGridLinesBrush="DarkGray"
-                      HorizontalGridLinesBrush="DarkGray" CanUserSortColumns ="False" SelectionMode="Extended" CanUserResizeColumns="False" CanUserResizeRows="False" SelectionUnit="Cell"  IsReadOnly="True">
+                      HorizontalGridLinesBrush="DarkGray" CanUserSortColumns ="False" SelectionMode="Extended" CanUserResizeColumns="False" CanUserResizeRows="False" SelectionUnit="Cell"  IsReadOnly="False">
 
                 <DataGrid.ColumnHeaderStyle>
                     <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -146,17 +147,7 @@
                     <DataGridTemplateColumn Header="Марка кабеля 1">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Grid >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition></ColumnDefinition>
-                                        <ColumnDefinition></ColumnDefinition>
-                                    </Grid.ColumnDefinitions>
-                                    <TextBox Text="{Binding Cable_Mark}" Width="10" Grid.Column="0"></TextBox>
-                                     <Button Height="20" Width="20"   Grid.Column="1">
-                                    <!--<ContentControl Content="{}"></ContentControl>-->
-                                    <!--<Image Source="unlocked.png"></Image>-->
-                                    </Button>
-                                </Grid>
+                                <TextBox Text="{Binding Cable, UpdateSourceTrigger=PropertyChanged}" Width="100" Grid.Column="0"></TextBox>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
