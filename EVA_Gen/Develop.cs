@@ -99,13 +99,25 @@ namespace EVA_Gen
                 
             }
 
-
+            //Заполнение комбобоксов
             Element view_Combo = Utilits.ViewKeyElement("Тип_Нагрузки_EVA");
             FilteredElementCollector string_table_combo = new FilteredElementCollector(doc, view_Combo.Id);
+            CircItem.TypeLoadCB.Add(new TypeLoadItem());
             foreach (var item in string_table_combo)
             {
-                CircItem.TypeLoadCB.Add(item.Name);
+                CircItem.TypeLoadCB.Add(new TypeLoadItem(item));
             }
+
+            view_Combo = Utilits.ViewKeyElement("УГО_EVA");
+            string_table_combo = new FilteredElementCollector(doc, view_Combo.Id);
+            foreach (var item in string_table_combo)
+            {
+                CircItem.UgoCB.Add(item.Name);
+            }
+
+
+
+
 
             //выполнение расчетов
             //сортировка щитов

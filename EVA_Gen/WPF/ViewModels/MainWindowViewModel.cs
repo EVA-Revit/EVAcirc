@@ -81,7 +81,7 @@ namespace EVA_Gen.WPF.ViewModels
             //Panels.Remove(SelectedPanel);
             //SelectedPanel.Name = "newds";
 
-            var str = SelectedPanel.Circuits.First().Text1;
+            var str = SelectedPanel.Circuits.First().Ugo;
 
             TaskDialog.Show("sad", str);
 

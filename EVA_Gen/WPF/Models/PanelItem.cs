@@ -98,13 +98,42 @@ namespace EVA_Gen.WPF.Models
     }
 
 
+    internal class TypeLoadItem
+    {
+        public ElementId Id { get; set; }
+        public string Name { get; set; }
+
+        public TypeLoadItem(Element el)
+        {
+            Id = el.Id;
+            Name = el.Name;
+        }
+
+        public TypeLoadItem(ElectricalSystem els)
+        {
+            Id = els.LookupParameter("Тип_Нагрузки_EVA").AsElementId();
+            Name = els.LookupParameter("Тип_Нагрузки_EVA").AsValueString();
+            
+        }
+
+        public TypeLoadItem()
+        {
+            Id = ElementId.InvalidElementId;
+            Name = "No";
+        }
+
+    }
+
     internal class CircItem : ElectricalInfo
     {
-        public static List<string> TypeLoadCB { get; set; } = new List<string>();
+        public static List<TypeLoadItem> TypeLoadCB { get; set; } = new List<TypeLoadItem>();
+        public static List<string> UgoCB { get; set; } = new List<string>();
         //public static string DeviceMark = "Марка_аппарата";
         //public static string DeviceType = "Т_аппарата";
         static Categories categories = Utilits.Doc.Settings.Categories;
         ElementId electricalEquipmentCategoryId = categories.get_Item(BuiltInCategory.OST_ElectricalEquipment).Id;
+
+        public TypeLoadItem TLi { get; set; }
 
         public bool Rez { get; set; } 
         public bool HasValueP { get; set; }
@@ -268,9 +297,7 @@ namespace EVA_Gen.WPF.Models
                 Cos = rCirc.LookupParameter("Cos_EVA").AsDouble();
 
 
-                Load_type_combo.Add("dsfsv");
-                Load_type_combo.Add("7777");
-                Load_type_combo.Add("8888");
+
                 //Load_type_combo.Add("No");
 
                 //Cable_Mark_2 = rCirc.LookupParameter("Марка_кабеля_2_EVA").AsString();
@@ -340,6 +367,12 @@ namespace EVA_Gen.WPF.Models
 
                 if (rCirc.LookupParameter("Тип_Нагрузки_EVA").AsElementId() == ElementId.InvalidElementId) Load_Type = "No";
                 else Load_Type = rCirc.LookupParameter("Тип_Нагрузки_EVA").AsValueString();
+                
+                var tLi = new TypeLoadItem(rCirc);
+                
+                var re = TypeLoadCB.FirstOrDefault(x => x.Id == tLi.Id);
+                //TaskDialog.Show("ssf", re.Name);
+                TLi = re;
                 Load_Name = rCirc.LookupParameter("Наименование_нагрузки_EVA").AsString();
                 if (rCirc.LookupParameter("УГО_EVA").AsElementId() == ElementId.InvalidElementId) Ugo = "No";
                 else Ugo = rCirc.LookupParameter("УГО_EVA").AsValueString();
